@@ -1,0 +1,5 @@
+**Question:**  A closed, rigid cylinder contains an ideal gas. Initially, the gas is in thermodynamic equilibrium at a pressure of p_1 = 57000.0 Pa. The cylinder is then cooled at constant volume until the final state is reached, where the gas density is ρ_2 = 2.8 kg/m^3. During this isochoric process, heat is removed from the gas in the amount q_12 = 36280 J/kg. There is no work interaction (W_12 = 0).
+
+Calculate the change in specific entropy Δs_12 of the gas.
+
+The gas is ideal, with constant molar heat capacity at constant volume c_vm = 15.08 J/(mol K), and molar mass M = 0.018 kg/mol.

@@ -1,0 +1,22 @@
+variables:
+  del_e_kin_12: 0.00 J/kg
+  del_e_pot_12: 0.00 J/kg
+  del_u_12: -28132.48 J/kg
+  w_12: 0.00 J/kg
+  q_12: -28132.48 J/kg
+equations:
+  FirstLawSpecific1:
+    name: FirstLawSpecific
+    expression: -del_e_kin_12 - del_e_pot_12 - del_u_12 + q_12 + w_12
+  NotInMotionDelekinEquation1:
+    name: NotInMotionDelekinEquation
+    expression: del_e_kin_12
+  NotInMotionDelepotEquation1:
+    name: NotInMotionDelepotEquation
+    expression: del_e_pot_12
+  Assignmentw_12:
+    name: Assignmentw_1
+    expression: w_12
+  Assignmentq_12:
+    name: Assignmentq_1
+    expression: q_12 + 28132.48

@@ -1,0 +1,5 @@
+**Question:**  A closed system containing an ideal gas undergoes a reversible polytropic, isothermal process from state 1 to state 2. The pressure in the final state is p_2 = 392112.0 Pa. The pressure increase during the process is Δp_12 = 334993.0 Pa, and the temperature remains constant (ΔT_12 = 0 K). The process is neither isochoric, isobaric, nor isentropic.
+
+Calculate the initial pressure p_1 of the gas.
+
+The gas is ideal and obeys the perfect gas equation of state.

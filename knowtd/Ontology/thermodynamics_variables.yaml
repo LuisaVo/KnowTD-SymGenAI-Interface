@@ -1,0 +1,1058 @@
+id: https://gitlab.rhrk.uni-kl.de/knowtd/knowtd/-/blob/main/Ontology/thermodynamics_variables.yaml
+title: Thermodynamics Variables
+name: thermo_variables
+description: |-
+  Ontology to describe classes relating to thermodynamics.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+version: 2.0.0
+
+prefixes:
+  wikidata: https://www.wikidata.org/wiki/
+  linkml: https://w3id.org/linkml/
+  thmo_variables: https://gitlab.rhrk.uni-kl.de/knowtd/knowtd/-/blob/main/Ontology/thermodynamics_variables.yaml/
+
+default_prefix: thmo_variables
+default_range: string
+
+imports:
+  # - linkml:types
+  - thermodynamics_concepts
+#==================================
+# Classes                         #
+#==================================
+classes:
+  Variable:
+    is_a: Element
+    aliases:
+      - quantity
+      - variable
+    abstract: true
+    slots:
+      - value
+      - is_required
+      # - id
+    attributes:
+      id:
+        slot_uri: thmo_variables:Variable_id
+
+  VariableConcept:
+    abstract: true
+  DerivedVariable:
+    is_a: VariableConcept
+    aliases:
+      - derived variable
+    description: >-
+      A variable which can be mathematically derived.
+  Difference:
+    is_a: DerivedVariable
+    mixin: true
+    abstract: true
+    aliases:
+      - difference
+  Ratio:
+    is_a: DerivedVariable
+    mixin: true
+    abstract: true
+    aliases:
+      - ratio
+  StateVariable:
+    is_a: VariableConcept
+    mixin: true
+    abstract: true
+    aliases:
+      - state variable
+    description: >-
+      A state variable is a macroscopic measurable property that characterises a state of a system .
+  ChangeOfStateVariable:
+    is_a: VariableConcept
+    mixin: true
+    abstract: true
+    aliases:
+      - change of state variable
+    description: >-
+      Calculable variables that characterize the change of state of a system.
+  MaterialProperty:
+    is_a: VariableConcept
+    mixin: true
+    abstract: true
+    aliases:
+      - material property
+    description: >-
+      Properties that describe a material.
+  UniversalQuantity:
+    is_a: VariableConcept
+    mixin: true
+    abstract: true
+    aliases:
+      - universal property
+      - universal quantity
+    description: >-
+      Variable that always has the same value.
+
+  SpecificProperty:
+    is_a: VariableConcept
+    mixin: true
+    abstract: true
+    aliases:
+      - specific property
+    description: >-
+      Specific properties are extensive properties per unit mass. 
+      We denote them by lower case letters.
+  MolarProperty:
+    is_a: VariableConcept
+    mixin: true
+    abstract: true
+    aliases:
+      - molar property
+    description: >-
+      Molar properties are extensive properties per mol. 
+      We denote them by lower case letters.
+  ExtensiveStateVariable:
+    is_a: VariableConcept
+    mixin: true
+    abstract: true
+    aliases:
+      - extensive property
+    description: >-
+      The value of an extensive property of a homogenous system is 
+      proportional to the mass of the system. 
+      We denote them by upper case letters.
+    close_mappings:
+      - wikidata:Q911916
+  IntensiveStateVariable:
+    is_a: VariableConcept
+    mixin: true
+    abstract: true
+    aliases:
+      - intensive property
+    description: >-
+      The value of an intensive property of a homogenous system does 
+      not vary with the mass of the system. 
+    close_mappings:
+      - wikidata:Q911916
+  InternalStateVariable:
+    is_a: StateVariable
+    mixin: true
+    abstract: true
+    aliases:
+      - internal state variable
+    description: >-
+      Describes the state of a system that does not move.
+  ExternalStateVariable:
+    is_a: StateVariable
+    mixin: true
+    abstract: true
+    aliases:
+      - external state variable
+    description: >-
+      External state variables are state variables that depend on the internal state variables of the systems 
+      and its interactions with the surroundings.
+
+
+  Mass:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+    aliases:
+      - mass
+    annotations:
+      schema:mathExpression: m
+      schema:Unit: kg
+    exact_mappings:
+      - wikidata:Q11423
+  MolarMass:
+    is_a: Variable
+    mixins:
+      - MaterialProperty
+    aliases:
+      - molar mass
+    annotations:
+      schema:mathExpression: M
+      schema:Unit: kg/mol
+    exact_mappings:
+      - wikidata:Q145623
+  Temperature:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+      - IntensiveStateVariable
+    aliases:
+      - temperature
+    annotations:
+      schema:mathExpression: T
+      schema:Unit: K
+    exact_mappings:
+      - wikidata:Q11466
+  StandardTemperature:
+    is_a: Variable
+    mixins:
+      - UniversalQuantity
+    aliases:
+      - standard temperature
+    annotations:
+      schema:mathExpression: T0
+      schema:Unit: K
+    slot_usage:
+      value:
+        ifabsent: float(273.15)
+    close_mappings:
+      - wikidata:Q102145
+  Pressure:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+      - IntensiveStateVariable
+    aliases:
+      - pressure
+    annotations:
+      schema:mathExpression: p
+      schema:Unit: Pa
+    exact_mappings:
+      - wikidata:Q39552
+  StandardPressure:
+    is_a: Variable
+    mixins:
+      - UniversalQuantity
+    aliases:
+      - standard pressure
+    annotations:
+      schema:mathExpression: p0
+      schema:Unit: Pa
+    slot_usage:
+      value:
+        ifabsent: float(101325)
+    exact_mappings:
+      - wikidata:Q9193068
+  Volume:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+      - ExtensiveStateVariable
+    aliases:
+      - volume
+    annotations:
+      schema:mathExpression: V
+      schema:Unit: m^3
+    exact_mappings:
+      - wikidata:Q39297
+  SpecificVolume:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+      - IntensiveStateVariable
+      - SpecificProperty
+    aliases:
+      - specific volume
+    annotations:
+      schema:mathExpression: v
+      schema:Unit: m^3/kg
+    exact_mappings:
+      - wikidata:Q683556
+  SurfaceArea:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+      - ExtensiveStateVariable
+    aliases:
+      - surface area
+    annotations:
+      schema:mathExpression: SA
+      schema:Unit: m^2
+    exact_mappings:
+      - wikidata:Q11500
+  InternalEnergy:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+      - ExtensiveStateVariable
+    aliases:
+      - internal energy
+    annotations:
+      schema:mathExpression: U
+      schema:Unit: J
+    exact_mappings:
+      - wikidata:Q180241
+  SpecificInternalEnergy:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+      - IntensiveStateVariable
+      - SpecificProperty
+    aliases:
+      - specific internal energy
+    annotations:
+      schema:mathExpression: u
+      schema:Unit: J/kg
+    exact_mappings:
+      - wikidata:Q76357367
+  Enthalpy:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+      - ExtensiveStateVariable
+    aliases:
+      - enthalpy
+    annotations:
+      schema:mathExpression: H
+      schema:Unit: J
+    exact_mappings:
+      - wikidata:Q161064
+  SpecificEnthalpy:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+      - IntensiveStateVariable
+      - SpecificProperty
+    aliases:
+      - specific enthalpy
+    annotations:
+      schema:mathExpression: h
+      schema:Unit: J/kg
+    exact_mappings:
+      - wikidata:Q21572993
+  Entropy:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+      - ExtensiveStateVariable
+    aliases:
+      - entropy
+    annotations:
+      schema:mathExpression: S
+      schema:Unit: J/K
+    exact_mappings:
+      - wikidata:Q45003
+  SpecificEntropy:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+      - IntensiveStateVariable
+      - SpecificProperty
+    aliases:
+      - specific entropy
+    annotations:
+      schema:mathExpression: s
+      schema:Unit: J/(kg K)
+    exact_mappings:
+      - wikidata:Q69423705
+  MolarEntropy:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+      - IntensiveStateVariable
+      - MolarProperty
+    aliases:
+      - molar entropy
+    annotations:
+      schema:mathExpression: sm
+      schema:Unit: J/(mol K)
+    exact_mappings:
+      - wikidata:Q68972876
+  SpecificDensity:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+      - IntensiveStateVariable
+    aliases:
+      - specific density
+    annotations:
+      schema:mathExpression: rho
+      schema:Unit: kg/m^3
+    exact_mappings:
+      - wikidata:Q110552639
+  MolarDensity:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+      - IntensiveStateVariable
+      - MolarProperty
+    aliases:
+      - specific density
+    annotations:
+      schema:mathExpression: rhom
+      schema:Unit: mol/m^3
+  PositionCenterMass:
+    is_a: Variable
+    mixins:
+      - ExternalStateVariable
+      - IntensiveStateVariable
+    aliases:
+      - position of center of mass
+    annotations:
+      schema:mathExpression: z
+      schema:Unit: m
+    close_mappings:
+      - wikidata:Q2945123
+      - wikidata:Q122683347
+  VelocityCenterMass:
+    is_a: Variable
+    mixins:
+      - ExternalStateVariable
+      - IntensiveStateVariable
+    aliases:
+      - velocity of center of mass
+    annotations:
+      schema:mathExpression: c
+      schema:Unit: m/s
+    close_mappings:
+      - wikidata:Q2945123
+      - wikidata:Q11465
+  PotentialEnergyCenterMass:
+    is_a: Variable
+    mixins:
+      - ExternalStateVariable
+      - ExtensiveStateVariable
+    aliases:
+      - potential energy
+      - potential energy center mass
+    annotations:
+      schema:mathExpression: E_pot
+      schema:Unit: J
+    close_mappings:
+      - wikidata:Q2945123
+      - wikidata:Q155640
+  SpecificPotentialEnergyCenterMass:
+    is_a: Variable
+    mixins:
+      - ExternalStateVariable
+      - IntensiveStateVariable
+    aliases:
+      - specific potential energy
+      - specific potential energy center mass
+    annotations:
+      schema:mathExpression: e_pot
+      schema:Unit: J/kg
+    close_mappings:
+      - wikidata:Q2945123
+      - wikidata:Q16908654
+  KineticEnergyCenterMass:
+    is_a: Variable
+    mixins:
+      - ExternalStateVariable
+      - ExtensiveStateVariable
+    aliases:
+      - kinetic energy
+      - kinetic energy center mass
+    annotations:
+      schema:mathExpression: E_kin
+      schema:Unit: J
+    close_mappings:
+      - wikidata:Q2945123
+      - wikidata:Q46276
+  SpecificKineticEnergyCenterMass:
+    is_a: Variable
+    mixins:
+      - ExternalStateVariable
+      - IntensiveStateVariable
+    aliases:
+      - specific kinetic energy
+      - specific kinetic energy center mass
+    annotations:
+      schema:mathExpression: e_kin
+      schema:Unit: J/kg
+    close_mappings:
+      - wikidata:Q2945123
+      - wikidata:Q7574995
+  AmountOfSubstance:
+    is_a: Variable
+    mixins:
+      - InternalStateVariable
+    aliases:
+      - amount of substance
+    annotations:
+      schema:mathExpression: n
+      schema:Unit: mol
+    exact_mappings:
+      - wikidata:Q104946
+  IndividualGasConstant:
+    is_a: Variable
+    mixins:
+      - MaterialProperty
+    aliases:
+     - individual gas constant
+     - specific gas constant
+    annotations:
+      schema:mathExpression: R
+      schema:Unit: J/(kg K)
+  SpecificHeatCapacityConstantPressure:
+    is_a: Variable
+    mixins:
+      - MaterialProperty
+      - IntensiveStateVariable
+      - SpecificProperty
+      - StateVariable
+      - InternalStateVariable
+    annotations:
+      schema:mathExpression: c_p
+      schema:Unit: J/K
+    exact_mappings:
+      - wikidata:Q75774282
+  SpecificHeatCapacityConstantVolume:
+    is_a: Variable
+    mixins:
+      - IntensiveStateVariable
+      - SpecificProperty
+      - MaterialProperty
+      - StateVariable
+      - InternalStateVariable
+    annotations:
+      schema:mathExpression: c_v
+      schema:Unit: J/(kg K)
+    exact_mappings:
+      - wikidata:Q75774757
+  MolarHeatCapacityConstantPressure:
+    is_a: Variable
+    mixins:
+      - MaterialProperty
+      - IntensiveStateVariable
+      - StateVariable
+      - InternalStateVariable
+      - MolarProperty
+    annotations:
+      schema:mathExpression: c_pm
+      schema:Unit: J/(K mol)
+    exact_mappings:
+      - wikidata:Q107096006
+  MolarHeatCapacityConstantVolume:
+    is_a: Variable
+    mixins:
+      - IntensiveStateVariable
+      - MaterialProperty
+      - StateVariable
+      - InternalStateVariable
+      - MolarProperty
+    annotations:
+      schema:mathExpression: c_vm
+      schema:Unit: J/(K mol)
+    exact_mappings:
+      - wikidata:Q107096023
+  HeatCapacityRatio:
+    is_a: Variable
+    mixins:
+      - Ratio
+      - StateVariable
+    annotations:
+      schema:mathExpression: kappa
+      schema:Unit:
+    exact_mappings:
+      - wikidata:Q503869
+  UniversalGasConstant:
+    is_a: Variable
+    mixins:
+      - UniversalQuantity
+    annotations:
+      schema:mathExpression: Rbar
+      schema:Unit: J/(K mol)
+    slot_usage:
+      value:
+        ifabsent: float(8.31446261815324)
+    exact_mappings:
+      - wikidata:Q182333
+  GravitationalAcceleration:
+    is_a: Variable
+    mixins:
+      - UniversalQuantity
+    annotations:
+      schema:mathExpression: g
+      schema:Unit: m/s^2
+    slot_usage:
+      value:
+        ifabsent: float(9.8067)
+    close_mappings:
+      - wikidata:Q11376
+  Heat:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    description: >-
+      Heat is energy transferred due to temperature differences only.
+    annotations:
+      schema:mathExpression: Q
+      schema:Unit: J
+    exact_mappings:
+      - wikidata:Q44432
+  HeatPerMass:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: q
+      schema:Unit: J/kg
+  Work:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: W
+      schema:Unit: J
+    exact_mappings:
+      - wikidata:Q900231
+  WorkPerMass:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: w
+      schema:Unit: J/kg
+  WorkOnInternalState:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: W_i
+      schema:Unit: J
+  WorkOnExternalState:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    slot_usage:
+      value:
+        ifabsent: float(0)
+    annotations:
+      schema:mathExpression: W_a
+      schema:Unit: J
+  WorkOnInternalStatePerMass:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: w_i
+      schema:Unit: J/kg
+  WorkOnExternalStatePerMass:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: w_a
+      schema:Unit: J/kg
+  TechnicalWorkPerMass:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: w_t
+      schema:Unit: J/kg
+  VolumeChangeWork:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: W_vol
+      schema:Unit: J
+  VolumeChangeWorkPerMass:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: w_vol
+      schema:Unit: J/kg
+  StirringWork:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: W_stir
+      schema:Unit: J
+  StirringWorkPerMass:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: w_stir
+      schema:Unit: J/kg
+  ElectricalWork:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: W_electrical
+      schema:Unit: J
+  ElectricalWorkPerMass:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: w_electrical
+      schema:Unit: J/kg
+  TemperatureDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_T
+      schema:Unit: K
+    close_mappings:
+      - wikidata:Q69362767
+  PressureDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_p
+      schema:Unit: Pa
+  VolumeDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_V
+      schema:Unit: m^3
+  SpecificVolumeDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_v
+      schema:Unit: m^3/kg
+  InternalEnergyDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_U
+      schema:Unit: J
+  SpecificInternalEnergyDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_u
+      schema:Unit: J/kg
+  EnthalpyDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_H
+      schema:Unit: J
+  SpecificEnthalpyDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_h
+      schema:Unit: J/kg
+  EntropyDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_S
+      schema:Unit: J/K
+  SpecificEntropyDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_s
+      schema:Unit: J/(kg K)
+  MolarEntropyDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_sm
+      schema:Unit: J/(mol K)
+  PositionCenterMassDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_z
+      schema:Unit: m
+  VelocityCenterMassDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_c
+      schema:Unit: m/s
+  KineticEnergyCenterMassDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_E_kin
+      schema:Unit: J
+  SpecificKineticEnergyCenterMassDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_e_kin
+      schema:Unit: J/kg
+  PotentialEnergyCenterMassDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_E_pot
+      schema:Unit: J
+  SpecificPotentialEnergyCenterMassDifference:
+    is_a: Variable
+    mixins:
+      - Difference
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: del_e_pot
+      schema:Unit: J/kg
+  PolytropicExponent:
+    is_a: Variable
+    mixins:
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: n_poly
+      schema:Unit: none
+  TemperatureRatio:
+    is_a: Variable
+    mixins:
+      - Ratio
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: ratio_T
+      schema:Unit: none
+  PressureRatio:
+    is_a: Variable
+    mixins:
+      - Ratio
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: ratio_p
+      schema:Unit: none
+  VolumeRatio:
+    is_a: Variable
+    mixins:
+      - Ratio
+      - ChangeOfStateVariable
+    annotations:
+      schema:mathExpression: ratio_v
+      schema:Unit: none
+  
+slots:
+  variable_slot:
+    abstract: true
+    inlined: true
+  value:
+    range: float
+  is_required: 
+    range: boolean
+  m:
+    is_a: variable_slot
+    range: Mass
+  M:
+    is_a: variable_slot
+    range: MolarMass
+  n:
+    is_a: variable_slot
+    range: AmountOfSubstance
+  R:
+    is_a: variable_slot
+    range: IndividualGasConstant
+  c_p:
+    is_a: variable_slot
+    range: SpecificHeatCapacityConstantPressure
+  c_v:
+    is_a: variable_slot
+    range: SpecificHeatCapacityConstantVolume
+  c_pm:
+    is_a: variable_slot
+    range: MolarHeatCapacityConstantPressure
+  c_vm:
+    is_a: variable_slot
+    range: MolarHeatCapacityConstantVolume
+  kappa:
+    is_a: variable_slot
+    range: HeatCapacityRatio
+  Rbar:
+    is_a: variable_slot
+    range: UniversalGasConstant
+  g:
+    is_a: variable_slot
+    range: GravitationalAcceleration
+  T:
+    is_a: variable_slot
+    range: Temperature
+  T0:
+    is_a: variable_slot
+    range: StandardTemperature
+  p:
+    is_a: variable_slot
+    range: Pressure
+  V:
+    is_a: variable_slot
+    range: Volume
+  v:
+    is_a: variable_slot
+    range: SpecificVolume
+  SA:
+    is_a: variable_slot
+    range: SurfaceArea
+  U:
+    is_a: variable_slot
+    range: InternalEnergy
+  u:
+    is_a: variable_slot
+    range: SpecificInternalEnergy
+  H:
+    is_a: variable_slot
+    range: Enthalpy
+  h:
+    is_a: variable_slot
+    range: SpecificEnthalpy
+  S:
+    is_a: variable_slot
+    range: Entropy
+  s:
+    is_a: variable_slot
+    range: SpecificEntropy
+  sm:
+    is_a: variable_slot
+    range: MolarEntropy
+  rho:
+    is_a: variable_slot
+    range: SpecificDensity
+  z:
+    is_a: variable_slot
+    range: PositionCenterMass
+  c:
+    is_a: variable_slot
+    range: VelocityCenterMass
+  E_kin:
+    is_a: variable_slot
+    range: KineticEnergyCenterMass
+  e_kin:
+    is_a: variable_slot
+    range: SpecificKineticEnergyCenterMass
+  E_pot:
+    is_a: variable_slot
+    range: PotentialEnergyCenterMass
+  e_pot:
+    is_a: variable_slot
+    range: SpecificPotentialEnergyCenterMass
+  Q:
+    is_a: variable_slot
+    range: Heat
+  q:
+    is_a: variable_slot
+    range: HeatPerMass
+  W:
+    is_a: variable_slot
+    range: Work  
+  w:
+    is_a: variable_slot
+    range: WorkPerMass
+  W_i:
+    is_a: variable_slot
+    range: WorkOnInternalState
+  W_a:
+    is_a: variable_slot
+    range: WorkOnExternalState
+  w_i:
+    is_a: variable_slot
+    range: WorkOnInternalStatePerMass
+  w_a:
+    is_a: variable_slot
+    range: WorkOnExternalStatePerMass
+  w_t:
+    is_a: variable_slot
+    range: TechnicalWorkPerMass
+  W_vol:
+    is_a: variable_slot
+    range: VolumeChangeWork
+  w_vol:
+    is_a: variable_slot
+    range: VolumeChangeWorkPerMass
+  W_stir:
+    is_a: variable_slot
+    range: StirringWork
+  w_stir:
+    is_a: variable_slot
+    range: StirringWorkPerMass
+  W_electrical:
+    is_a: variable_slot
+    range: ElectricalWork
+  w_electrical:
+    is_a: variable_slot
+    range: ElectricalWorkPerMass
+  del_T:
+    is_a: variable_slot
+    range: TemperatureDifference
+  del_p:
+    is_a: variable_slot
+    range: PressureDifference
+  del_V:
+    is_a: variable_slot
+    range: VolumeDifference
+  del_v:
+    is_a: variable_slot
+    range: SpecificVolumeDifference
+  del_U:
+    is_a: variable_slot
+    range: InternalEnergyDifference
+  del_u:
+    is_a: variable_slot
+    range: SpecificInternalEnergyDifference
+  del_H:
+    is_a: variable_slot
+    range: EnthalpyDifference
+  del_h:
+    is_a: variable_slot
+    range: SpecificEnthalpyDifference
+  del_S:
+    is_a: variable_slot
+    range: EntropyDifference
+  del_s:
+    is_a: variable_slot
+    range: SpecificEntropyDifference
+  del_sm:
+    is_a: variable_slot
+    range: MolarEntropyDifference
+  del_z:
+    is_a: variable_slot
+    range: PositionCenterMassDifference
+  del_c:
+    is_a: variable_slot
+    range: VelocityCenterMassDifference
+  del_E_kin:
+    is_a: variable_slot
+    range: KineticEnergyCenterMassDifference
+  del_e_kin:
+    is_a: variable_slot
+    range: SpecificKineticEnergyCenterMassDifference
+  del_E_pot:
+    is_a: variable_slot
+    range: PotentialEnergyCenterMassDifference
+  del_e_pot:
+    is_a: variable_slot
+    range: SpecificPotentialEnergyCenterMassDifference
+  T_const:
+    is_a: variable_slot
+    range: boolean
+  n_poly: 
+    is_a: variable_slot
+    range: PolytropicExponent
+  ratio_T:
+    is_a: variable_slot
+    range: TemperatureRatio
+  ratio_p:
+    is_a: variable_slot
+    range: PressureRatio
+  ratio_v:
+    is_a: variable_slot
+    range: VolumeRatio

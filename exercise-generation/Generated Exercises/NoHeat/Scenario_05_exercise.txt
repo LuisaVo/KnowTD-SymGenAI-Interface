@@ -1,0 +1,3 @@
+**Question:** A closed, homogeneous system contains (m = 12.14\ \text{kg}) of an ideal gas. The system changes from equilibrium state 1 to equilibrium state 2. There is no motion. The process is adiabatic and not reversible. During the transition, an indicated work of (w_{i,12} = 5430.85\ \text{J/kg}) is exchanged.
+
+Determine the change in specific internal energy, (\Delta u_{12}), for the gas.

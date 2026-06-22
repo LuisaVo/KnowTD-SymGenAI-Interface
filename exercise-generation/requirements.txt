@@ -1,0 +1,18 @@
+# Core dependencies
+pyyaml>=6.0
+pandas>=2.0.0
+
+# LinkML for ontology and schema management
+linkml-runtime>=1.5.0
+
+# IDP engine for model checking
+idp-engine>=0.8.0
+
+# NetworkX for graph operations
+networkx>=3.0
+
+# Matplotlib for visualizations
+matplotlib>=3.7.0
+
+# OpenAI API for text generation
+openai>=1.0.0

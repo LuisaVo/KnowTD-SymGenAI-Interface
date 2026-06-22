@@ -1,0 +1,4 @@
+**Question:** A closed system contains *m* = 31.98 kg of an ideal gas. The gas is initially in equilibrium at **T₁ = 296.0 K** and **p₁ = 459000 Pa**. It is brought reversibly to a second equilibrium state with **T₂ = 345 K** and **p₂ = 91000 Pa**.
+For the ideal gas, **R = 816.15 J/(kg·K)**.
+
+Determine the **change in volume** of the system, **ΔV₁₂ = V₂ − V₁**.

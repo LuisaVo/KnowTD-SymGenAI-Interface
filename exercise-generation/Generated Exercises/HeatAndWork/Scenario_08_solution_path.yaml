@@ -1,0 +1,30 @@
+variables:
+  n_I: 989.62 mol
+  del_V_12: 0.00 m^3
+  p_2: 233000.00 Pa
+  T_2: 361.05 K
+  V_1: 12.75 m^3
+  V_2: 12.75 m^3
+  Rbar_gas1: '8.31'
+equations:
+  IdealGasLawAmountOfSubstance2:
+    name: IdealGasLawAmountOfSubstance
+    expression: -Rbar_gas1*T_2*n_I + V_2*p_2
+  DelVEquation1:
+    name: DelVEquation
+    expression: V_1 - V_2 + del_V_12
+  Assignmentn_I:
+    name: Assignmentn_
+    expression: n_I - 989.62
+  Assignmentdel_V_12:
+    name: Assignmentdel_V_1
+    expression: del_V_12
+  Assignmentp_2:
+    name: Assignmentp_
+    expression: p_2 - 233000.0
+  AssignmentT_2:
+    name: AssignmentT_
+    expression: T_2 - 361.05
+  AssignmentRbar_gas1:
+    name: AssignmentRbar_gas
+    expression: Rbar_gas1 - 8.31446261815324

@@ -1,0 +1,22 @@
+variables:
+  del_E_kin_12: 0.00 J
+  del_E_pot_12: 0.00 J
+  del_U_12: -402427.20 J
+  W_12: 0.00 J
+  Q_12: -402427.20 J
+equations:
+  FirstLaw1:
+    name: FirstLaw
+    expression: Q_12 + W_12 - del_E_kin_12 - del_E_pot_12 - del_U_12
+  NotInMotionDelEkinEquation1:
+    name: NotInMotionDelEkinEquation
+    expression: del_E_kin_12
+  NotInMotionDelEpotEquation1:
+    name: NotInMotionDelEpotEquation
+    expression: del_E_pot_12
+  AssignmentW_12:
+    name: AssignmentW_1
+    expression: W_12
+  AssignmentQ_12:
+    name: AssignmentQ_1
+    expression: Q_12 + 402427.2

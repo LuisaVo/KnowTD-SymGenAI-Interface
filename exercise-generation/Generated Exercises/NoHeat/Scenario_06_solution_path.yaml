@@ -1,0 +1,125 @@
+variables:
+  w_i_12: 116553.81 J/kg
+  W_12: 827532.03 J
+  q_12: 0.00 J/kg
+  Q_12: 0.00 J
+  V_2: 2.45 m^3
+  T_2: 330.00 K
+  v_1: 0.71 m^3/kg
+  T_1: 329.00 K
+  T0_1: '273.15'
+  p_1: 224158.07 Pa
+  u_1: 6509530.29 J/kg
+  h_1: 6669579.15 J/kg
+  T0_2: '273.15'
+  p_2: 465224.82 Pa
+  v_2: 0.35 m^3/kg
+  u_2: 6626084.10 J/kg
+  h_2: 6786619.43 J/kg
+  w_12: 116553.81 J/kg
+  W_i_12: 827532.03 J
+  W_a_12: 0.00 J
+  w_a_12: 0.00 J/kg
+  del_T_12: 1.00 K
+  del_p_12: 241066.76 Pa
+  del_u_12: 116553.81 J/kg
+  del_s_12: 0.00 J/(kg K)
+  del_e_pot_12: 0.00 J/kg
+  del_e_kin_12: 0.00 J/kg
+  m_I: 7.10 kg
+  R_gas1: 486.47 J/(kg K)
+  c_v_gas1: 116553.81 J/(kg K)
+equations:
+  SpecificStateVariableVEquation2:
+    name: SpecificStateVariableVEquation
+    expression: -V_2/m_I + v_2
+  InternalEnergyEquation1:
+    name: InternalEnergyEquation
+    expression: -c_v_gas1*(-T0_1 + T_1) + u_1
+  InternalEnergyEquation2:
+    name: InternalEnergyEquation
+    expression: -c_v_gas1*(-T0_2 + T_2) + u_2
+  SpecificVolumeDensityEquation1:
+    name: SpecificVolumeDensityEquation
+    expression: -R_gas1*T_1 + h_1 - u_1
+  SpecificVolumeDensityEquation2:
+    name: SpecificVolumeDensityEquation
+    expression: -R_gas1*T_2 + h_2 - u_2
+  SpecificHeatTransferEquation1:
+    name: SpecificHeatTransferEquation
+    expression: -Q_12/m_I + q_12
+  SpecificWorkOnInternalStateEquation1:
+    name: SpecificWorkOnInternalStateEquation
+    expression: -W_i_12/m_I + w_i_12
+  SpecificWorkOnExternalStateEquation1:
+    name: SpecificWorkOnExternalStateEquation
+    expression: -W_a_12/m_I + w_a_12
+  DelUPerfectGasEquation1:
+    name: DelUPerfectGasEquation
+    expression: -c_v_gas1*del_T_12 + del_u_12
+  DelSPerfectGasVolumeEquation1:
+    name: DelSPerfectGasVolumeEquation
+    expression: -R_gas1*log(v_2/v_1) - c_v_gas1*log(T_2/T_1) + del_s_12
+  WorkOnInternalExternalStateEquation1:
+    name: WorkOnInternalExternalStateEquation
+    expression: W_12 - W_a_12 - W_i_12
+  SpecificWorkOnInternalExternalStateEquation1:
+    name: SpecificWorkOnInternalExternalStateEquation
+    expression: w_12 - w_a_12 - w_i_12
+  FirstLawSpecific1:
+    name: FirstLawSpecific
+    expression: -del_e_kin_12 - del_e_pot_12 - del_u_12 + q_12 + w_12
+  NotInMotionDelekinEquation1:
+    name: NotInMotionDelekinEquation
+    expression: del_e_kin_12
+  NotInMotionDelepotEquation1:
+    name: NotInMotionDelepotEquation
+    expression: del_e_pot_12
+  AdiabaticHeatEquation1:
+    name: AdiabaticHeatEquation
+    expression: Q_12
+  AdiabaticSpecificHeatEquation1:
+    name: AdiabaticSpecificHeatEquation
+    expression: q_12
+  IsentropicEntropyEquation1:
+    name: IsentropicEntropyEquation
+    expression: del_s_12
+  DelTEquation1:
+    name: DelTEquation
+    expression: T_1 - T_2 + del_T_12
+  DelPEquation1:
+    name: DelPEquation
+    expression: del_p_12 + p_1 - p_2
+  SpecificEnthalpyEquation1:
+    name: SpecificEnthalpyEquation
+    expression: h_2 - p_2*v_2 - u_2
+  SpecificEnthalpyEquation2:
+    name: SpecificEnthalpyEquation
+    expression: h_1 - p_1*v_1 - u_1
+  Assignmentw_i_12:
+    name: Assignmentw_i_1
+    expression: w_i_12 - 116553.81
+  AssignmentW_12:
+    name: AssignmentW_1
+    expression: W_12 - 827532.03
+  AssignmentV_2:
+    name: AssignmentV_
+    expression: V_2 - 2.45
+  AssignmentT_2:
+    name: AssignmentT_
+    expression: T_2 - 330.0
+  Assignmentv_1:
+    name: Assignmentv_
+    expression: v_1 - 0.714
+  AssignmentT_1:
+    name: AssignmentT_
+    expression: T_1 - 329.0
+  AssignmentT0_1:
+    name: AssignmentT0_
+    expression: T0_1 - 273.15
+  AssignmentT0_2:
+    name: AssignmentT0_
+    expression: T0_2 - 273.15
+  AssignmentW_a_12:
+    name: AssignmentW_a_1
+    expression: W_a_12

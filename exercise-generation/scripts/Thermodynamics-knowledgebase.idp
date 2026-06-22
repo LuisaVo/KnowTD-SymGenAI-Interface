@@ -1,0 +1,261 @@
+vocabulary Voc { 
+    // concepts
+    type System ≜ {I}
+    type State ≜ {1, 2}
+    type PureMaterial ≜ {gas1}
+    type ChangeOfState ≜ {A}
+    type Transition ≜ {12}
+
+    // attributes
+    type System_type ≜ {open, closed, isolated}
+    type Material_type ≜ {homogeneous, heterogeneous}
+    type EquationOfState ≜ {'ideal gas', 'perfect gas', 'van der waals', other}
+    type Equilibrium ≜ {equilibrium, not_equilibrium}
+    type Transition_types ≜ {adiabatic, reversible, polytropic, isothermal, isochoric, isobaric, isentropic}
+    
+
+    // variables
+    [Mass] m: (System) → ℝ
+    [MolarMass] M: (PureMaterial) → ℝ
+    [Temperature] T: (State) → ℝ
+    [StandardTemperature] T0: () → ℝ
+    [Pressure] p: (State) → ℝ
+    [Volume] V: (State) → ℝ
+    [InternalEnergy] U: (State) → ℝ
+    [Enthalpy] H: (State) → ℝ
+    [Entropy] S: (State) → ℝ
+    [IndividualGasConstant] R: (PureMaterial) → ℝ
+    [SpecificHeatCapacityConstantPressure] c_p: (PureMaterial) → ℝ
+    [SpecificHeatCapacityConstantVolume] c_v: (PureMaterial) → ℝ
+    [HeatCapacityRatio] kappa: (PureMaterial) → ℝ
+    [Heat] Q: (Transition) → ℝ
+    [Work] W: (Transition) → ℝ
+    [WorkOnInternalState] W_i: (Transition) → ℝ
+    [WorkOnExternalState] W_a: (Transition) → ℝ
+    [VolumeChangeWork] W_vol: (Transition) → ℝ
+    [StirringWork] W_stir: (Transition) → ℝ
+    [ElectricalWork] W_electrical: (Transition) → ℝ
+    [InternalEnergyDifference] del_U: (Transition) → ℝ
+    [EnthalpyDifference] del_H: (Transition) → ℝ
+    [EntropyDifference] del_S: (Transition) → ℝ
+    [PolytropicExponent] n_poly: (Transition) → ℝ
+
+    // concept - attribute relation
+    [System is of type]
+    system_has_type: (System) → System_type
+    [System is equilibrium (or not)]
+    system_in_equilibrium: (System) → Equilibrium
+    material_is_modeled_by: (PureMaterial) → EquationOfState
+    material_has_type: (PureMaterial) → Material_type
+    state_in_equilibrium: (State) → Equilibrium
+    transition_has_type: (Transition ⨯ Transition_types) → 𝔹
+
+    // concept - concept relation
+    state_belongs_to_system: (State) → System
+    system_contains_material: (System) → PureMaterial
+
+    initial_state: (ChangeOfState) → State
+    final_state: (ChangeOfState) → State
+    uses_transition: (ChangeOfState) → Transition
+
+    // pedagogical cases
+    type case ≜ {case1, case2, case3}
+    transition_has_case: (Transition) → case
+}
+
+theory T : Voc {
+// state
+    [Every state belongs to exactly one system.]
+    ∀state ∈ State: #{ sys in System: state_belongs_to_system(state) = sys} = 1.
+
+    // change of state
+    [Initial and final state of a change of state must differ.]
+    ∀change ∈ ChangeOfState: initial_state(change) ≠ final_state(change).
+    [A change of state must connect states that belong to the same system.]
+    ∀change ∈ ChangeOfState: state_belongs_to_system(initial_state(change)) = state_belongs_to_system(final_state(change)).
+    [Only equilibrium states can serve as initial/final states.]
+    ∀change ∈ ChangeOfState: state_in_equilibrium(initial_state(change)) = equilibrium ∧ state_in_equilibrium(final_state(change)) = equilibrium.
+    [A change of state has exactly one final, one initial state and one transition.]
+    ∀change ∈ ChangeOfState: (∃state in State: initial_state(change) = state)
+                      ∧ (∃state in State: final_state(change) = state)
+                      ∧ (∃transition in Transition: uses_transition(change) = transition).
+
+    // system
+    [If state is in equilibrium, so must all its states.]
+    ∀sys ∈ System: ( system_in_equilibrium(sys) = equilibrium ) ⇒ (∀state ∈ State: ( state_belongs_to_system(state) = sys ) ⇒ ( state_in_equilibrium(state) = equilibrium) ).
+    [A system must contain a material and at least one state.]
+    ∀sys ∈ System: #{ material ∈ PureMaterial: system_contains_material(sys) = material} = 1.
+
+    // material
+    [If a material is modeled by ideal gas, then it must be homogeneous.]
+    ∀material ∈ PureMaterial, sys ∈ System: ((material_is_modeled_by(material) = 'ideal gas' ) ∧ system_contains_material(sys) = material) ⇒ ( system_in_equilibrium(sys) = equilibrium).
+
+    // attributes
+    // adiabatic
+    [In an adiabatic transition there is no heat transfer.]
+    ∀transition ∈ Transition:
+        transition_has_type(transition, adiabatic) ⇔ Q(transition) = 0.
+    // isothermal
+    [In an isothermal transition there is no change in temperature.]
+    ∀change ∈ ChangeOfState:
+        transition_has_type(uses_transition(change), isothermal) ⇒ T(final_state(change)) - T(initial_state(change)) = 0.
+    [An isothermal transition is polytropic.]
+    ∀transition ∈ Transition:
+        transition_has_type(transition, isothermal) ⇔ transition_has_type(transition, polytropic) ∧ n_poly(transition) = 1.
+    // isobaric
+    [In an isobaric transition there is no change in pressure.]
+    ∀change ∈ ChangeOfState:
+        transition_has_type(uses_transition(change), isobaric) ⇒ p(final_state(change)) - p(initial_state(change)) = 0.
+    [An isobaric transition is polytropic.]
+    ∀transition ∈ Transition:
+        transition_has_type(transition, isobaric) ⇔ ( transition_has_type(transition, polytropic) ∧ n_poly(transition) = 0).
+    // isochoric
+    [In an isochoric transition there is no change in volume.]
+    ∀change ∈ ChangeOfState:
+        transition_has_type(uses_transition(change), isochoric) ⇒ V(final_state(change)) - V(initial_state(change)) = 0.
+    [A isochoric transition cannot be polytropic.]
+    ∀transition ∈ Transition:
+        transition_has_type(transition, isochoric) ⇒  ¬ transition_has_type(transition, polytropic).
+    [IsochoricWorkOnInternalStateEquation]
+    ∀transition ∈ Transition:
+        transition_has_type(transition, isochoric) ⇔ (W_vol(transition) = 0).
+    //isentropic
+    [An isentropic transition is polytropic.]
+    ∀change ∈ ChangeOfState:
+        transition_has_type(uses_transition(change), isentropic) ⇔ ( transition_has_type(uses_transition(change), polytropic) ∧ n_poly(uses_transition(change)) = kappa(system_contains_material(state_belongs_to_system(initial_state(change)))) ).
+    [An isentropic transition is adiabatic and reversible and vice versa.]
+    ∀transition ∈ Transition: ( transition_has_type(transition, adiabatic) ∧ transition_has_type(transition, reversible) ) ⇔ transition_has_type(transition, isentropic).
+    [In an isentropic transition there is no change in entropy.]
+    ∀transition ∈ Transition:
+        transition_has_type(transition, isentropic) ⇒ ( del_S(transition) = 0 ).
+    // polytropic
+    // [In a polytropic transition p *v^n is constant ]
+    // ∀change in ChangeOfState:
+    //     transition_has_type(uses_transition(change), polytropic) ⇒ ∃n in ℤ: p(initial_state(change)) * V(initial_state(change))^n = const(change).
+    [A polytropic transition is always reversible]
+    ∀transition ∈ Transition:
+        transition_has_type(transition, polytropic)  ⇒ transition_has_type(transition, reversible).
+
+    // reversible / irreversible
+    [If there is w_stir, then it is irreversible.]
+    ∀transition ∈ Transition:
+        ( W_stir(transition) ≠ 0 ) ⇒  ( ¬ transition_has_type(transition, reversible)).
+    [If there is W_electrical, then it is irreversible.]
+    ∀transition ∈ Transition:
+        ( W_electrical(transition) ≠ 0 ) ⇒ ( ¬ transition_has_type(transition, reversible)).
+
+
+    // positive Values
+    ∀state ∈ State: 
+        V(state) ≥ 0 ∧
+        p(state) ≥ 0 ∧
+        T(state) ≥ 0.
+    ∀sys ∈ System:
+        m(sys) > 0.
+    ∀material ∈ PureMaterial:
+        R(material) > 0 ∧
+        c_v(material) > 0 ∧
+        c_p(material) > 0.
+
+    // constant values
+    T0() = 273.15.
+
+    // default
+    ∀transition ∈ Transition: W_a(transition) = 0.
+
+    // Definitions
+    [KappaPolytropicExponentEquation]
+    ∀material ∈ PureMaterial:  (kappa(material) * c_v(material) = c_p(material)).
+    [CaloricEquationOfStateIdealGas]
+    ∀material ∈ PureMaterial:  ( (material_is_modeled_by(material) = 'ideal gas') ∨ (material_is_modeled_by(material) = 'perfect gas') ) ⇒ (R(material) = c_p(material) - c_v(material)).
+    [InternalEnergyEquation]
+    ∀state ∈ State: ∀system in System: (state_belongs_to_system(state) = system) ∧ (material_is_modeled_by(system_contains_material(system)) = 'perfect gas') ⇒ (U(state) = c_v(system_contains_material(system)) * (T(state) - T0()) * m(system)).
+    [WorkOnInternalExternalStateEquation]
+    ∀change ∈ ChangeOfState: (W(uses_transition(change)) = W_i(uses_transition(change)) + W_a(uses_transition(change))).
+    [WorkOnInternalStateEquation]
+    ∀change ∈ ChangeOfState: (W_i(uses_transition(change)) = W_vol(uses_transition(change)) + W_stir(uses_transition(change)) + W_electrical(uses_transition(change))).
+    [EnthalpyEquation]
+    ∀state ∈ State:  (H(state) = U(state) + p(state) * V(state)).
+    // Definition Deltas
+    [DelUEquation]
+    ∀change ∈ ChangeOfState: (del_U(uses_transition(change)) = U(final_state(change)) - U(initial_state(change))).
+    [DelHEquation]
+    ∀change ∈ ChangeOfState: (del_H(uses_transition(change)) = H(final_state(change)) - H(initial_state(change))).
+    [DelSEquation]
+    ∀change ∈ ChangeOfState: (del_S(uses_transition(change)) = S(final_state(change)) - S(initial_state(change))).
+    [DelHHeatCapacityEquation]
+    ∀change ∈ ChangeOfState: ∀system in System: (state_belongs_to_system(initial_state(change)) = system) ∧ (material_is_modeled_by(system_contains_material(system)) = 'perfect gas') ⇒ (del_H(uses_transition(change)) = c_p(system_contains_material(system)) * (T(final_state(change)) - T(initial_state(change))) * m(system)).
+    
+    
+    // Laws
+    [FirstLaw]
+    ∀change ∈ ChangeOfState: (Q(uses_transition(change)) + W(uses_transition(change)) = del_U(uses_transition(change))).
+    [SecondLaw]
+    ∀transition ∈ Transition: ( del_S(transition) ≥ 0 ).
+    [IdealGasLaw]
+    ∀state ∈ State: ∀system in System: (state_belongs_to_system(state) = system) ∧ ( (material_is_modeled_by(system_contains_material(system)) = 'ideal gas') ∨ (material_is_modeled_by(system_contains_material(system)) = 'perfect gas') ) ⇒ (p(state) * V(state) = m(system) * R(system_contains_material(system)) * T(state)).
+
+
+    [A process is meaningful if at least one of T,p,V changes.]
+    ∀change ∈ ChangeOfState:
+        ( T(initial_state(change)) ≠ T(final_state(change))) ∨ 
+        ( p(initial_state(change)) ≠ p(final_state(change)))  ∨
+        ( V(initial_state(change)) ≠ V(final_state(change))).
+
+    [A process is meaningful if at least one of Q,W is non-zero.]
+    ∀change ∈ ChangeOfState:
+        ( Q(uses_transition(change)) ≠ 0) ∨
+        ( W(uses_transition(change)) ≠ 0).
+
+    [Pedagogical setting 1: No Work]
+    ∀transition ∈ Transition: ( transition_has_case(transition) = case1 ) ⇔ ( Q(transition) ≠ 0 ∧ W(transition) = 0 ).
+    [Pedagogical setting 2: No Heat]
+    ∀transition ∈ Transition: ( transition_has_case(transition) = case2 ) ⇔ ( Q(transition) = 0 ∧ W(transition) ≠ 0 ).
+    [Pedagogical setting 3: Heat and Work]
+    ∀transition ∈ Transition: ( transition_has_case(transition) = case3 ) ⇔ ( Q(transition) ≠ 0 ∧ W(transition) ≠ 0 ).
+
+}
+
+structure S_default:Voc {
+    state_belongs_to_system ≜ {1 → I, 2 → I}.
+    system_contains_material ≜ {I → gas1}.
+    system_in_equilibrium ≜ {I→equilibrium}.
+    initial_state ≜ {A→1}.
+    final_state ≜ {A→2}.
+    uses_transition ≜ {A→12}.
+    system_has_type ≜ {I→closed}.
+    material_is_modeled_by ≜ {gas1 → 'perfect gas'}.
+    material_has_type ≜ {gas1 → homogeneous}.
+    state_in_equilibrium ≜ {1→equilibrium, 2→equilibrium}.
+}
+
+structure S_case1:Voc {
+    transition_has_case ≜ {12→case1}.
+}
+
+structure S_case2:Voc {
+    transition_has_case ≜ {12→case2}.
+}
+
+structure S_case3:Voc {
+    transition_has_case ≜ {12→case3}.
+}
+
+structure S_test:Voc {
+    Q ⊇ {12→0}.
+    transition_has_type ≜ {(12, isochoric), (12, adiabatic)}.
+    transition_has_case ≜ {12→case2}.
+}
+
+// display {
+//     introduction('<div>This example lets you reason about thermodynamic processes.<br/><br/> <b>Tips:</b> Fill all the fields with a grey background. Click on a grey button to see an explanation.</div>').
+// }
+
+procedure main() {
+    pretty_print(model_check(T, S_default))
+    pretty_print(model_expand(T, S_default, max=1))
+    // pretty_print(Theory(T, S_default).explain())
+    
+    // pretty_print(model_propagate(T))
+    // pretty_print(minimize(T, S))
+}

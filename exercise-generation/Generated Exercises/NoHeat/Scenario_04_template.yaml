@@ -1,0 +1,297 @@
+states:
+- id: '1'
+  T:
+    id: T_1
+  T0:
+    id: T0_1
+    value: 273.15
+  p:
+    id: p_1
+  V:
+    id: V_1
+  v:
+    id: v_1
+  rho:
+    id: rho_1
+  U:
+    id: U_1
+  u:
+    id: u_1
+  H:
+    id: H_1
+  h:
+    id: h_1
+  S:
+    id: S_1
+  s:
+    id: s_1
+  sm:
+    id: sm_1
+  c:
+    id: c_1
+  z:
+    id: z_1
+  E_kin:
+    id: E_kin_1
+  e_kin:
+    id: e_kin_1
+  E_pot:
+    id: E_pot_1
+  e_pot:
+    id: e_pot_1
+  equilibrium: true
+- id: '2'
+  T:
+    id: T_2
+  T0:
+    id: T0_2
+    value: 273.15
+  p:
+    id: p_2
+  V:
+    id: V_2
+  v:
+    id: v_2
+  rho:
+    id: rho_2
+  U:
+    id: U_2
+  u:
+    id: u_2
+  H:
+    id: H_2
+  h:
+    id: h_2
+  S:
+    id: S_2
+  s:
+    id: s_2
+  sm:
+    id: sm_2
+  c:
+    id: c_2
+  z:
+    id: z_2
+  E_kin:
+    id: E_kin_2
+  e_kin:
+    id: e_kin_2
+  E_pot:
+    id: E_pot_2
+  e_pot:
+    id: e_pot_2
+  equilibrium: true
+change_of_state:
+  id: A
+  initial_state: '1'
+  final_state: '2'
+  transition:
+    id: '12'
+    motion: false
+    adiabatic: true
+    reversible: false
+    Q:
+      id: Q_12
+    q:
+      id: q_12
+    W:
+      id: W_12
+    w:
+      id: w_12
+    W_i:
+      id: W_i_12
+    W_a:
+      id: W_a_12
+      value: 0.0
+    w_i:
+      id: w_i_12
+    w_a:
+      id: w_a_12
+    w_t:
+      id: w_t_12
+    W_vol:
+      id: W_vol_12
+    w_vol:
+      id: w_vol_12
+    W_stir:
+      id: W_stir_12
+    w_stir:
+      id: w_stir_12
+    W_electrical:
+      id: W_electrical_12
+    w_electrical:
+      id: w_electrical_12
+    del_T:
+      id: del_T_12
+    del_p:
+      id: del_p_12
+    del_V:
+      id: del_V_12
+    del_v:
+      id: del_v_12
+    del_U:
+      id: del_U_12
+    del_u:
+      id: del_u_12
+    del_H:
+      id: del_H_12
+    del_h:
+      id: del_h_12
+    del_S:
+      id: del_S_12
+    del_s:
+      id: del_s_12
+    del_sm:
+      id: del_sm_12
+    del_z:
+      id: del_z_12
+    del_c:
+      id: del_c_12
+    del_E_pot:
+      id: del_E_pot_12
+    del_e_pot:
+      id: del_e_pot_12
+    del_E_kin:
+      id: del_E_kin_12
+    del_e_kin:
+      id: del_e_kin_12
+    n_poly:
+      id: n_poly_12
+    ratio_T:
+      id: ratio_T_12
+    ratio_p:
+      id: ratio_p_12
+    ratio_v:
+      id: ratio_v_12
+    is_isothermal: false
+    is_isochoric: false
+    is_polytropic: false
+    is_isobaric: false
+    is_isentropic: false
+system:
+  id: I
+  material: gas1
+  m:
+    id: m_I
+  n:
+    id: n_I
+  related_changes_and_states:
+  - A
+  - '1'
+  - '2'
+  related_changes:
+  - A
+  related_states:
+  - '1'
+  - '2'
+  closed: true
+  equilibrium: true
+  motion: false
+  homogeneous: true
+pureMaterial:
+  id: gas1
+  equation_of_state:
+    id: EquationOfState1
+    model: perfect gas
+  M:
+    id: M_gas1
+  R:
+    id: R_gas1
+  kappa:
+    id: kappa_gas1
+  Rbar:
+    id: Rbar_gas1
+    value: 8.31446261815324
+  c_p:
+    id: c_p_gas1
+  c_v:
+    id: c_v_gas1
+  c_pm:
+    id: c_pm_gas1
+  c_vm:
+    id: c_vm_gas1
+  homogeneous: true
+  pure: true
+required_variables:
+- T_1
+- p_1
+- V_1
+- v_1
+- rho_1
+- U_1
+- u_1
+- H_1
+- h_1
+- S_1
+- s_1
+- sm_1
+- c_1
+- z_1
+- E_kin_1
+- e_kin_1
+- E_pot_1
+- e_pot_1
+- T_2
+- p_2
+- V_2
+- v_2
+- rho_2
+- U_2
+- u_2
+- H_2
+- h_2
+- S_2
+- s_2
+- sm_2
+- c_2
+- z_2
+- E_kin_2
+- e_kin_2
+- E_pot_2
+- e_pot_2
+- Q_12
+- q_12
+- W_12
+- w_12
+- W_i_12
+- W_a_12
+- w_i_12
+- w_a_12
+- w_t_12
+- W_vol_12
+- w_vol_12
+- W_stir_12
+- w_stir_12
+- W_electrical_12
+- w_electrical_12
+- del_T_12
+- del_p_12
+- del_V_12
+- del_v_12
+- del_U_12
+- del_u_12
+- del_H_12
+- del_h_12
+- del_S_12
+- del_s_12
+- del_sm_12
+- del_z_12
+- del_c_12
+- del_E_pot_12
+- del_e_pot_12
+- del_E_kin_12
+- del_e_kin_12
+- n_poly_12
+- ratio_T_12
+- ratio_p_12
+- ratio_v_12
+- m_I
+- n_I
+- M_gas1
+- R_gas1
+- kappa_gas1
+- c_p_gas1
+- c_v_gas1
+- c_pm_gas1
+- c_vm_gas1
+problem_class: SingleStep

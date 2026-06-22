@@ -1,0 +1,34 @@
+# **Question:**  A gas in a cooled cylinder undergoes an isothermal compression at T = 298 K. The initial and final pressure are p_1 = 1 bar, p_2 = 1.6 bar. Calculate the heat that has to be removed per kilogram of gas.
+
+# The gas is ideal, with R = 518 J/(kg K).
+problem_class: SingleStep
+system:
+  id: I
+  material: Gas
+  related_changes_and_states: 
+    - A
+pureMaterial:
+  id: Gas
+  R:
+    value: 518
+  equation_of_state:
+    id: eos_gas
+    model: perfect gas
+states:
+  - id: 1
+    p:
+      value: 100000
+    T:
+      value: 298
+  - id: 2
+    p:
+      value: 160000
+change_of_state:
+  id: A
+  initial_state: 1
+  final_state: 2
+  transition:
+    id: 12
+    is_isothermal: true
+required_variables:
+  - q_12

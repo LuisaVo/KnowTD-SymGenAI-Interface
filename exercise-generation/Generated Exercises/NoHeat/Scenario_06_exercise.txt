@@ -1,0 +1,18 @@
+**Question:** An ideal gas in a closed cylinder undergoes a reversible adiabatic (isentropic) polytropic process from state 1 to state 2.  
+
+At state 1, the temperature and specific volume are  
+T₁ = 329.0 K, v₁ = 0.714 m³/kg.  
+
+At state 2, the temperature is T₂ = 330.0 K and the total volume is V₂ = 2.45 m³.  
+
+During the process, there is no heat transfer:  
+Q₁₂ = 0.0 J, q₁₂ = 0.0 J/kg.  
+
+The total work and the specific work are  
+W₁₂ = 827532.03 J, wᵢ,₁₂ = 116553.81 J/kg.  
+
+The process is adiabatic, reversible, isentropic, and polytropic (but neither isothermal, isochoric, nor isobaric).  
+
+Calculate the pressure difference Δp₁₂ between state 1 and state 2.  
+
+The gas is ideal and behaves as a perfect gas.

@@ -1,0 +1,154 @@
+id: https://gitlab.rhrk.uni-kl.de/knowtd/knowtd/-/blob/main/Ontology/thermodynamics_attributes.yaml
+title: Thermodynamics Attributes
+name: thermo_attributes
+description: |-
+  Ontology to describe classes relating to thermodynamics.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+version: 2.0.0
+
+prefixes:
+  wikidata: https://www.wikidata.org/wiki/
+  thmo_attributes: https://gitlab.rhrk.uni-kl.de/knowtd/knowtd/-/blob/main/Ontology/thermodynamics_attributes.yaml/
+
+default_prefix: thmo_attributes
+default_range: boolean
+
+imports:
+  - linkml:types
+
+#==================================
+# Classes                         #
+#================================== 
+slots:
+# attributes of systems:
+  equilibrium:
+    range: boolean
+    description: >-
+      A system is in equilibrium if no changes occur if it is isolated from 
+      its surroundings
+    in_subset:
+      - attributes
+    exact_mappings:
+      - wikidata:Q51363
+  closed:
+    range: boolean
+    ifabsent: 'True'
+    description: >-
+      A closed thermodynamic system contains a macrocopic amount of matter. 
+      There is no mass flow across its boundary, the mass of the system is constant. 
+      Work and heat can be transferred across the system's boundary. The boundary 
+      can be a real object (e.g. walls) or we can just imagine it. The system can 
+      move freely in space. Everything outside the system is called "surroundings".
+    in_subset:
+      - attributes
+    exact_mappings:
+      - wikidata:Q1468684
+  motion:
+    range: boolean
+    ifabsent: 'False'
+    in_subset:
+      - attributes
+    exact_mappings:
+      - wikidata:Q79782
+  homogeneous:
+    range: boolean
+    ifabsent: 'True'
+    description: >-
+      A system is homogenous if at all locations inside the system all intesive 
+      state variables have the same value.
+    in_subset:
+      - attributes
+    close_mappings:
+      - wikidata:Q906378
+# attributes of materials:
+  pure:
+    range: boolean
+    description: >-
+      A pure substance has a fixed chemical composition and distinct chemical 
+      properties. It consists of only one type of molecule.
+    in_subset:
+      - attributes
+    exact_mappings:
+      - wikidata:Q578779
+    # inverse: mixed
+  mixed:
+    range: boolean
+    description: >-
+      A mixture consists of two or more pure substances. The composition of a 
+      mixture may vary.
+    in_subset:
+      - attributes
+    exact_mappings:
+      - wikidata:Q169336
+    # inverse: pure
+# attributes of change of states:
+  adiabatic:
+    range: boolean
+    in_subset:
+      - attributes
+    equals_expression: "{is_isentropic} > 0"
+    exact_mappings:
+      - wikidata:Q182453
+  reversible:
+    range: boolean
+    in_subset:
+      - attributes
+    equals_expression: "{is_isentropic} > 0"
+    exact_mappings:
+      - wikidata:Q908691
+  is_isothermal:
+    range: boolean
+    in_subset:
+      - attributes
+    exact_mappings:
+      - wikidata:Q486921
+  is_isochoric:
+    range: boolean
+    in_subset:
+      - attributes
+    exact_mappings:
+      - wikidata:Q208388
+  is_polytropic:
+    range: boolean
+    in_subset:
+      - attributes
+    exact_mappings:
+      - wikidata:Q831024
+  is_isobaric:
+    range: boolean
+    in_subset:
+      - attributes
+    exact_mappings:
+      - wikidata:Q137649
+  is_isenthalpic:
+    range: boolean
+    in_subset:
+      - attributes
+    exact_mappings:
+      - wikidata:Q907297
+  is_isentropic:
+    range: boolean
+    in_subset:
+      - attributes
+    equals_expression: "{adiabatic} + {reversible} > 1"
+    exact_mappings:
+      - wikidata:Q907271
+
+# attributes of EOS:
+  model:
+    range: string
+    ifabsent: string(perfect gas)
+    in_subset:
+      - attributes
+
+
+# Enums
+enums:
+  EquationOfStateModels:
+    permissible_values:
+      ideal gas:
+      van der Waals:
+      perfect gas:
+subsets:
+   attributes:
+    description: Subset of slots (range attribute) that can be used to relate attributes to concepts (domain).

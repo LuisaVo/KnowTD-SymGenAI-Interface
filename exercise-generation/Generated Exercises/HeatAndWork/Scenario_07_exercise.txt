@@ -1,0 +1,8 @@
+**Question:** A closed, homogeneous ideal gas system changes from equilibrium state 1 to equilibrium state 2. There is no motion and the process is not reversible.
+
+At state 1: (T_1 = 349.0\ \text{K}), (p_1 = 338000.0\ \text{Pa}).
+At state 2: (T_2 = 306.0\ \text{K}) and (p_2 = 126000.0\ \text{Pa}).
+
+Determine the change in specific volume, (\Delta v_{12}).
+
+The gas is ideal, with (R = 880.44\ \text{J/(kg·K)}).

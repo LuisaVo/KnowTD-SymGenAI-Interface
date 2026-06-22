@@ -1,0 +1,20 @@
+name: knowTD
+channels:
+  - anaconda
+  - defaults
+  - pip
+dependencies:
+  - matplotlib
+  - sympy
+  - flask
+  - graphviz
+  - pip:
+      - dash
+      - dash_cytoscape
+      - dash-bootstrap-components
+      - linkml=1.8.2
+      - linkml-dataops
+      - linkml-runtime
+      - networkx
+      - pandas
+      - pyyaml

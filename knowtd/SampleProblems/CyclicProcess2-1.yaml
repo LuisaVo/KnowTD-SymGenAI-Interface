@@ -1,0 +1,80 @@
+# We consider a gas in a compartment closed by a movable piston. In the initial state, the piston is locked and the gas is under the temperature T_1 = 300 K and the pressure p_1 = 2 bar. In a first step, the locking mechanism is released: the gas is compressed by the piston and undergoes an isentropic compression to p_2 = 10 bar (State 1 -> State 2). The gas is then isobarically heated, the supplied heat per kilogram of gas is q_23 = 50 kJ/kg (State 2 -> State 3). Finally, the moving piston enables an adiabatic and reversibel expansion of the gas to p_4 = p_1 (State 3 -> State 4). The gas then undergoes an isobaric cooling and reaches the state 1 (State 4 -> State 1).
+# a) Calculate the temperature T_2
+# b) Calculate the temperature T_3
+# c) Calculate the internal work w_i done on the gas during the step 2 -> 3
+# d) Calculate the temperature T_4
+# e) Calculate the specific internal energy difference delta_u during the step 4 -> 1
+# Assumptions:
+# Changes in kinetic and potential energy can be neglected
+# The gas is a perfect gas
+# The changes of state occur through equilibria
+# Gas properties:
+# cp = 1.015 kJ/(kg K)
+# R = 0.29 kJ/(kg K)
+
+problem_class: CyclicProcess
+system:
+  id: I
+  material: Gas
+  related_changes_and_states: 
+    - A
+    - B
+    - C
+    - D
+pureMaterial:
+  id: Gas
+  R:
+    value: 290
+  c_p:
+    value: 1015
+  equation_of_state:
+    id: eos_gas
+    model: perfect gas
+states:
+  - id: 1
+    T:
+      value: 300
+    p:
+      value: 200000
+  - id: 2
+    p:
+      value: 1000000
+  - id: 3
+    z:
+  - id: 4
+    z:
+change_of_states:
+  - id: A
+    initial_state: 1
+    final_state: 2
+    transition:
+      id: 12
+      is_isentropic: true
+  - id: B
+    initial_state: 2
+    final_state: 3
+    transition:
+      id: 23
+      is_isobaric: true
+      q:
+        value: 50000
+  - id: C
+    initial_state: 3
+    final_state: 4
+    transition:
+      id: 34
+      adiabatic: true
+      reversible: true
+      is_isentropic: true
+  - id: D
+    initial_state: 4
+    final_state: 1
+    transition:
+      id: 41
+      is_isobaric: true
+required_variables:
+  - T_2
+  - T_3
+  - w_i_23
+  - T_4
+  - del_u_41

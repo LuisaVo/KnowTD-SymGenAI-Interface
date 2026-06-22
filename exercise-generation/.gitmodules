@@ -1,0 +1,3 @@
+[submodule "knowtd"]
+	path = knowtd
+	url = https://gitlab.rhrk.uni-kl.de/knowtd/knowtd

@@ -1,0 +1,41 @@
+# **Question:** A gas in a cylinder is compressed reversibly from v_1 = 0.05 m^3/kg to v_2 = 0.02 m^3/kg. The initial temperature is T_1 = 298 K. The process is adiabatic. What is the work supplied per kilogram of gas?
+
+# The gas is ideal, with R = 287 J/(kg K) and c_v = 1010 J/(kg K).
+
+#**Answer:** $p = 118778.571428571$
+
+problem_class: SingleStep
+system:
+  id: I
+  material: Gas
+  related_changes_and_states: 
+    - A
+pureMaterial:
+  id: Gas
+  R:
+    value: 287
+  c_v:
+    value: 1010
+  equation_of_state:
+    id: eos_gas
+    model: perfect gas
+states:
+  - id: 1
+    v:
+      value: 0.05
+    T:
+      value: 298
+  - id: 2
+    v:
+      value: 0.02
+change_of_state:
+  id: A
+  initial_state: 1  
+  final_state: 2
+  transition:
+    id: 12
+    adiabatic: true
+    reversible: true
+    is_isentropic: true
+required_variables:
+  - w_12

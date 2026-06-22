@@ -1,0 +1,19 @@
+id: https://gitlab.rhrk.uni-kl.de/knowtd/knowtd/-/blob/main/Ontology/thermodynamics_ontology.yaml
+title: Thermodynamics Ontology
+name: thermo_ontology
+description: |-
+  Ontology to describe classes relating to thermodynamics. It consists of concepts, variables, attributes, equations, rules and problems
+license: https://creativecommons.org/publicdomain/zero/1.0/
+version: 2.0.0
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+
+imports:
+  - linkml:types
+  - thermodynamics_concepts
+  - thermodynamics_variables
+  - thermodynamics_attributes
+  - thermodynamics_equations
+  - thermodynamics_rules
+  - thermodynamics_problems

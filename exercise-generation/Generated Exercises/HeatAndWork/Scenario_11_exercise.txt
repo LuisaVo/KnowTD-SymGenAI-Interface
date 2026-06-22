@@ -1,0 +1,3 @@
+**Question:** An ideal gas in a closed, stationary cylinder undergoes a reversible polytropic expansion at constant pressure. Initially, the gas is at temperature T₁ = 341.0 K, and specific volume v₁ = 0.833 m³/kg. Finally, the gas is at temperature T₂ = 324 K. The amount of substance in the system is n = 4186.42 mol. Calculate the change of specific entropy Δs₁₂.
+
+The gas is ideal, with molar mass M = 0.011 kg/mol, and c_v = 785.43 J/(kg K).

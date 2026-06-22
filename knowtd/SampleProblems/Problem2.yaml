@@ -1,0 +1,41 @@
+# **Question:**  A gas in a cylinder undergoes a polytropic expansion with the exponent n = 0.8. The initial pressure and specific volume are p_1 = 2 bar and v_1 = 0.7 m^3/kg, the final specific volume is v_2 = 1.1 m^3/kg. Calculate the following quantities per kilogram of gas: work, heat, entropy change.  
+
+# The gas is ideal, with R = 277 J/(kg K) and c_v = 1746 J/(kg K).
+
+problem_class: SingleStep
+system:
+  id: I
+  material: Gas
+  related_changes_and_states: 
+    - A
+pureMaterial:
+  id: Gas
+  R:
+    value: 277
+  c_v:
+    value: 1746
+  equation_of_state:
+    id: eos_gas
+    model: perfect gas
+states:
+  - id: 1
+    p:
+      value: 200000
+    v:
+      value: 0.7
+  - id: 2
+    v:
+      value: 1.1
+change_of_state:
+  id: A
+  initial_state: 1
+  final_state: 2
+  transition:
+    id: 12
+    is_polytropic: true
+    n_poly:
+      value: 0.8
+required_variables:
+  - w_12
+  - q_12
+  - del_s_12

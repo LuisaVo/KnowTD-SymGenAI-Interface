@@ -1,0 +1,37 @@
+# **Question:**  A cylinder contains m = 1 kg of an ideal gas. The initial volume, pressure and temperature are V_1 = 0.8 m^3, p_1 = 1 bar, and T_1 = 298 K. After an adiabatic reversible compression, the final pressure and temperature are p_2 = 2.9 bar, and T_2 = 333 K. Calculate the molar mass of the gas, and its molar heat capacity at constant volume c_v.
+problem_class: SingleStep
+system:
+  id: I
+  material: Gas
+  related_changes_and_states: 
+    - A
+  m:
+    value: 1
+pureMaterial:
+  id: Gas
+  equation_of_state:
+    id: eos_gas
+    model: perfect gas
+states:
+  - id: 1
+    V:
+      value: 0.8
+    T:
+      value: 298
+    p:
+      value: 100000
+  - id: 2
+    p:
+      value: 290000
+    T:
+      value: 333
+change_of_state:
+  id: A
+  initial_state: 1
+  final_state: 2
+  transition:
+    id: 12
+    is_isentropic: true
+required_variables:
+  - M_Gas
+  - c_vm_Gas

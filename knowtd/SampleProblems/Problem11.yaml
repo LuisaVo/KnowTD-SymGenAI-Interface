@@ -1,0 +1,35 @@
+# **Question:**  A gas in a closed rigid cylinder is heated by up from T_1 = 298 K to T_2 = 353 K. The supplied heat is 1,3 kJ. Calculate the mass of the gas in the cylinder. 
+
+# The gas is ideal with c_v = 479 J/(kg K). 
+
+problem_class: SingleStep
+system:
+  id: I
+  material: Gas
+  related_changes_and_states: 
+    - A
+pureMaterial:
+  id: Gas
+  c_v:
+    value: 479
+  equation_of_state:
+    id: eos_gas
+    model: perfect gas
+states:
+  - id: 1
+    T:
+      value: 298
+  - id: 2
+    T:
+      value: 353
+change_of_state:
+  id: A
+  initial_state: 1
+  final_state: 2
+  transition:
+    id: 12
+    Q:
+      value: 1300
+    is_isochoric: true
+required_variables:
+  - m_I

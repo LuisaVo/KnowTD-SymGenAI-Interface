@@ -1,0 +1,161 @@
+id: https://gitlab.rhrk.uni-kl.de/knowtd/knowtd/-/blob/main/Ontology/thermodynamics_problems.yaml
+title: Thermodynamics Problems
+name: thermo_problems
+description: |-
+  Ontology to describe classes relating to thermodynamics.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+version: 2.0.0
+
+prefixes:
+  wikidata: https://www.wikidata.org/wiki/
+  thmo_problems: https://gitlab.rhrk.uni-kl.de/knowtd/knowtd/-/blob/main/Ontology/thermodynamics_problems.yaml/
+
+default_prefix: thmo_problems
+default_range: string
+
+imports:
+  - thermodynamics_concepts
+#==================================
+# Classes                         #
+#==================================
+classes:
+  Problem:
+    # is_a: Element
+    description: >-
+      Basic Problem with manually entered additional equations and required variables.
+    tree_root: true
+    slots:
+      - required_variables
+      - additional_equations
+      - problem_class
+      - valid_problem
+      - invalid_problem
+
+  SystemProblem:
+    is_a: Problem
+    description: >-
+      Basic Problem covering one system with manually entered additional equations and required variables.
+    slots:
+      - system
+      - pureMaterial
+    exact_mappings:
+      - wikidata:Q503327
+    slot_usage:
+      system:
+        required: True
+
+  Equilibrium:
+    is_a: SystemProblem
+    description: >-
+      Problem that contains a system, material, equation of state, one state and no change of state or transition.
+    slots:
+      - state
+    exact_mappings:
+      - wikidata:Q51363
+    slot_usage:
+      state:
+        required: True
+  
+  SingleStep:
+    is_a: SystemProblem
+    description: >-
+      Problem that describes a system that transitions from one state to another.
+    slots:
+      - states
+      - change_of_state
+    slot_usage:
+      states:
+        exact_cardinality: 2
+      change_of_state:
+        required: True
+      valid_problem:
+        equals_expression: len({states}) == 2
+    exact_mappings:
+      - wikidata:Q213016
+  
+  SequentialSteps:
+    is_a: SystemProblem
+    description: >-
+      Problem that describes a system that transitions between multiple states sequentially.
+    slots:
+      - states
+      - change_of_states
+    slot_usage:
+      states:
+        minimum_cardinality: 3
+      change_of_states:
+        minimum_cardinality: 2
+      valid_problem:
+        equals_expression: len({states}) == len({change_of_states}) + 1
+    close_mappings:
+      - wikidata:Q7783163
+      
+  CyclicProcess:
+    is_a: SystemProblem
+    description: >-
+      Problem that describes a system that transitions between multiple states in a cyclic manner.
+    slots:
+      - states
+      - change_of_states
+    slot_usage:
+      states:
+        minimum_cardinality: 3
+      change_of_states:
+        minimum_cardinality: 3
+      valid_problem:
+        equals_expression: len({states}) == len({change_of_states})
+    exact_mappings:
+      - wikidata:Q75920
+
+slots:
+  required_variables:
+    required: true
+    range: string
+    multivalued: true
+    in_subset:
+      - problem_references
+  additional_equations:
+    range: string
+    multivalued: true
+    in_subset:
+      - problem_references
+  problem_class:
+    required: true
+    designates_type: true
+    range: string
+    in_subset:
+      - problem_references
+  pureMaterial:
+    inlined: true
+    inlined_as_list: true
+    range: PureMaterial  
+    in_subset:
+      - problem_references
+  states:
+    required: true
+    inlined: true
+    multivalued: true
+    inlined_as_list: true
+    range: State
+    in_subset:
+      - problem_references
+  change_of_states:
+    required: true
+    inlined: true
+    multivalued: true
+    inlined_as_list: true
+    range: ChangeOfState
+    in_subset:
+      - problem_references
+
+  # slots for sanity checks:
+  valid_problem:
+    range: boolean
+    equals_expression: 1
+  invalid_problem:
+    range: boolean
+    # equals_expression: not valid_problem # evals to true if valid_problem is None
+  
+subsets:
+   problem_references:
+    description: Subset of slots (range concept) that can be used to relate concepts to problems (domain).

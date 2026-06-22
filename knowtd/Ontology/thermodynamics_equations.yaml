@@ -1,0 +1,1435 @@
+id: https://gitlab.rhrk.uni-kl.de/knowtd/knowtd/-/blob/main/Ontology/thermodynamics_equations.yaml
+title: Thermodynamics Equations
+name: thermo_equations
+description: |-
+  Ontology to describe classes relating to thermodynamics.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+version: 2.0.0
+
+prefixes:
+  thmo_equations: https://gitlab.rhrk.uni-kl.de/knowtd/knowtd/-/blob/main/Ontology/thermodynamics_equations.yaml/
+
+default_prefix: thmo_equations
+default_range: string
+
+imports:
+  - thermodynamics_concepts
+  - thermodynamics_rules
+
+#==================================
+# Classes                         #
+#==================================
+classes:
+  Equation:
+    is_a: Element
+    abstract: true
+    slots:
+      - id
+      - as_text
+      - related_variables
+  
+  Inequality:
+    is_a: Equation
+    abstract: true
+
+  SecondLawAdiabaticIrreversible:
+    is_a: Inequality
+    mixins: 
+      - AdiabaticRule
+      - IrreversibleRule
+    slots:
+      - change_of_state_id
+    annotations:
+      schema:mathExpression: s_2 - s_1 > 0
+    slot_usage:
+      as_text:
+        ifabsent: string(s_{change_of_state#final_state} - s_{change_of_state#initial_state} > 0)  
+  
+  BaseEquation:
+    is_a: Equation
+    mixin: true
+    abstract: true
+
+  DefiningEquation:
+    is_a: BaseEquation
+    mixin: true
+    abstract: true
+
+  AdditionalEquation:
+    is_a: Equation
+  
+  SystemEquation:
+    is_a: Equation
+    abstract: true
+    # mixins: SystemRules
+    slots:
+      - system_id
+  AmountOfSubstanceEquation:
+    is_a: SystemEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: n = m/M
+    slot_usage:
+      as_text:
+        ifabsent: string(m_{system} = M_{system#material}*n_{system})  
+
+  MaterialEquation:
+    is_a: Equation
+    abstract: true
+    slots:
+      - material_id
+  MolarHeatCapacityConstantPressureEquation:
+    is_a: MaterialEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: c_pm = c_p * M
+    slot_usage:
+      as_text:
+        ifabsent: string(c_pm_{material} = c_p_{material} * M_{material})
+  MolarHeatCapacityConstantVolumeEquation:
+    is_a: MaterialEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: c_vm = c_v * M
+    slot_usage:
+      as_text:
+        ifabsent: string(c_vm_{material} = c_v_{material} * M_{material})
+  KappaPolytropicExponentEquation:
+    is_a: MaterialEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: kappa = c_p/c_v
+    slot_usage:
+      as_text:
+        ifabsent: string(kappa_{material} = c_p_{material}/c_v_{material})
+
+  IdealGasEquation:
+    is_a: MaterialEquation
+    abstract: true
+    mixins:
+      - IdealGasMaterialRule
+  CaloricEquationOfStateIdealGas:
+    is_a: IdealGasEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: R = c_p - c_v
+    slot_usage:
+      as_text:
+        ifabsent: string(R_{material} = c_p_{material} - c_v_{material})
+  SpecificGasConstantEquation:
+    is_a: IdealGasEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: R = Rbar / M
+    slot_usage:
+      as_text:
+        ifabsent: string(R_{material} = Rbar_{material} / M_{material})
+    
+  
+
+  StateEquation:
+    is_a: Equation
+    abstract: true
+    slots:
+      - state_id
+  EnthalpyEquation:
+    is_a: StateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: H = U + p*V
+    slot_usage:
+      as_text:
+        ifabsent: string(H_{state} = U_{state} + p_{state}*V_{state})
+  SpecificEnthalpyEquation:
+    is_a: StateEquation
+    annotations:
+      schema:mathExpression: h = u + p*v
+    slot_usage:
+      as_text:
+        ifabsent: string(h_{state} = u_{state} + p_{state}*v_{state})
+  ThermalDensityEquation:
+    is_a: StateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: rho = 1/v
+    slot_usage:
+      as_text:
+        ifabsent: string(rho_{state} = 1/v_{state})
+ 
+  SystemInStateEquation:
+    is_a: Equation
+    abstract: true
+    # mixins: SystemRules
+    slots:
+      - system_id
+      - state_id
+  SpecificStateVariableVEquation:
+    is_a: SystemInStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: v = V/m
+    slot_usage:
+      as_text:
+        ifabsent: string(v_{state} = V_{state}/m_{system})
+  SpecificStateVariableUEquation:
+    is_a: SystemInStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: u = U/m
+    slot_usage:
+      as_text:
+        ifabsent: string(u_{state} = U_{state}/m_{system})
+  SpecificStateVariableHEquation:
+    is_a: SystemInStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: h = H/m
+    slot_usage:
+      as_text:
+        ifabsent: string(h_{state} = H_{state}/m_{system})
+  SpecificStateVariableSEquation:
+    is_a: SystemInStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: s = S/m
+    slot_usage:
+      as_text:
+        ifabsent: string(s_{state} = S_{state}/m_{system})
+  MolarStateVariableSEquation:
+    is_a: SystemInStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: sm = S/n
+    slot_usage:
+      as_text:
+        ifabsent: string(sm_{state} = S_{state}/n_{system})
+  SpecificKineticEnergyCenterMassEquation:
+    is_a: SystemInStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: e_kin = E_kin/m
+    slot_usage:
+      as_text:
+        ifabsent: string(e_kin_{state} = E_kin_{state}/m_{system})
+  SpecificPotentialEnergyCenterMassEquation:
+    is_a: SystemInStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: e_pot = E_pot/m
+    slot_usage:
+      as_text:
+        ifabsent: string(e_pot_{state} = E_pot_{state}/m_{system})
+  SpecificDensityEquation:
+    is_a: SystemInStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: rho = m/V
+    slot_usage:
+      as_text:
+        ifabsent: string(rho_{state} = m_{system}/V_{state})
+
+
+  IdealGasSystemInStateEquation:
+    is_a: SystemInStateEquation
+    abstract: true
+    mixins: 
+      - IdealGasRule
+  IdealGasLaw:
+    is_a: IdealGasSystemInStateEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: p * V = m * R * T
+    slot_usage:
+      as_text:
+        ifabsent: string(p_{state} * V_{state} = m_{system} * R_{system#material} * T_{state})
+  SpecificIdealGasLaw:
+    is_a: IdealGasSystemInStateEquation
+    annotations:
+      schema:mathExpression: p * v = R * T
+    slot_usage:
+      as_text:
+        ifabsent: string(p_{state} * v_{state} = R_{system#material} * T_{state})
+  IdealGasLawAmountOfSubstance:
+    is_a: IdealGasSystemInStateEquation
+    annotations:
+      schema:mathExpression: p * V = n * Rbar * T
+    slot_usage:
+      as_text:
+        ifabsent: string(p_{state} * V_{state} = n_{system} * Rbar_{system#material} * T_{state})
+  SpecificVolumeDensityEquation:
+    is_a: IdealGasSystemInStateEquation
+    annotations:
+      schema:mathExpression: h = u + R*T
+    slot_usage:
+      as_text:
+        ifabsent: string(h_{state} = u_{state} + R_{system#material}*T_{state})
+
+  PerfectGasSystemInStateEquation:
+    is_a: SystemInStateEquation
+    abstract: true
+    mixins: 
+      - PerfectGasRule
+  InternalEnergyEquation:
+    is_a: PerfectGasSystemInStateEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: u = c_v * (T - T0)
+    slot_usage:
+      as_text:
+        ifabsent: string(u_{state} = c_v_{system#material} * (T_{state} - T0_{state}))
+
+
+  ChangeOfStateEquation:
+    is_a: Equation
+    abstract: true
+    slots:
+      - change_of_state_id
+  ChangeOfStateDifferenceEquation:
+    is_a: ChangeOfStateEquation
+    abstract: true
+  DelTEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_T = T_2 - T_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_T_{change_of_state#transition} = T_{change_of_state#final_state} - T_{change_of_state#initial_state})
+  DelPEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_p = p_2 - p_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_p_{change_of_state#transition} = p_{change_of_state#final_state} - p_{change_of_state#initial_state})
+  DelVEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_V = V_2 - V_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_V_{change_of_state#transition} = V_{change_of_state#final_state} - V_{change_of_state#initial_state})
+  DelvEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_v = v_2 - v_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_v_{change_of_state#transition} = v_{change_of_state#final_state} - v_{change_of_state#initial_state})
+  DelUEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_U = U_2 - U_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_U_{change_of_state#transition} = U_{change_of_state#final_state} - U_{change_of_state#initial_state})
+  DeluEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_u = u_2 - u_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_u_{change_of_state#transition} = u_{change_of_state#final_state} - u_{change_of_state#initial_state})
+  DelHEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_H = H_2 - H_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_H_{change_of_state#transition} = H_{change_of_state#final_state} - H_{change_of_state#initial_state})
+  DelhEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_h = h_2 - h_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_h_{change_of_state#transition} = h_{change_of_state#final_state} - h_{change_of_state#initial_state})
+  DelSEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_S = S_2 - S_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_S_{change_of_state#transition} = S_{change_of_state#final_state} - S_{change_of_state#initial_state})
+  DelsEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_s = s_2 - s_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_s_{change_of_state#transition} = s_{change_of_state#final_state} - s_{change_of_state#initial_state})
+  DelsmEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_sm = sm_2 - sm_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_sm_{change_of_state#transition} = sm_{change_of_state#final_state} - sm_{change_of_state#initial_state})
+  DelCEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_c = c_2 - c_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_c_{change_of_state#transition} = c_{change_of_state#final_state} - c_{change_of_state#initial_state})
+  DelZEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_z = z_2 - z_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_z_{change_of_state#transition} = z_{change_of_state#final_state} - z_{change_of_state#initial_state})
+  DelEKinEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_E_kin = E_kin_2 - E_kin_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_E_kin_{change_of_state#transition} = E_kin_{change_of_state#final_state} - E_kin_{change_of_state#initial_state})
+  DelEPotEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_E_pot = E_pot_2 - E_pot_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_E_pot_{change_of_state#transition} = E_pot_{change_of_state#final_state} - E_pot_{change_of_state#initial_state})
+  DeleKinEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_e_kin = e_kin_2 - e_kin_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_e_kin_{change_of_state#transition} = e_kin_{change_of_state#final_state} - e_kin_{change_of_state#initial_state})
+  DelePotEquation:
+    is_a: ChangeOfStateDifferenceEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: del_e_pot = e_pot_2 - e_pot_1
+    slot_usage:
+      as_text:
+        ifabsent: string(del_e_pot_{change_of_state#transition} = e_pot_{change_of_state#final_state} - e_pot_{change_of_state#initial_state})
+  PolytropicExponentEquation:
+    is_a: ChangeOfStateEquation
+    mixins: 
+      - DefiningEquation
+      - PolytropicRule
+    annotations:
+      schema:mathExpression: n_poly = ln(p_1/p_2)/ln(v_2/v_1)
+    slot_usage:
+      as_text:
+        ifabsent: string(n_poly_{change_of_state#transition} = ln(p_{change_of_state#initial_state} / p_{change_of_state#final_state})/ln(v_{change_of_state#final_state} / v_{change_of_state#initial_state}))
+  WorkOnInternalExternalStateEquation:
+    is_a: ChangeOfStateEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: W = W_i + W_a
+    slot_usage:
+      as_text:
+        ifabsent: string(W_{change_of_state#transition} = W_i_{change_of_state#transition} + W_a_{change_of_state#transition})
+  SpecificWorkOnInternalExternalStateEquation:
+    is_a: ChangeOfStateEquation
+    annotations:
+      schema:mathExpression: w = w_i + w_a
+    slot_usage:
+      as_text:
+        ifabsent: string(w_{change_of_state#transition} = w_i_{change_of_state#transition} + w_a_{change_of_state#transition})
+  VolumeStirringElectricalWorkEquation:
+    is_a: ChangeOfStateEquation
+    annotations:
+      schema:mathExpression: W_i = W_vol + W_stir + W_electrical
+    slot_usage:
+      as_text:
+        ifabsent: string(W_i_{change_of_state#transition} = W_vol_{change_of_state#transition} + W_stir_{change_of_state#transition} + W_electrical_{change_of_state#transition})
+  FirstLaw:
+    is_a: ChangeOfStateEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: Q + W = del_U + del_E_kin + del_E_pot
+    slot_usage:
+      as_text:
+        ifabsent: string(Q_{change_of_state#transition} + W_{change_of_state#transition} = del_U_{change_of_state#transition} + del_E_kin_{change_of_state#transition} + del_E_pot_{change_of_state#transition})
+  FirstLawSpecific:
+    is_a: ChangeOfStateEquation
+    annotations:
+      schema:mathExpression: q + w = del_u + del_e_kin + del_e_pot
+    slot_usage:
+      as_text:
+        ifabsent: string(q_{change_of_state#transition} + w_{change_of_state#transition} = del_u_{change_of_state#transition}+ del_e_kin_{change_of_state#transition} + del_e_pot_{change_of_state#transition})
+  TechnicalWorkEquation:
+    is_a: ChangeOfStateEquation
+    annotations:
+      schema:mathExpression: w_t = w_i + w_a + p_2 * v_2 - p_1 * v_1
+    slot_usage:
+      as_text:
+        ifabsent: string(w_t_{change_of_state#transition} = w_i_{change_of_state#transition} + w_a_{change_of_state#transition} + p_{change_of_state#final_state} * v_{change_of_state#final_state} - p_{change_of_state#initial_state} * v_{change_of_state#initial_state})
+  WorkOnExternalStateEquation:
+    is_a: ChangeOfStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: W_a = del_E_kin + del_E_pot
+    slot_usage:
+      as_text:
+        ifabsent: string(W_a_{change_of_state#transition} = del_E_kin_{change_of_state#transition} + del_E_pot_{change_of_state#transition})
+  RatioVolumeEquation:
+    is_a: ChangeOfStateEquation
+    annotations:
+      schema:mathExpression: ratio_v = v_2 / v_1
+    slot_usage:
+      as_text:
+        ifabsent: string(ratio_v_{change_of_state#transition} = v_{change_of_state#final_state} / v_{change_of_state#initial_state})
+  RatioTemperatureEquation:
+    is_a: ChangeOfStateEquation
+    annotations:
+      schema:mathExpression: ratio_T = T_2 / T_1
+    slot_usage:
+      as_text:
+        ifabsent: string(ratio_T_{change_of_state#transition} = T_{change_of_state#final_state} / T_{change_of_state#initial_state})
+  RatioPressureEquation:
+    is_a: ChangeOfStateEquation
+    annotations:
+      schema:mathExpression: ratio_p = p_2 / p_1
+    slot_usage:
+      as_text:
+        ifabsent: string(ratio_p_{change_of_state#transition} = p_{change_of_state#final_state} / p_{change_of_state#initial_state})
+
+  SystemInChangeOfStateEquation:
+    is_a: Equation
+    abstract: true
+    # mixins: SystemRules
+    slots:
+      - system_id
+      - change_of_state_id
+  SpecificHeatTransferEquation:
+    is_a: SystemInChangeOfStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: q = Q/m
+    slot_usage:
+      as_text:
+        ifabsent: string(q_{change_of_state#transition} = Q_{change_of_state#transition}/m_{system})
+  SpecificWorkTransferEquation:
+    is_a: SystemInChangeOfStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: w = W/m
+    slot_usage:
+      as_text:
+        ifabsent: string(w_{change_of_state#transition} = W_{change_of_state#transition}/m_{system})
+  SpecificWorkOnInternalStateEquation:
+    is_a: SystemInChangeOfStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: w_i = W_i / m
+    slot_usage:
+      as_text:
+        ifabsent: string(w_i_{change_of_state#transition} = W_i_{change_of_state#transition} / m_{system})
+  SpecificWorkOnExternalStateEquation:
+    is_a: SystemInChangeOfStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: w_a = W_a / m
+    slot_usage:
+      as_text:
+        ifabsent: string(w_a_{change_of_state#transition} = W_a_{change_of_state#transition} / m_{system})
+  SpecificVolumeChangeWorkEquation:
+    is_a: SystemInChangeOfStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: w_vol = W_vol / m
+    slot_usage:
+      as_text:
+        ifabsent: string(w_vol_{change_of_state#transition} = W_vol_{change_of_state#transition} / m_{system})
+  SpecificStirringWorkEquation:
+    is_a: SystemInChangeOfStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: w_stir = W_stir / m
+    slot_usage:
+      as_text:
+        ifabsent: string(w_stir_{change_of_state#transition} = W_stir_{change_of_state#transition} / m_{system})
+  SpecificElectricalWorkEquation:
+    is_a: SystemInChangeOfStateEquation
+    mixins: 
+      - DefiningEquation
+    annotations:
+      schema:mathExpression: w_electrical = W_electrical / m
+    slot_usage:
+      as_text:
+        ifabsent: string(w_electrical_{change_of_state#transition} = W_electrical_{change_of_state#transition} / m_{system})
+  PerfectGasChangeOfStateEquation:
+    is_a: SystemInChangeOfStateEquation
+    abstract: true
+    mixins:
+      - PerfectGasRule
+  DelHPerfectGasEquation:
+    is_a: PerfectGasChangeOfStateEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: del_h = c_p * del_T
+    slot_usage:
+      as_text:
+        ifabsent: string(del_h_{change_of_state#transition} = c_p_{system#material} * del_T_{change_of_state#transition})
+  DelUPerfectGasEquation:
+    is_a: PerfectGasChangeOfStateEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: del_u = c_v * del_T
+    slot_usage:
+      as_text:
+        ifabsent: string(del_u_{change_of_state#transition} = c_v_{system#material} * del_T_{change_of_state#transition})
+  DelSPerfectGasVolumeEquation:
+    is_a: PerfectGasChangeOfStateEquation
+    annotations:
+      schema:mathExpression: del_s = c_v * ln(T_2/T_1) + R*ln(v_2/v_1)
+    slot_usage:
+      as_text:
+        ifabsent: string(del_s_{change_of_state#transition} = c_v_{system#material} * ln(T_{change_of_state#final_state} / T_{change_of_state#initial_state}) + R_{system#material} * ln(v_{change_of_state#final_state} / v_{change_of_state#initial_state}))
+  DelSPerfectGasVolumeEquationII:
+    is_a: PerfectGasChangeOfStateEquation
+    annotations:
+      schema:mathExpression: del_sm = c_vm * ln(T_2/T_1) + Rbar*ln(v_2/v_1)
+    slot_usage:
+      as_text:
+        ifabsent: string(del_sm_{change_of_state#transition} = c_vm_{system#material} * ln(T_{change_of_state#final_state} / T_{change_of_state#initial_state}) + Rbar_{system#material} * ln(v_{change_of_state#final_state} / v_{change_of_state#initial_state}))
+
+
+  IsochoricEquation:
+    is_a: ChangeOfStateEquation
+    abstract: true
+    mixins:
+      - IsochoricRule
+  IsochoricVolumeEquation:
+    is_a: IsochoricEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: V_2 - V_1 = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(V_{change_of_state#final_state} - V_{change_of_state#initial_state} = 0)
+  IsochoricSpecificVolumeEquation:
+    is_a: IsochoricEquation
+    annotations:
+      schema:mathExpression: v_2 - v_1 = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(v_{change_of_state#final_state} - v_{change_of_state#initial_state} = 0)
+  IsochoricSpecificWorkOnInternalStateEquation:
+    is_a: IsochoricEquation
+    annotations:
+      schema:mathExpression: w_i = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(w_i_{change_of_state#transition} = 0)
+  IsochoricWorkOnInternalStateEquation:
+    is_a: IsochoricEquation
+    annotations:
+      schema:mathExpression: W_i = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(W_i_{change_of_state#transition} = 0)
+  IsochoricTechnicalWorkEquation: # TODO falsch
+    is_a: IsochoricEquation
+    annotations:
+      schema:mathExpression: w_t = v_1 * (p_2 - p_1)
+    slot_usage:
+      as_text:
+        ifabsent: string(w_t_{change_of_state#transition} = v_{change_of_state#initial_state} * (p_{change_of_state#final_state} - p_{change_of_state#initial_state}))
+
+  IsochoricIdealGasEquation:
+    is_a: SystemInChangeOfStateEquation
+    abstract: true
+    mixins:
+      - IdealGasRule
+      - IsochoricRule
+  IsochoricIdealGasPressureTemperatureRatio:
+    is_a: IsochoricIdealGasEquation
+    annotations:
+      schema:mathExpression: ratio_T = ratio_p
+    slot_usage:
+      as_text:
+        ifabsent: string(ratio_T_{change_of_state#transition} = ratio_p_{change_of_state#transition})
+
+  IsothermalChangeOfStateEquation:
+    is_a: ChangeOfStateEquation
+    abstract: true
+    mixins:
+      - IsothermalRule
+  IsothermalProperties:
+    is_a: IsothermalChangeOfStateEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: T_2 - T_1 = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(T_{change_of_state#final_state} - T_{change_of_state#initial_state} = 0)
+  IsothermalWorkOnInternalStateEquation:
+    is_a: IsothermalChangeOfStateEquation
+    annotations:
+      schema:mathExpression: w_i = del_u - T_1 * del_s
+    slot_usage:
+      as_text:
+        ifabsent: string(w_i_{change_of_state#transition} = del_u_{change_of_state#transition} - T_{change_of_state#initial_state} * del_s_{change_of_state#transition})
+
+  IsothermalIdealGasEquation:
+    is_a: SystemInChangeOfStateEquation
+    abstract: true
+    mixins:
+      - IdealGasRule
+      - IsothermalRule
+  IsothermalIdealGasPressureVolumeRatio:
+    is_a: IsothermalIdealGasEquation
+    annotations:
+      schema:mathExpression: v_2 / v_1 = p_1 / p_2
+    slot_usage:
+      as_text:
+        ifabsent: string(v_{change_of_state#final_state} / v_{change_of_state#initial_state} = p_{change_of_state#initial_state} / p_{change_of_state#final_state})
+  IsothermalIdealGasWorkEquation:
+    is_a: IsothermalIdealGasEquation
+    annotations:
+      schema:mathExpression: W_i = p_1 * V_1 * ln(p_2/p_1)
+    slot_usage:
+      as_text:
+        ifabsent: string(W_i_{change_of_state#transition} = p_{change_of_state#initial_state} * V_{change_of_state#initial_state} * ln(p_{change_of_state#final_state}/p_{change_of_state#initial_state}))
+  IsothermalIdealGasWorkEquationII:
+    is_a: IsothermalIdealGasEquation
+    annotations:
+      schema:mathExpression: w_i = R * T_1 * ln(p_2/p_1)
+    slot_usage:
+      as_text:
+        ifabsent: string(w_i_{change_of_state#transition} = R_{system#material} * T_{change_of_state#initial_state} * ln(p_{change_of_state#final_state}/p_{change_of_state#initial_state}))
+  IsothermalIdealGasPolytropicExponentEquation:
+    is_a: IsothermalIdealGasEquation
+    annotations:
+      schema:mathExpression: n_poly = 1
+    slot_usage:
+      as_text:
+        ifabsent: string(n_poly_{change_of_state#transition} = 1)
+
+  IsothermalPerfectGasEquation:
+    is_a: SystemInChangeOfStateEquation
+    abstract: true
+    mixins:
+      - PerfectGasRule
+      - IsothermalRule
+  IsothermalPerfectGasEntropyEquation:
+    is_a: IsothermalPerfectGasEquation
+    annotations:
+      schema:mathExpression: del_s = R * ln(v_2/v_1)
+    slot_usage:
+      as_text:
+        ifabsent: string(del_s_{change_of_state#transition} = R_{system#material} * ln(v_{change_of_state#final_state} / v_{change_of_state#initial_state}))
+  IsothermalPerfectGasWorkOnInternalStateEquation:
+    is_a: IsothermalPerfectGasEquation
+    annotations:
+      schema:mathExpression: w_i = -T_1 * del_s
+    slot_usage:
+      as_text:
+        ifabsent: string(w_i_{change_of_state#transition} = - T_{change_of_state#initial_state} * del_s_{change_of_state#transition})
+
+  IsobaricEquation:
+    is_a: ChangeOfStateEquation
+    abstract: true
+    mixins:
+      - IsobaricRule
+  IsobaricProperties:
+    is_a: IsobaricEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: p_2 - p_1 = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(p_{change_of_state#final_state} - p_{change_of_state#initial_state} = 0)
+  IsobaricWorkOnInternalStateEquation:
+    is_a: IsobaricEquation
+    annotations:
+      schema:mathExpression: W_i = -p_1 * del_V
+    slot_usage:
+      as_text:
+        ifabsent: string(W_i_{change_of_state#transition} = - p_{change_of_state#initial_state} * del_V_{change_of_state#transition})
+  IsobaricSpecificWorkOnInternalStateEquation:
+    is_a: IsobaricEquation
+    annotations:
+      schema:mathExpression: w_i = -p_1 * del_v
+    slot_usage:
+      as_text:
+        ifabsent: string(w_i_{change_of_state#transition} = - p_{change_of_state#initial_state} * del_v_{change_of_state#transition})
+  IsobaricPolytropicExponentEquation:
+    is_a: IsobaricEquation
+    annotations:
+      schema:mathExpression: n_poly = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(n_poly_{change_of_state#transition} = 0)
+  IsobaricPerfectGasEquation:
+    is_a: SystemInChangeOfStateEquation
+    abstract: true
+    mixins:
+      - PerfectGasRule
+      - IsobaricRule
+  IsobaricPerfectGasHeatEquation:
+    is_a: IsobaricPerfectGasEquation
+    annotations:
+      schema:mathExpression: q = c_p * (T_2 - T_1)
+    slot_usage:
+      as_text:
+        ifabsent: string(q_{change_of_state#transition} = c_p_{system#material} * del_T_{change_of_state#transition})
+
+  AdiabaticEquation:
+    is_a: ChangeOfStateEquation
+    abstract: true
+    mixins:
+      - AdiabaticRule
+  AdiabaticHeatEquation:
+    is_a: AdiabaticEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: Q = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(Q_{change_of_state#transition} = 0)
+  AdiabaticSpecificHeatEquation:
+    is_a: AdiabaticEquation
+    annotations:
+      schema:mathExpression: q = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(q_{change_of_state#transition} = 0)
+  IsentropicEquation:
+    is_a: ChangeOfStateEquation
+    abstract: true
+    mixins:
+      - IsentropicRule
+  IsentropicHeatEquation:
+    is_a: IsentropicEquation
+    annotations:
+      schema:mathExpression: q = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(q_{change_of_state#transition} = 0)
+  IsentropicEntropyEquation:
+    is_a: IsentropicEquation
+    annotations:
+      schema:mathExpression: del_s = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(del_s_{change_of_state#transition} = 0)
+  IsentropicMolarEntropyEquation:
+    is_a: IsentropicEquation
+    annotations:
+      schema:mathExpression: del_sm = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(del_sm_{change_of_state#transition} = 0)
+
+  IsentropicPerfectGasEquation:
+    is_a: SystemInChangeOfStateEquation
+    abstract: true
+    mixins:
+      - PerfectGasRule
+      - IsentropicRule
+  IsentropicPerfectGasPolytropicExponentEquation:
+    is_a: IsentropicPerfectGasEquation
+    annotations:
+      schema:mathExpression: kappa = n_poly
+    slot_usage:
+      as_text:
+        ifabsent: string(kappa_{system#material} = n_poly_{change_of_state#transition})
+  IsentropicPerfectGasTechnicalWorkEquation:
+    is_a: IsentropicPerfectGasEquation
+    annotations:
+      schema:mathExpression: w_t = kappa * w_i
+    slot_usage:
+      as_text:
+        ifabsent: string(w_t_{change_of_state} = kappa_{system#material} * w_i_{change_of_state#transition})
+  IsentropicPerfectGasWorkEquation:
+    is_a: IsentropicPerfectGasEquation
+    annotations:
+      schema:mathExpression: w_i = (R * T_1 / (kappa-1)) * ((p_2/p_1)** ((kappa-1)/kappa) -1))
+    slot_usage:
+      as_text:
+        ifabsent: string(w_i_{change_of_state#transition} = (R_{system#material} * T_{change_of_state#initial_state} / (kappa_{system#material} -1)) * ((p_{change_of_state#final_state} / p_{change_of_state#initial_state})**((kappa_{system#material} - 1)/ kappa_{system#material}) - 1))
+  IsentropicPerfectGasTemperatureEquation:
+    is_a: IsentropicPerfectGasEquation
+    annotations:
+      schema:mathExpression: T_1 / T_2 = (p_1/p_2) ** ((kappa - 1)/kappa)
+    slot_usage:
+      as_text:
+        ifabsent: string(T_{change_of_state#initial_state} / T_{change_of_state#final_state} = (p_{change_of_state#initial_state}/p_{change_of_state#final_state})**((kappa_{system#material} -1)/kappa_{system#material}) )
+    
+  PolytropicEquation:
+    is_a: SystemInChangeOfStateEquation
+    abstract: true
+    mixins:
+      - PolytropicRule
+  PolytropicWorkEquation:
+    is_a: PolytropicEquation
+    annotations:
+      schema:mathExpression: w_i = p_1 * v_1 / (n_poly-1) * ((v_1 / v_2) ** (n_poly-1) - 1)
+    slot_usage:
+      as_text:
+        ifabsent: string(w_i_{change_of_state#transition} = (p_{change_of_state#initial_state} * v_{change_of_state#initial_state} / (n_poly_{change_of_state#transition} - 1)) * ((v_{change_of_state#initial_state} / v_{change_of_state#final_state})**(n_poly_{change_of_state#transition} -1) -1))
+
+  IdealGasPolytropicChangeOfStateEquation:
+    is_a: SystemInChangeOfStateEquation
+    mixins:
+      - PolytropicRule
+      - IdealGasRule
+    annotations:
+      schema:mathExpression: T_2 / T_1 = (p_2 / p_1) ** ((n_poly-1)/n_poly)
+    slot_usage:
+      as_text:
+        ifabsent: string(T_{change_of_state#final_state} / T_{change_of_state#initial_state} = (p_{change_of_state#final_state} / p_{change_of_state#initial_state})**((n_poly_{change_of_state#transition}-1)/n_poly_{change_of_state#transition}))
+  IdealGasPolytropicChangeOfStateEquationII:
+    is_a: SystemInChangeOfStateEquation
+    mixins:
+      - PolytropicRule
+      - IdealGasRule
+    annotations:
+      schema:mathExpression: w_i = R * (T_2 - T_1) / (n_poly - 1)
+    slot_usage:
+      as_text:
+        ifabsent: string(w_i_{change_of_state#transition}  = R_{system#material} * (T_{change_of_state#final_state} - T_{change_of_state#initial_state}) / (n_poly_{change_of_state#transition} - 1))
+
+  NotInMotionEquation:
+    is_a: ChangeOfStateEquation
+    abstract: true
+    mixins:
+      - NotInMotionRule
+  NotInMotionDelCEquation:
+    is_a: NotInMotionEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: del_c = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(del_c_{change_of_state#transition} = 0)
+  NotInMotionDelZEquation:
+    is_a: NotInMotionEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: del_z = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(del_z_{change_of_state#transition} = 0)
+  NotInMotionDelEkinEquation:
+    is_a: NotInMotionEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: del_E_kin = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(del_E_kin_{change_of_state#transition} = 0)
+  NotInMotionDelekinEquation:
+    is_a: NotInMotionEquation
+    annotations:
+      schema:mathExpression: del_e_kin = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(del_e_kin_{change_of_state#transition} = 0)
+  NotInMotionDelEpotEquation:
+    is_a: NotInMotionEquation
+    mixins: 
+      - BaseEquation
+    annotations:
+      schema:mathExpression: del_E_pot = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(del_E_pot_{change_of_state#transition} = 0)
+  NotInMotionDelepotEquation:
+    is_a: NotInMotionEquation
+    annotations:
+      schema:mathExpression: del_e_pot = 0
+    slot_usage:
+      as_text:
+        ifabsent: string(del_e_pot_{change_of_state#transition} = 0)
+
+slots:
+  as_text:
+    range: string
+  # sum slots:
+  related_variables:
+    range: Variable
+    multivalued: true
+  system_id:
+    range: System
+    in_subset:
+      - equation_references
+  change_of_state_id:
+    range: ChangeOfState
+    in_subset:
+      - equation_references
+  state_id:
+    range: State
+    in_subset:
+      - equation_references
+  material_id:
+    range: PureMaterial
+    in_subset:
+      - equation_references
+
+# system equations
+  amount_of_substance_equation:
+    range: AmountOfSubstanceEquation
+    in_subset:
+      - object_references
+# material equations
+  specific_gas_constant_equation:
+    range: SpecificGasConstantEquation
+    in_subset:
+      - object_references
+  kappa_polytropic_exponent_equation:
+    range: KappaPolytropicExponentEquation
+    in_subset:
+      - object_references
+  caloric_equation_of_state_ideal_gas:
+    range: CaloricEquationOfStateIdealGas
+    in_subset:
+      - object_references
+  molar_heat_capacity_constant_pressure_equation:
+    range: MolarHeatCapacityConstantPressureEquation
+    in_subset:
+      - object_references
+  molar_heat_capacity_constant_volume_equation:
+    range: MolarHeatCapacityConstantVolumeEquation
+    in_subset:
+      - object_references
+# state equations
+  enthalpy_equation:
+    range: EnthalpyEquation
+    in_subset:
+      - object_references
+  specific_enthalpy_equation:
+    range: SpecificEnthalpyEquation
+    in_subset:
+      - object_references
+  thermal_density_equation:
+    range: ThermalDensityEquation
+    in_subset:
+      - object_references
+# change of state equations
+  polytropic_exponent_equation:
+    range: PolytropicExponentEquation
+    in_subset:
+      - object_references
+  work_on_internal_external_state_equation:
+    range: WorkOnInternalExternalStateEquation
+    in_subset:
+      - object_references
+  specific_work_on_internal_external_state_equation:
+    range: SpecificWorkOnInternalExternalStateEquation
+    in_subset:
+      - object_references
+  volume_stirring_electrical_work_equation:
+    range: VolumeStirringElectricalWorkEquation
+    in_subset:
+      - object_references
+  first_law:
+    range: FirstLaw
+    in_subset:
+      - object_references
+  first_law_specific:
+    range: FirstLawSpecific
+    in_subset:
+      - object_references
+  technical_work_equation:
+    range: TechnicalWorkEquation
+    in_subset:
+      - object_references
+  work_on_external_state_equation:
+    range: WorkOnExternalStateEquation
+    in_subset:
+      - object_references
+  not_in_motion_del_c_equation:
+    range: NotInMotionDelCEquation
+    in_subset:
+      - object_references
+  not_in_motion_del_z_equation:
+    range: NotInMotionDelZEquation
+    in_subset:
+      - object_references
+  not_in_motion_del_E_kin_equation:
+    range: NotInMotionDelEkinEquation
+    in_subset:
+      - object_references
+  not_in_motion_del_e_kin_equation:
+    range: NotInMotionDelekinEquation
+    in_subset:
+      - object_references
+  not_in_motion_del_E_pot_equation:
+    range: NotInMotionDelEpotEquation
+    in_subset:
+      - object_references
+  not_in_motion_del_e_pot_equation:
+    range: NotInMotionDelepotEquation
+    in_subset:
+      - object_references
+  adiabatic_heat_equation:
+    range: AdiabaticHeatEquation
+    in_subset:
+      - object_references
+  adiabatic_specific_heat_equation:
+    range: AdiabaticSpecificHeatEquation
+    in_subset:
+      - object_references
+  isentropic_heat_equation:
+    range: IsentropicHeatEquation
+    in_subset:
+      - object_references
+  isentropic_entropy_equation:
+    range: IsentropicEntropyEquation
+    in_subset:
+      - object_references
+  isentropic_molar_entropy_equation:
+    range: IsentropicMolarEntropyEquation
+    in_subset:
+      - object_references
+  isobaric_properties:
+    range: IsobaricProperties
+    in_subset:
+      - object_references
+  isobaric_work_on_internal_state_equation:
+    range: IsobaricWorkOnInternalStateEquation
+    in_subset:
+      - object_references
+  isobaric_specific_work_on_internal_state_equation:
+    range: IsobaricSpecificWorkOnInternalStateEquation
+    in_subset:
+      - object_references
+  isothermal_properties:
+    range: IsothermalProperties
+    in_subset:
+      - object_references
+  isothermal_perfect_gas_work_on_internal_state_equation:
+    range: IsothermalPerfectGasWorkOnInternalStateEquation
+    in_subset:
+      - object_references
+  isothermal_work_on_internal_state_equation:
+    range: IsothermalWorkOnInternalStateEquation
+    in_subset:
+      - object_references
+  isochoric_volume_equation:
+    range: IsochoricVolumeEquation
+    in_subset:
+      - object_references
+  isochoric_specific_volume_equation:
+    range: IsochoricSpecificVolumeEquation
+    in_subset:
+      - object_references
+  isochoric_specific_work_on_internal_state_equation:
+    range: IsochoricSpecificWorkOnInternalStateEquation
+    in_subset:
+      - object_references
+  isochoric_work_on_internal_state_equation:
+    range: IsochoricWorkOnInternalStateEquation
+    in_subset:
+      - object_references
+  isochoric_technical_work_equation:
+    range: IsochoricTechnicalWorkEquation
+    in_subset:
+      - object_references
+  del_T_equation:
+    range: DelTEquation
+    in_subset:
+      - object_references
+  del_p_equation:
+    range: DelPEquation
+    in_subset:
+      - object_references
+  del_V_equation:
+    range: DelVEquation
+    in_subset:
+      - object_references
+  del_v_equation:
+    range: DelvEquation
+    in_subset:
+      - object_references
+  del_U_equation:
+    range: DelUEquation
+    in_subset:
+      - object_references
+  del_u_equation:
+    range: DeluEquation
+    in_subset:
+      - object_references
+  del_H_equation:
+    range: DelHEquation
+    in_subset:
+      - object_references
+  del_h_equation:
+    range: DelhEquation
+    in_subset:
+      - object_references
+  del_S_equation:
+    range: DelSEquation
+    in_subset:
+      - object_references
+  del_s_equation:
+    range: DelsEquation
+    in_subset:
+      - object_references
+  del_sm_equation:
+    range: DelsmEquation
+    in_subset:
+      - object_references
+  del_c_equation:
+    range: DelCEquation
+    in_subset:
+      - object_references
+  del_z_equation:
+    range: DelZEquation
+    in_subset:
+      - object_references
+  del_E_Kin_equation:
+    range: DelEKinEquation
+    in_subset:
+      - object_references
+  del_E_Pot_equation:
+    range: DelEPotEquation
+    in_subset:
+      - object_references
+  del_e_Kin_equation:
+    range: DeleKinEquation
+    in_subset:
+      - object_references
+  del_e_Pot_equation:
+    range: DelePotEquation
+    in_subset:
+      - object_references
+  ratio_volume_equation:
+    range: RatioVolumeEquation
+    in_subset:
+      - object_references
+  ratio_temperature_equation:
+    range: RatioTemperatureEquation
+    in_subset:
+      - object_references
+  ratio_pressure_equation:
+    range: RatioPressureEquation
+    in_subset:
+      - object_references
+# system + state equations
+  specific_state_variable_v_equation:
+    range: SpecificStateVariableVEquation
+    in_subset:
+      - object_references
+  specific_state_variable_u_equation:
+    range: SpecificStateVariableUEquation
+    in_subset:
+      - object_references
+  specific_state_variable_h_equation:
+    range: SpecificStateVariableHEquation
+    in_subset:
+      - object_references
+  specific_state_variable_s_equation:
+    range: SpecificStateVariableSEquation
+    in_subset:
+      - object_references
+  molar_state_variable_s_equation:
+    range: MolarStateVariableSEquation
+    in_subset:
+      - object_references
+  specific_kinetic_energy_center_mass_equation:
+    range: SpecificKineticEnergyCenterMassEquation
+    in_subset:
+      - object_references
+  specific_potential_energy_center_mass_equation:
+    range: SpecificPotentialEnergyCenterMassEquation
+    in_subset:
+      - object_references
+  specific_density_equation:
+    range: SpecificDensityEquation
+    in_subset:
+      - object_references
+  ideal_gas_law:
+    range: IdealGasLaw
+    in_subset:
+      - object_references
+  specific_ideal_gas_law:
+    range: SpecificIdealGasLaw
+    in_subset:
+      - object_references
+  ideal_gas_law_amount_of_substance:
+    range: IdealGasLawAmountOfSubstance
+    in_subset:
+      - object_references
+  internal_energy_equation:
+    range: InternalEnergyEquation
+    in_subset:
+      - object_references
+  specific_volume_density_equation:
+    range: SpecificVolumeDensityEquation
+    in_subset:
+      - object_references
+# system + change of state equations
+  specific_heat_transfer_equation:
+    range: SpecificHeatTransferEquation
+    in_subset:
+      - object_references
+  specific_work_transfer_equation:
+    range: SpecificWorkTransferEquation
+    in_subset:
+      - object_references
+  specific_work_on_internal_state_equation:
+    range: SpecificWorkOnInternalStateEquation
+    in_subset:
+      - object_references
+  specific_work_on_external_state_equation:
+    range: SpecificWorkOnExternalStateEquation
+    in_subset:
+      - object_references
+  specific_volume_change_work_equation:
+    range: SpecificVolumeChangeWorkEquation
+    in_subset:
+    - object_references
+  specific_stirring_work_equation:
+    range: SpecificStirringWorkEquation
+    in_subset:
+    - object_references
+  specific_electrical_work_equation:
+    range: SpecificElectricalWorkEquation
+    in_subset:
+    - object_references
+  ideal_gas_polytropic_change_of_state_equation:
+    range: IdealGasPolytropicChangeOfStateEquation
+    in_subset:
+      - object_references
+  ideal_gas_polytropic_change_of_state_equationII:
+    range: IdealGasPolytropicChangeOfStateEquationII
+    in_subset:
+      - object_references
+  polytropic_work_equation:
+    range: PolytropicWorkEquation
+    in_subset:
+      - object_references
+  isentropic_perfect_gas_polytropic_exponent_equation:
+    range: IsentropicPerfectGasPolytropicExponentEquation
+    in_subset:
+      - object_references
+  isentropic_perfect_gas_work_equation:
+    range: IsentropicPerfectGasWorkEquation
+    in_subset:
+      - object_references
+  isentropic_perfect_gas_temperature_equation:
+    range: IsentropicPerfectGasTemperatureEquation
+    in_subset:
+      - object_references
+  isobaric_perfect_gas_heat_equation:
+    range: IsobaricPerfectGasHeatEquation
+    in_subset:
+      - object_references
+  isobaric_polytropic_exponent_equation:
+    range: IsobaricPolytropicExponentEquation
+    in_subset:
+      - object_references
+  isothermal_ideal_gas_pressure_volume_ratio:
+    range: IsothermalIdealGasPressureVolumeRatio
+    in_subset:
+      - object_references
+  isothermal_ideal_gas_work_equation:
+    range: IsothermalIdealGasWorkEquation
+    in_subset:
+      - object_references
+  isothermal_ideal_gas_work_equation_II:
+    range: IsothermalIdealGasWorkEquationII
+    in_subset:
+      - object_references
+  isothermal_ideal_gas_polytropic_exponent_equation:
+    range: IsothermalIdealGasPolytropicExponentEquation
+    in_subset:
+      - object_references
+  isothermal_perfect_gas_entropy_equation:
+    range: IsothermalPerfectGasEntropyEquation
+    in_subset:
+      - object_references
+  isochoric_ideal_gas_pressure_temperature_ratio:
+    range: IsochoricIdealGasPressureTemperatureRatio
+    in_subset:
+      - object_references
+  del_H_perfect_gas_equation:
+    range: DelHPerfectGasEquation
+    in_subset:
+      - object_references
+  del_U_perfect_gas_equation:
+    range: DelUPerfectGasEquation
+    in_subset:
+      - object_references
+  del_S_perfect_gas_volume_equation:
+    range: DelSPerfectGasVolumeEquation
+    in_subset:
+      - object_references
+  del_S_perfect_gas_volume_equation_ii:
+    range: DelSPerfectGasVolumeEquationII
+    in_subset:
+      - object_references
+      
+subsets:
+  object_references:
+    description: Subset of slots (range equations) that can be used to relate equations to other elements (domain).

@@ -1,0 +1,37 @@
+# **Question:**  A gas with the density rho = 1.2 kg/m^3 in a rigid adiabatic tank with the volume V = 0.01 m^3 is stirred. The initial temperature is T_1 = 298 K. Calculate the temperature T_2 in the tank, after the stirrer has supplied a work of 1 kJ. 
+
+# The gas is ideal with c_v = 1746 J/(kg K). 
+problem_class: SingleStep
+system:
+  id: I
+  material: Gas
+  related_changes_and_states: 
+    - A
+pureMaterial:
+  id: Gas
+  c_v:
+    value: 1746
+  equation_of_state:
+    id: eos_gas
+    model: perfect gas
+states:
+  - id: 1
+    rho:
+      value: 1.2
+    V:
+      value: 0.01
+    T:
+      value: 298
+  - id: 2
+    rho:
+change_of_state:
+  id: A
+  initial_state: 1
+  final_state: 2
+  transition:
+    id: 12
+    adiabatic: true
+    W:
+      value: 1000
+required_variables:
+  - T_2

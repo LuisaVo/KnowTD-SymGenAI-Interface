@@ -1,0 +1,38 @@
+variables:
+  m_I: 12.14 kg
+  del_e_kin_12: 0.00 J/kg
+  del_e_pot_12: 0.00 J/kg
+  del_u_12: 5430.85 J/kg
+  w_a_12: 0.00 J/kg
+  w_i_12: 5430.85 J/kg
+  W_a_12: 0.00 J
+  w_12: 5430.85 J/kg
+  q_12: 0.00 J/kg
+equations:
+  SpecificWorkOnExternalStateEquation1:
+    name: SpecificWorkOnExternalStateEquation
+    expression: -W_a_12/m_I + w_a_12
+  SpecificWorkOnInternalExternalStateEquation1:
+    name: SpecificWorkOnInternalExternalStateEquation
+    expression: w_12 - w_a_12 - w_i_12
+  FirstLawSpecific1:
+    name: FirstLawSpecific
+    expression: -del_e_kin_12 - del_e_pot_12 - del_u_12 + q_12 + w_12
+  NotInMotionDelekinEquation1:
+    name: NotInMotionDelekinEquation
+    expression: del_e_kin_12
+  NotInMotionDelepotEquation1:
+    name: NotInMotionDelepotEquation
+    expression: del_e_pot_12
+  AdiabaticSpecificHeatEquation1:
+    name: AdiabaticSpecificHeatEquation
+    expression: q_12
+  Assignmentm_I:
+    name: Assignmentm_
+    expression: m_I - 12.14
+  Assignmentw_i_12:
+    name: Assignmentw_i_1
+    expression: w_i_12 - 5430.85
+  AssignmentW_a_12:
+    name: AssignmentW_a_1
+    expression: W_a_12

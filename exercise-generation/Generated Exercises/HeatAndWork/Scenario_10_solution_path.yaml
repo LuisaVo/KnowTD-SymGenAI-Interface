@@ -1,0 +1,46 @@
+variables:
+  c_vm_gas1: 22.99 J/(K mol)
+  c_v_gas1: 1149.50 J/(kg K)
+  M_gas1: 0.02 kg/mol
+  del_e_kin_12: 0.00 J/kg
+  del_e_pot_12: 0.00 J/kg
+  del_u_12: -87362.00 J/kg
+  del_T_12: -76.00 K
+  w_a_12: 0.00 J/kg
+  w_i_12: 59030.14 J/kg
+  w_12: 59030.14 J/kg
+  q_12: -146392.14 J/kg
+equations:
+  MolarHeatCapacityConstantVolumeEquation1:
+    name: MolarHeatCapacityConstantVolumeEquation
+    expression: -M_gas1*c_v_gas1 + c_vm_gas1
+  DelUPerfectGasEquation1:
+    name: DelUPerfectGasEquation
+    expression: -c_v_gas1*del_T_12 + del_u_12
+  SpecificWorkOnInternalExternalStateEquation1:
+    name: SpecificWorkOnInternalExternalStateEquation
+    expression: w_12 - w_a_12 - w_i_12
+  FirstLawSpecific1:
+    name: FirstLawSpecific
+    expression: -del_e_kin_12 - del_e_pot_12 - del_u_12 + q_12 + w_12
+  NotInMotionDelekinEquation1:
+    name: NotInMotionDelekinEquation
+    expression: del_e_kin_12
+  NotInMotionDelepotEquation1:
+    name: NotInMotionDelepotEquation
+    expression: del_e_pot_12
+  Assignmentc_vm_gas1:
+    name: Assignmentc_vm_gas
+    expression: c_vm_gas1 - 22.99
+  AssignmentM_gas1:
+    name: AssignmentM_gas
+    expression: M_gas1 - 0.02
+  Assignmentdel_T_12:
+    name: Assignmentdel_T_1
+    expression: del_T_12 + 76.0
+  Assignmentw_a_12:
+    name: Assignmentw_a_1
+    expression: w_a_12
+  Assignmentw_i_12:
+    name: Assignmentw_i_1
+    expression: w_i_12 - 59030.14

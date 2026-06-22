@@ -1,0 +1,37 @@
+# **Question:**  A gas in a cylinder is compressed adiabatically. The initial temperature and specific volume are T_1 = 298 K and v_1 = 0.8 m^3/kg. The final volume is v_2 = 0.5 m^3/kg. Calculate the minimal work that is required per kilogram of gas for this compression.
+
+# The gas is ideal, with R = 297 J/(kg K) and c_v = 1040 J/(kg K).
+problem_class: SingleStep
+system:
+  id: I
+  material: Gas
+  related_changes_and_states: 
+    - A
+pureMaterial:
+  id: Gas
+  R:
+    value: 297
+  c_v:
+    value: 1040
+  equation_of_state:
+    id: eos_gas
+    model: perfect gas
+states:
+  - id: 1
+    v:
+      value: 0.8
+    T:
+      value: 298
+  - id: 2
+    v:
+      value: 0.5
+change_of_state:
+  id: A
+  initial_state: 1
+  final_state: 2
+  transition:
+    id: 12
+    is_isentropic: true
+    # adiabatic: true
+required_variables:
+  - w_12

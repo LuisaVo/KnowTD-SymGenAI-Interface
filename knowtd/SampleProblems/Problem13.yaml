@@ -1,0 +1,37 @@
+# **Question:**  A gas in a cylinder undergoes an adiabatic polytropic expansion. The initial pressure and temperature are p_1 = 2.1 bar and T_1 = 273 K, the final pressure is p_2 = 1 bar. Calculate the work per kilogram of gas.
+
+# The gas is ideal with c_v = 1009 J/(kg K) and has a molar mass of 30 g/mol.   
+problem_class: SingleStep
+system:
+  id: I
+  material: Gas
+  related_changes_and_states: 
+    - A
+pureMaterial:
+  id: Gas
+  M:
+    value: 0.030
+  c_v:
+    value: 1009
+  equation_of_state:
+    id: eos_gas
+    model: perfect gas
+states:
+  - id: 1
+    p:
+      value: 210000
+    T:
+      value: 273
+  - id: 2
+    p:
+      value: 100000
+change_of_state:
+  id: A
+  initial_state: 1
+  final_state: 2
+  transition:
+    id: 12
+    is_isentropic: true
+    is_polytropic: true
+required_variables:
+  - w_12

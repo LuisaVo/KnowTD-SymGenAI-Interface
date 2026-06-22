@@ -1,0 +1,36 @@
+# **Question:**  A gas in a cylinder is compressed isentropically. The pressure and specific volume change from p_1 = 1 bar, v_1 = 0.52 m^3/kg to p_2 = 3 bar, v_2 = 0.2 m^3/kg. Calculate the molar heat capacity at constant volume c_v of the gas under the assumption that c_v is constant.
+
+# The gas is ideal, its molar mass is M = 44 g/mol. 
+problem_class: SingleStep
+system:
+  id: I
+  material: Gas
+  related_changes_and_states: 
+    - A
+pureMaterial:
+  id: Gas
+  M:
+    value: 0.044
+  equation_of_state:
+    id: eos_gas
+    model: perfect gas
+states:
+  - id: 1
+    p:
+      value: 100000
+    v:
+      value: 0.52
+  - id: 2
+    p:
+      value: 300000
+    v:
+      value: 0.2
+change_of_state:
+  id: A
+  initial_state: 1
+  final_state: 2
+  transition:
+    id: 12
+    is_isentropic: true
+required_variables:
+  - c_vm_Gas

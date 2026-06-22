@@ -1,0 +1,13 @@
+Case,Scenario ID,Description
+"Q ≠ 0, W = 0",01,"Q ≠ 0, W = 0, irreversible"
+"Q ≠ 0, W = 0",02,"Q ≠ 0, W = 0, irreversible, isochoric"
+"Q ≠ 0, W = 0",03,"Q ≠ 0, W = 0, reversible, isochoric"
+"Q = 0, W ≠ 0",04,"Q = 0, W ≠ 0, adiabatic, irreversible"
+"Q = 0, W ≠ 0",05,"Q = 0, W ≠ 0, adiabatic, irreversible, isochoric"
+"Q = 0, W ≠ 0",06,"Q = 0, W ≠ 0, adiabatic, reversible, isentropic, polytropic"
+"Q ≠ 0, W ≠ 0",07,"Q ≠ 0, W ≠ 0, irreversible"
+"Q ≠ 0, W ≠ 0",08,"Q ≠ 0, W ≠ 0, irreversible, isochoric"
+"Q ≠ 0, W ≠ 0",09,"Q ≠ 0, W ≠ 0, reversible"
+"Q ≠ 0, W ≠ 0",10,"Q ≠ 0, W ≠ 0, reversible, polytropic"
+"Q ≠ 0, W ≠ 0",11,"Q ≠ 0, W ≠ 0, reversible, isobaric, polytropic"
+"Q ≠ 0, W ≠ 0",12,"Q ≠ 0, W ≠ 0, reversible, isothermal, polytropic"

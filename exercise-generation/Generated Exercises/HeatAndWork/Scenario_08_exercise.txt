@@ -1,0 +1,5 @@
+**Question:**  
+A closed, rigid tank contains n = 989.62 mol of an ideal gas. The gas undergoes a heating process at constant volume (isochoric). In the final equilibrium state, the temperature and pressure are T_2 = 361.05 K and p_2 = 233000.0 Pa.  
+
+Determine the initial volume V_1 of the gas in the tank.  
+The gas is ideal and obeys the perfect gas law.

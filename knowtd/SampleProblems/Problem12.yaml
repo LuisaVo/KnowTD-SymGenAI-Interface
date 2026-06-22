@@ -1,0 +1,41 @@
+# **Question:**  A gas in a cylinder expands adiabatically. The initial pressure and specific volume are p_1 = 1.9 bar and v_1 = 0.9 m^3/kg, the final pressure and specific volume are p_2 = 1 bar and v_2 = 1.5 m^3/kg. Calculate the work per kilogram of gas and the change of the specific entropy.
+
+# The gas is ideal with c_v = 1040 J/(kg K) and has a molar mass of 28 g/mol.  
+problem_class: SingleStep
+system:
+  id: I
+  material: Gas
+  related_changes_and_states: 
+    - A
+pureMaterial:
+  id: Gas
+  M:
+    value: 0.028
+  c_v:
+    value: 1040
+  equation_of_state:
+    id: eos_gas
+    model: perfect gas
+states:
+  - id: 1
+    p:
+      value: 190000
+    v:
+      value: 0.9
+  - id: 2
+    p:
+      value: 100000
+    v:
+      value: 1.5
+change_of_state:
+  id: A
+  initial_state: 1
+  final_state: 2
+  transition:
+    id: 12
+    adiabatic: true
+    q: 
+      value: 0
+required_variables:
+  - w_12
+  - del_s_12

@@ -1,0 +1,34 @@
+variables:
+  R_gas1: 880.44 J/(kg K)
+  p_2: 126000.00 Pa
+  T_2: 306.00 K
+  p_1: 338000.00 Pa
+  T_1: 349.00 K
+  v_1: 0.91 m^3/kg
+  v_2: 2.14 m^3/kg
+  del_v_12: 1.23 m^3/kg
+equations:
+  SpecificIdealGasLaw1:
+    name: SpecificIdealGasLaw
+    expression: -R_gas1*T_1 + p_1*v_1
+  SpecificIdealGasLaw2:
+    name: SpecificIdealGasLaw
+    expression: -R_gas1*T_2 + p_2*v_2
+  DelvEquation1:
+    name: DelvEquation
+    expression: del_v_12 + v_1 - v_2
+  AssignmentR_gas1:
+    name: AssignmentR_gas
+    expression: R_gas1 - 880.44
+  Assignmentp_2:
+    name: Assignmentp_
+    expression: p_2 - 126000.0
+  AssignmentT_2:
+    name: AssignmentT_
+    expression: T_2 - 306.0
+  Assignmentp_1:
+    name: Assignmentp_
+    expression: p_1 - 338000.0
+  AssignmentT_1:
+    name: AssignmentT_
+    expression: T_1 - 349.0

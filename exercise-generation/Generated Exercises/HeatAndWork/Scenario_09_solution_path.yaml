@@ -1,0 +1,38 @@
+variables:
+  R_gas1: 816.15 J/(kg K)
+  m_I: 31.98 kg
+  p_2: 91000.00 Pa
+  T_2: 345.00 K
+  p_1: 459000.00 Pa
+  T_1: 296.00 K
+  V_1: 16.83 m^3
+  V_2: 98.95 m^3
+  del_V_12: 82.12 m^3
+equations:
+  IdealGasLaw1:
+    name: IdealGasLaw
+    expression: -R_gas1*T_1*m_I + V_1*p_1
+  IdealGasLaw2:
+    name: IdealGasLaw
+    expression: -R_gas1*T_2*m_I + V_2*p_2
+  DelVEquation1:
+    name: DelVEquation
+    expression: V_1 - V_2 + del_V_12
+  AssignmentR_gas1:
+    name: AssignmentR_gas
+    expression: R_gas1 - 816.15
+  Assignmentm_I:
+    name: Assignmentm_
+    expression: m_I - 31.98
+  Assignmentp_2:
+    name: Assignmentp_
+    expression: p_2 - 91000.0
+  AssignmentT_2:
+    name: AssignmentT_
+    expression: T_2 - 345.0
+  Assignmentp_1:
+    name: Assignmentp_
+    expression: p_1 - 459000.0
+  AssignmentT_1:
+    name: AssignmentT_
+    expression: T_1 - 296.0

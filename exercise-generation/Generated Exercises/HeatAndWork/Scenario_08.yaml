@@ -1,0 +1,60 @@
+change_of_state:
+  final_state: '2'
+  id: A
+  initial_state: '1'
+  transition:
+    W_a:
+      id: W_a_12
+      value: 0.0
+    adiabatic: false
+    del_V:
+      id: del_V_12
+      value: 0.0
+    id: '12'
+    is_isentropic: false
+    is_isobaric: false
+    is_isochoric: true
+    is_isothermal: false
+    is_polytropic: false
+    motion: false
+    reversible: false
+problem_class: SingleStep
+pureMaterial:
+  equation_of_state:
+    id: EquationOfState1
+    model: perfect gas
+  homogeneous: true
+  id: gas1
+  pure: true
+required_variables:
+- V_1
+states:
+- equilibrium: true
+  id: '1'
+- T:
+    id: T_2
+    value: 361.05
+  equilibrium: true
+  id: '2'
+  p:
+    id: p_2
+    value: 233000.0
+system:
+  closed: true
+  equilibrium: true
+  homogeneous: true
+  id: I
+  material: gas1
+  motion: false
+  n:
+    id: n_I
+    value: 989.62
+  related_changes:
+  - A
+  related_changes_and_states:
+  - A
+  - '1'
+  - '2'
+  related_states:
+  - '1'
+  - '2'

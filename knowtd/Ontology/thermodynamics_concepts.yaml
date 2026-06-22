@@ -1,0 +1,400 @@
+id: https://gitlab.rhrk.uni-kl.de/knowtd/knowtd/-/blob/main/Ontology/thermodynamics_concepts.yaml
+title: Thermodynamics Concepts
+name: thermo_concepts
+description: |-
+  Ontology to describe classes relating to thermodynamics.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+version: 2.0.0
+
+prefixes:
+  wikidata: https://www.wikidata.org/wiki/
+  thmo_concepts: https://gitlab.rhrk.uni-kl.de/knowtd/knowtd/-/blob/main/Ontology/thermodynamics_concepts.yaml/
+default_prefix: thmo_concepts
+default_range: string
+
+imports:
+  - thermodynamics_equations
+  - thermodynamics_variables
+  - thermodynamics_attributes
+  
+#==================================
+# Classes                         #
+#==================================
+classes:
+  Element:
+    abstract: true
+  Concept:
+    abstract: true
+    is_a: Element
+    slots:
+      - id
+  System:
+    is_a: Concept
+    aliases:
+      - system
+    description: >-
+      Is the part of the universe, we are studying.
+    slots:
+      - material
+      - m
+      - n
+      - related_changes_and_states
+      - related_changes
+      - related_states
+      - closed
+      - equilibrium
+      - motion
+      - homogeneous
+      - amount_of_substance_equation
+      - isothermal_perfect_gas_work_on_internal_state_equation
+      - specific_state_variable_v_equation
+      - specific_state_variable_u_equation
+      - specific_state_variable_h_equation
+      - specific_state_variable_s_equation
+      - molar_state_variable_s_equation
+      - specific_kinetic_energy_center_mass_equation
+      - specific_potential_energy_center_mass_equation
+      - specific_density_equation
+      - ideal_gas_law
+      - specific_ideal_gas_law
+      - ideal_gas_law_amount_of_substance
+      - internal_energy_equation
+      - specific_volume_density_equation
+      - specific_heat_transfer_equation
+      - specific_work_transfer_equation
+      - specific_work_on_internal_state_equation
+      - specific_work_on_external_state_equation
+      - specific_volume_change_work_equation
+      - specific_stirring_work_equation
+      - specific_electrical_work_equation
+      - ideal_gas_polytropic_change_of_state_equation
+      - ideal_gas_polytropic_change_of_state_equationII
+      - polytropic_work_equation
+      - isentropic_perfect_gas_polytropic_exponent_equation
+      - isentropic_perfect_gas_work_equation
+      - isobaric_perfect_gas_heat_equation
+      - isothermal_ideal_gas_pressure_volume_ratio
+      - isothermal_ideal_gas_work_equation
+      - isothermal_ideal_gas_work_equation_II
+      - isothermal_ideal_gas_polytropic_exponent_equation
+      - isothermal_perfect_gas_entropy_equation
+      - isochoric_ideal_gas_pressure_temperature_ratio
+      - del_H_perfect_gas_equation
+      - del_U_perfect_gas_equation
+      - del_S_perfect_gas_volume_equation
+      - del_S_perfect_gas_volume_equation_ii
+    slot_usage:
+      equilibrium:
+        ifabsent: 'True'
+    exact_mappings:
+      - wikidata:Q503327
+  ClosedSystem:
+    is_a: System
+    aliases:
+      - closed system
+    description: >-
+      A closed thermodynamic system contains a macroscopic amount of matter.  
+      There is no mass flow across its boundary, the mass of the system is constant.  
+      Work and heat can be transferred across the system's boundary. 
+      The boundary  can be a real object (e.g. walls) or we can just imagine it. 
+      The system can  move freely in space. Everything outside the system is called "surroundings".
+    exact_mappings:
+      - wikidata:Q1468684
+  OpenSystem:
+    is_a: System
+    aliases:
+      - open system
+    description: >-
+      An open system is a fixed part of the space that we are interested in. 
+      Work and heat as well as matter can be transferred across its boundary. 
+    exact_mappings:
+      - wikidata:Q898312
+  Material:
+    is_a: Concept
+    aliases:
+      - material
+    description:
+    slots:
+      - homogeneous
+      - pure
+      - mixed
+    exact_mappings:
+      - wikidata:Q214609
+  PureMaterial:
+    is_a: Material
+    aliases:
+      - pure material
+    description: >-
+      A pure material contains only a single component.
+    slots:
+      - equation_of_state
+      - M
+      - R
+      - kappa
+      - Rbar
+      - c_p
+      - c_v
+      - c_pm
+      - c_vm
+      - specific_gas_constant_equation
+      - kappa_polytropic_exponent_equation
+      - molar_heat_capacity_constant_pressure_equation
+      - molar_heat_capacity_constant_volume_equation
+      - caloric_equation_of_state_ideal_gas
+    exact_mappings:
+      - wikidata:Q578779
+    slot_usage:
+      homogeneous:
+        ifabsent: 'True'
+      pure:
+        ifabsent: 'True'
+  Mixture:
+    is_a: Material
+    aliases:
+      - substance mixture
+      - mixture of materials
+    description: >-
+      A mixture contains at least two components.
+    exact_mappings:
+      - wikidata:Q169336
+    slot_usage:
+      mixed:
+        ifabsent: 'True'
+  EquationOfState:
+    is_a: Concept
+    aliases:
+      - equation of state
+      - EOS
+    description: >-
+      An EOS relates state variables of a given material.
+    slots:
+      - model
+    exact_mappings:
+      - wikidata:Q214967
+
+  State:
+    is_a: Concept
+    aliases:
+      - state
+    description: >-
+      The thermodynamic state of a system is characterized by macroscopic, measurable properties (state variables).
+    slots:
+      - T
+      - T0
+      - p
+      - V
+      - v
+      - rho
+      - U
+      - u
+      - H
+      - h
+      - S
+      - s
+      - sm
+      - c
+      - z
+      - E_kin
+      - e_kin
+      - E_pot
+      - e_pot
+      - equilibrium
+      - enthalpy_equation
+      - specific_enthalpy_equation
+      - thermal_density_equation
+    slot_usage:
+      equilibrium:
+        ifabsent: 'True'
+    exact_mappings:
+      - wikidata:Q230875
+  Transition:
+    is_a: Concept
+    aliases:
+      - transition
+    description: >-
+      The transition is related to change of state. The exact path of the transition may be known (transition through equilibrium states) or not known (general case, irreversible transition).
+    slots:
+      - equilibrium
+      - motion
+      - adiabatic
+      - reversible
+      - Q
+      - q
+      - W
+      - w
+      - W_i
+      - W_a
+      - w_i
+      - w_a
+      - w_t
+      - W_vol
+      - w_vol
+      - W_stir
+      - w_stir
+      - W_electrical
+      - w_electrical
+      - del_T
+      - del_p
+      - del_V
+      - del_v
+      - del_U
+      - del_u
+      - del_H
+      - del_h
+      - del_S
+      - del_s
+      - del_sm
+      - del_z
+      - del_c
+      - del_E_pot
+      - del_e_pot
+      - del_E_kin
+      - del_e_kin
+      - n_poly
+      - ratio_T
+      - ratio_p
+      - ratio_v
+      - is_isothermal
+      - is_isochoric
+      - is_polytropic
+      - is_isobaric
+      - is_isenthalpic
+      - is_isentropic
+    exact_mappings:
+      - wikidata:Q900800
+  ChangeOfState:
+    is_a: Concept
+    aliases:
+      - change of state
+    description: >-
+      In a "change of state" a system undergoes a change from one equilibirum state 
+      (initial state) to another (final state). 
+      The transistion between these states  may or may not be reversible.
+    slots:
+      - initial_state
+      - final_state
+      - transition
+      - polytropic_exponent_equation
+      - work_on_internal_external_state_equation
+      - specific_work_on_internal_external_state_equation
+      - volume_stirring_electrical_work_equation
+      - first_law
+      - first_law_specific
+      - technical_work_equation
+      - work_on_external_state_equation
+      - not_in_motion_del_c_equation
+      - not_in_motion_del_z_equation
+      - not_in_motion_del_E_kin_equation
+      - not_in_motion_del_e_kin_equation
+      - not_in_motion_del_E_pot_equation
+      - not_in_motion_del_e_pot_equation
+      - adiabatic_heat_equation
+      - adiabatic_specific_heat_equation
+      - isentropic_heat_equation
+      - isentropic_entropy_equation
+      - isentropic_molar_entropy_equation
+      - isobaric_properties
+      - isobaric_work_on_internal_state_equation
+      - isobaric_specific_work_on_internal_state_equation
+      - isothermal_properties
+      - isothermal_work_on_internal_state_equation
+      - isochoric_volume_equation
+      - isochoric_specific_volume_equation
+      - isochoric_specific_work_on_internal_state_equation
+      - isochoric_work_on_internal_state_equation
+      - isochoric_technical_work_equation
+      - del_T_equation
+      - del_p_equation
+      - del_V_equation
+      - del_v_equation
+      - del_U_equation
+      - del_u_equation
+      - del_H_equation
+      - del_h_equation
+      - del_S_equation
+      - del_s_equation
+      - del_sm_equation
+      - del_c_equation
+      - del_z_equation
+      - del_E_Kin_equation
+      - del_E_Pot_equation
+      - del_e_Kin_equation
+      - del_e_Pot_equation
+      - ratio_pressure_equation
+      - ratio_volume_equation
+      - ratio_temperature_equation
+      - isobaric_polytropic_exponent_equation
+    exact_mappings:
+      - wikidata:Q213016
+
+  Any:
+    is_a: Element
+    class_uri: linkml:Any
+
+slots:
+  id:
+    identifier: true
+    # range: string
+    # range: Any
+    any_of:
+      - range: string
+      - range: integer
+  related_changes_and_states:
+    range: Concept
+    multivalued: true
+    # equals_expression: '{related_changes} + {related_states}'
+    any_of:
+      - range: State
+      - range: ChangeOfState
+  related_changes:
+    range: ChangeOfState
+    multivalued: true
+  related_states:
+    range: State
+    multivalued: true
+  material:
+    range: PureMaterial
+    in_subset:
+      - equation_references 
+  equation_of_state:
+    inlined: true
+    range: EquationOfState
+    in_subset:
+      - problem_references
+  system:
+    range: System
+    inlined: true
+    in_subset:
+      - equation_references
+      - problem_references
+  state:
+    range: State
+    inlined: true
+    in_subset:
+      - equation_references
+      - problem_references
+  initial_state:
+    range: State
+    in_subset:
+      - equation_references
+      - problem_references
+  final_state:
+    range: State
+    in_subset:
+      - equation_references
+      - problem_references
+  transition:
+    inlined: true
+    range: Transition
+    in_subset:
+      - equation_references
+      - problem_references
+  change_of_state:
+    inlined: true
+    range: ChangeOfState
+    in_subset:
+      - equation_references
+      - problem_references
+subsets:
+  equation_references:
+    description: Subset of slots (range concept) that can be used to relate concepts to equations (domain).

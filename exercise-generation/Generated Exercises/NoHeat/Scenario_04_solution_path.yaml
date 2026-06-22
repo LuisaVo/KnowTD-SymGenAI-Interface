@@ -1,0 +1,46 @@
+variables:
+  c_v_gas1: 1530.00 J/(kg K)
+  c_p_gas1: 1646.00 J/K
+  R_gas1: 116.00 J/(kg K)
+  del_e_kin_12: 0.00 J/kg
+  del_e_pot_12: 0.00 J/kg
+  del_u_12: -41310.00 J/kg
+  del_T_12: -27.00 K
+  w_a_12: 0.00 J/kg
+  w_i_12: -41310.00 J/kg
+  w_12: -41310.00 J/kg
+  q_12: 0.00 J/kg
+equations:
+  CaloricEquationOfStateIdealGas1:
+    name: CaloricEquationOfStateIdealGas
+    expression: R_gas1 - c_p_gas1 + c_v_gas1
+  DelUPerfectGasEquation1:
+    name: DelUPerfectGasEquation
+    expression: -c_v_gas1*del_T_12 + del_u_12
+  SpecificWorkOnInternalExternalStateEquation1:
+    name: SpecificWorkOnInternalExternalStateEquation
+    expression: w_12 - w_a_12 - w_i_12
+  FirstLawSpecific1:
+    name: FirstLawSpecific
+    expression: -del_e_kin_12 - del_e_pot_12 - del_u_12 + q_12 + w_12
+  NotInMotionDelekinEquation1:
+    name: NotInMotionDelekinEquation
+    expression: del_e_kin_12
+  NotInMotionDelepotEquation1:
+    name: NotInMotionDelepotEquation
+    expression: del_e_pot_12
+  AdiabaticSpecificHeatEquation1:
+    name: AdiabaticSpecificHeatEquation
+    expression: q_12
+  Assignmentc_p_gas1:
+    name: Assignmentc_p_gas
+    expression: c_p_gas1 - 1646.0
+  AssignmentR_gas1:
+    name: AssignmentR_gas
+    expression: R_gas1 - 116.0
+  Assignmentw_a_12:
+    name: Assignmentw_a_1
+    expression: w_a_12
+  Assignmentw_i_12:
+    name: Assignmentw_i_1
+    expression: w_i_12 + 41310.0

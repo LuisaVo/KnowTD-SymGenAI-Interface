@@ -1,0 +1,21 @@
+variables:
+  del_p_12: 334993.00 Pa
+  p_2: 392112.00 Pa
+  p_1: 57119.00 Pa
+  n_poly_12: 1.00 none
+equations:
+  PolytropicWorkEquation1:
+    name: PolytropicWorkEquation
+    expression: -p_1*v_1*((v_1/v_2)**(n_poly_12 - 1) - 1)/(n_poly_12 - 1) + w_i_12
+  IsothermalIdealGasPolytropicExponentEquation1:
+    name: IsothermalIdealGasPolytropicExponentEquation
+    expression: n_poly_12 - 1
+  DelPEquation1:
+    name: DelPEquation
+    expression: del_p_12 + p_1 - p_2
+  Assignmentdel_p_12:
+    name: Assignmentdel_p_1
+    expression: del_p_12 - 334993.0
+  Assignmentp_2:
+    name: Assignmentp_
+    expression: p_2 - 392112.0

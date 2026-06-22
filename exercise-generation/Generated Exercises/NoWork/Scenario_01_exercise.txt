@@ -1,0 +1,3 @@
+**Question:**  A closed, homogeneous system containing an ideal gas undergoes a change of state from equilibrium state 1 to equilibrium state 2. During this process there is no shaft work and no boundary work, so that the total work is W_12 = 0 J. Heat is removed from the system in the amount Q_12 = 402427.2 J. The process is neither adiabatic nor reversible, and it is not isothermal, isochoric, isobaric, isentropic, or polytropic.  
+
+Calculate the change in internal energy ΔU_12 of the system.

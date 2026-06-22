@@ -1,0 +1,53 @@
+variables:
+  c_v_gas1: 785.43 J/(kg K)
+  M_gas1: 0.01 kg/mol
+  T_2: 324.00 K
+  v_1: 0.83 m^3/kg
+  T_1: 341.00 K
+  p_1: 309421.78 Pa
+  v_2: 0.79 m^3/kg
+  w_i_12: 12849.62 J/kg
+  del_s_12: -78.82 J/(kg K)
+  n_poly_12: 0.00 none
+  R_gas1: 755.86 J/(kg K)
+  Rbar_gas1: '8.31'
+equations:
+  SpecificGasConstantEquation1:
+    name: SpecificGasConstantEquation
+    expression: R_gas1 - Rbar_gas1/M_gas1
+  SpecificIdealGasLaw1:
+    name: SpecificIdealGasLaw
+    expression: -R_gas1*T_1 + p_1*v_1
+  IdealGasPolytropicChangeOfStateEquation1:
+    name: IdealGasPolytropicChangeOfStateEquation
+    expression: -(p_2/p_1)**((n_poly_12 - 1)/n_poly_12) + T_2/T_1
+  IdealGasPolytropicChangeOfStateEquationII1:
+    name: IdealGasPolytropicChangeOfStateEquationII
+    expression: -R_gas1*(-T_1 + T_2)/(n_poly_12 - 1) + w_i_12
+  PolytropicWorkEquation1:
+    name: PolytropicWorkEquation
+    expression: -p_1*v_1*((v_1/v_2)**(n_poly_12 - 1) - 1)/(n_poly_12 - 1) + w_i_12
+  DelSPerfectGasVolumeEquation1:
+    name: DelSPerfectGasVolumeEquation
+    expression: -R_gas1*log(v_2/v_1) - c_v_gas1*log(T_2/T_1) + del_s_12
+  IsobaricPolytropicExponentEquation1:
+    name: IsobaricPolytropicExponentEquation
+    expression: n_poly_12
+  Assignmentc_v_gas1:
+    name: Assignmentc_v_gas
+    expression: c_v_gas1 - 785.43
+  AssignmentM_gas1:
+    name: AssignmentM_gas
+    expression: M_gas1 - 0.011
+  AssignmentT_2:
+    name: AssignmentT_
+    expression: T_2 - 324.0
+  Assignmentv_1:
+    name: Assignmentv_
+    expression: v_1 - 0.833
+  AssignmentT_1:
+    name: AssignmentT_
+    expression: T_1 - 341.0
+  AssignmentRbar_gas1:
+    name: AssignmentRbar_gas
+    expression: Rbar_gas1 - 8.31446261815324

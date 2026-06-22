@@ -1,0 +1,64 @@
+// https://interactive-consultant.idp-z3.be/?gist=53fc5956146bf4be430c7c0652105d34&file=Triangle_example.idp
+
+vocabulary Voc { 
+    // concepts
+    type Side ≜ {a, b, c}
+    type Angle ≜ {alpha, beta, gamma}
+
+    // attributes
+    type Side_types ≜ {equilateral, isosceles, general}
+    type Angle_types ≜ {right, obtuse, acute}
+
+    // variables
+    [side length] length: (Side) → ℝ
+    [angle degree] degree: (Angle) → ℝ
+    [sinus] sin: (ℝ) → ℝ
+
+    // relations
+    [Triangle has side type(s)] has_side_type: (Side_types) → 𝔹 
+    [Triangle has angle type] has_angle_type: () → Angle_types
+}
+
+theory T : Voc {
+
+    // Equation Based Constraints
+    [All angles sum up to 180] sum{{degree(x) | x ∈ Angle}} = 180.
+    [sines approximation: Bhaskara I's Approximation] ∀x ∈ ℝ: (40500 - x * (180 - x) ) ≠ 0 ⇒ (sin(x) = ( 4 * x * (180 - x) ) / (40500 - x * (180 - x)) ).
+    [law of sines] sin(degree(alpha)) ≠ 0 ∧ sin(degree(beta)) ≠ 0 ∧ sin(degree(gamma)) ≠ 0 
+                    ⇒ length(a) / sin(degree(alpha)) = length(b) / sin(degree(beta)) = length(c) / sin(degree(gamma)).
+
+    // Definitional Constraints
+    // triangle setup
+    [Lengths are positive numbers] ∀x ∈ Side: 0 < length(x).
+    [Angles are positive numbers between 0 and 180] ∀x ∈ Angle: 0 < degree(x) < 180.
+    // attribute definitions
+    [In an equilateral triangle, all sides have equal length.] has_side_type(equilateral) ⇔ length(a) = length(b) = length(c).                                               
+    [In an isosceles triangle, two sides have equal length.] has_side_type(isosceles) ⇔ (  (length(a) = length(b))
+                                                                                            ∨ (length(a) = length(c))
+                                                                                            ∨ (length(b) = length(c))
+                                                                ).
+    [In a general triangle is not equilateral and not isosceles.] has_side_type(general) ⇔ ¬( has_side_type(equilateral) ∨ has_side_type(isosceles) ).
+
+    [In right triangles, the largest angle is 90°.] has_angle_type() = right ⇔ max{degree(x) | x ∈ Angle} = 90.
+    [In obtuse triangles, the largest angle greater than 90°.] has_angle_type() = obtuse ⇔ max{degree(x) | x ∈ Angle} > 90.
+    [In acute triangles, the largest angle less 90°.] has_angle_type() = acute ⇔ max{degree(x) | x ∈ Angle} < 90.
+
+    // Pedagogical Constraints
+    [Lengths are less than 10.] ∀x ∈ Side: length(x) < 10.
+    [a is the longest side.] max{length(x) | x ∈ Side} = length(a).
+}
+
+structure S : Voc{
+    // you could define fixed properties of the triangle
+    //has_angle_type ≜ acute.
+    //degree ⊇ {alpha → 70}.
+}
+
+display {
+    introduction('<div>This example lets explore scenarios for triangles. You can play with the side attributes and angle attributes.<br/><br/> <b>Tips:</b> Select an attribute and check which combinations are (not) allowed. Click on a grey button to see an explanation.</div>').
+}
+
+procedure main() {
+    pretty_print(model_check(T, S))
+    pretty_print(model_expand(T, S, max=1))
+}

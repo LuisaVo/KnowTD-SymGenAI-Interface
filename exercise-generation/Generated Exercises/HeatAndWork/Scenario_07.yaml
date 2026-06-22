@@ -1,0 +1,58 @@
+states:
+- id: '1'
+  T:
+    id: T_1
+    value: 349.0
+  p:
+    id: p_1
+    value: 338000.0
+  equilibrium: true
+- id: '2'
+  T:
+    id: T_2
+    value: 306.0
+  p:
+    id: p_2
+    value: 126000.0
+  equilibrium: true
+change_of_state:
+  id: A
+  initial_state: '1'
+  final_state: '2'
+  transition:
+    id: '12'
+    motion: false
+    adiabatic: false
+    reversible: false
+    W_a:
+      id: W_a_12
+      value: 0.0
+system:
+  id: I
+  material: gas1
+  related_changes_and_states:
+  - A
+  - '1'
+  - '2'
+  related_changes:
+  - A
+  related_states:
+  - '1'
+  - '2'
+  closed: true
+  equilibrium: true
+  motion: false
+  homogeneous: true
+pureMaterial:
+  id: gas1
+  equation_of_state:
+    id: EquationOfState1
+    model: perfect gas
+  R:
+    id: R_gas1
+    value: 880.44
+  homogeneous: true
+  pure: true
+required_variables:
+- del_v_12
+problem_class: SingleStep

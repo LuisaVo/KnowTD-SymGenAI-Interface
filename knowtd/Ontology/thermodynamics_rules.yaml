@@ -1,0 +1,194 @@
+id: https://gitlab.rhrk.uni-kl.de/knowtd/knowtd/-/blob/main/Ontology/thermodynamics_rules.yaml
+title: Thermodynamics Rules
+name: thermo_rules
+description: |-
+  Ontology to describe classes relating to thermodynamics.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+version: 2.0.0
+
+prefixes:
+  thmo_rules: https://gitlab.rhrk.uni-kl.de/knowtd/knowtd/-/blob/main/Ontology/thermodynamics_rules.yaml/
+
+default_prefix: thmo_rules
+default_range: string
+
+#==================================
+# Classes                         #
+#==================================
+classes:
+  Rule:
+    is_a: Element
+    abstract: true
+    mixin: true
+    slots:
+      - satisfied
+  SystemRules:
+    is_a: Rule
+    mixin: true
+    rules:
+      - preconditions:
+          slot_conditions:
+            system_id.closed:
+              equals_expression: 'True'
+            system_id.equilibrium:
+              equals_expression: 'True'
+            system_id.homogeneous:
+              equals_expression: 'True'
+        postconditions:
+          slot_conditions:
+            satisfied:
+              equals_expression: 'True'
+  IdealGasMaterialRule:
+    is_a: Rule
+    mixin: true
+    rules:
+      - preconditions:
+          slot_conditions:
+            material_id.equation_of_state.model:
+              any_of:
+                - equals_string: ideal gas
+                - equals_string: perfect gas
+        postconditions: 
+          slot_conditions:
+            satisfied:
+              equals_expression: 'True'
+  PerfectGasMaterialRule:
+    is_a: Rule
+    mixin: true
+    rules:
+      - preconditions:
+          slot_conditions:
+            material_id.equation_of_state.model:
+              equals_string: perfect gas
+        postconditions: 
+          slot_conditions:
+            satisfied:
+              equals_expression: 'True'
+  IdealGasRule:
+    is_a: Rule
+    mixin: true
+    rules:
+      - preconditions:
+          slot_conditions:
+            system_id.material.equation_of_state.model:
+              any_of:
+                - equals_string: ideal gas
+                - equals_string: perfect gas
+        postconditions:  
+          slot_conditions:
+            satisfied:
+              equals_expression: 'True'
+  PerfectGasRule:
+    is_a: Rule
+    mixin: true
+    rules:
+      - preconditions:
+          slot_conditions:
+            system_id.material.equation_of_state.model:
+              equals_string: perfect gas
+        postconditions:
+          slot_conditions:
+            satisfied:
+              equals_expression: 'True'
+  IsochoricRule:
+    is_a: Rule
+    mixin: true
+    rules:
+      - preconditions:
+          slot_conditions:
+            change_of_state_id.transition.is_isochoric:
+              equals_expression: 'True'
+        postconditions:
+          slot_conditions:
+            satisfied:
+              equals_expression: 'True'
+  IsothermalRule:
+    is_a: Rule
+    mixin: true
+    rules:
+      - preconditions:
+          slot_conditions:
+            change_of_state_id.transition.is_isothermal:
+              equals_expression: 'True'
+        postconditions:
+          slot_conditions:
+            satisfied:
+              equals_expression: 'True'
+  IsobaricRule:
+    is_a: Rule
+    mixin: true
+    rules:
+      - preconditions:
+          slot_conditions:
+            change_of_state_id.transition.is_isobaric:
+              equals_expression: 'True'
+        postconditions:
+          slot_conditions:
+            satisfied:
+              equals_expression: 'True'
+  IsentropicRule:
+    is_a: Rule
+    mixin: true
+    rules:
+      - preconditions:
+          slot_conditions:
+            change_of_state_id.transition.is_isentropic:
+              equals_expression: 'True'
+        postconditions:
+          slot_conditions:
+            satisfied:
+              equals_expression: 'True'
+  PolytropicRule:
+    is_a: Rule
+    mixin: true
+    rules:
+      - preconditions:
+          slot_conditions:
+            change_of_state_id.transition.is_polytropic:
+              equals_expression: 'True'
+        postconditions:
+          slot_conditions:
+            satisfied:
+              equals_expression: 'True'
+  NotInMotionRule:
+    is_a: Rule
+    mixin: true
+    rules:
+      - preconditions:
+          slot_conditions:
+            change_of_state_id.transition.motion:
+              equals_expression: 'False'
+        postconditions:
+          slot_conditions:
+            satisfied:
+              equals_expression: 'True'
+  AdiabaticRule:
+    is_a: Rule
+    mixin: true
+    rules:
+      - preconditions:
+          slot_conditions:
+            change_of_state_id.transition.adiabatic:
+              equals_expression: 'True'
+        postconditions:
+          slot_conditions:
+            satisfied:
+              equals_expression: 'True'
+  IrreversibleRule:
+    is_a: Rule
+    mixin: true
+    rules:
+      - preconditions:
+          slot_conditions:
+            change_of_state_id.reversible:
+              equals_expression: 'False'
+        postconditions:
+          slot_conditions:
+            satisfied:
+              equals_expression: 'True'
+
+slots:
+  satisfied:
+    range: boolean
+    description: >-
+      Indicates whether a rule is satisfied or not.
