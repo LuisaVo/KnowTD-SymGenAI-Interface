@@ -7,6 +7,8 @@ exercise, extracts known values, and computes the missing ones.
 import streamlit as st
 import os
 import yaml
+import re
+from pathlib import Path
 from streamlit_agraph import agraph, Config
 
 # ── connect your backend here ─────────────────────────────────────────────────
@@ -110,8 +112,52 @@ if "parsed_yaml_edit" not in st.session_state:
     st.session_state["parsed_yaml_edit"] = ""
 
 
-def load_example_text() -> None:
-    st.session_state["exercise_text"] = example_exercise
+EXAMPLE_FILE = Path("utils/DescriptionSampleProblems.md")
+
+
+def load_examples_from_markdown(markdown_path: Path) -> dict[str, str]:
+    """Parse markdown sections in the form '## ProblemX' into label->text map."""
+    if not markdown_path.exists():
+        return {}
+
+    content = markdown_path.read_text(encoding="utf-8")
+    parts = re.split(r"^##\s+(Problem\d+)\s*$", content, flags=re.MULTILINE)
+    examples: dict[str, str] = {}
+    for i in range(1, len(parts), 2):
+        name = parts[i].strip()
+        body = parts[i + 1].strip()
+        if body:
+            examples[name] = body
+    return examples
+
+
+markdown_examples = load_examples_from_markdown(EXAMPLE_FILE)
+example_labels = sorted(markdown_examples.keys(), key=lambda x: int(x.replace("Problem", "")))
+
+if "selected_example_label" not in st.session_state:
+    st.session_state["selected_example_label"] = example_labels[0] if example_labels else ""
+
+
+def load_selected_example_text() -> None:
+    label = st.session_state.get("selected_example_label", "")
+    if label and label in markdown_examples:
+        st.session_state["exercise_text"] = markdown_examples[label]
+    else:
+        st.session_state["exercise_text"] = example_exercise
+
+col_hint, col_select, col_ex = st.columns([2, 2, 1], vertical_alignment='bottom')
+with col_select:
+    st.selectbox(
+        "Example",
+        options=example_labels if example_labels else ["Fallback example"],
+        key="selected_example_label",
+        help="Select one of the sample problems from utils/DescriptionSampleProblems.md",
+    )
+with col_ex:
+    st.button("Load example", width='stretch', on_click=load_selected_example_text)
+
+if not markdown_examples:
+    st.caption("Could not read utils/DescriptionSampleProblems.md, using fallback inline example.")
 
 exercise_text = st.text_area(
     "Exercise text",
@@ -120,10 +166,6 @@ exercise_text = st.text_area(
     height=160,
     help="Paste the full exercise text here, including all given values and the question.",
 )
-
-col_hint, col_ex = st.columns([3, 1])
-with col_ex:
-    st.button("Load example", width='stretch', on_click=load_example_text)
 
 st.divider()
 
