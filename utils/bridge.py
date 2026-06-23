@@ -144,8 +144,10 @@ def get_prompt(user_text: str) -> str:
     - Use the specific or total form of properties as appropriate (e.g., v for specific volume, V for total volume, w for mass specific work and q for mass specific heat).
     - Keep the structure of the JSON exactly as provided.
     - Analyze the problem statement to identify if the problem is adiabatic, reversible, isobaric, isochoric, and so on.
-    - The "required_variables" field must list the IDs of the variables explicitly asked for in the problem.
-    - Do not calculate or infer additional values.
+    - The "required_variables" field must list the IDs of the variables explicitly asked for in the problem. Remove all variables from this list, that are not specified as target/required.
+    - Do not calculate or infer additional values. 
+    - The JSON expects SI Units, if for example the pressure is given in bar, please convert it into pascal.
+    - if heat or work is being removed, add a minus there is none. 
     
     *Problem Statement:* 
     {user_text}
@@ -253,7 +255,7 @@ def response_to_yaml_dict(response: str) -> dict:
     def remove_none_values(data):
         """Recursively remove keys with None values from nested JSON."""
         if isinstance(data, dict):
-            return {k: remove_none_values(v) for k, v in data.items() if not isinstance(v, str) or isinstance(v, str) and "None" not in v and "null" not in v}
+            return {k: remove_none_values(v) for k, v in data.items() if not (v is None or (isinstance(v, str) and ("None" in v or "null" in v)) or (isinstance(v, dict) and 'value' in v and v["value"] is None))}
         elif isinstance(data, list):
             return [remove_none_values(item) for item in data if item is not None]
         else:
