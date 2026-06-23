@@ -77,7 +77,7 @@ if st.button("Solve", type="primary", width='stretch'):
         if result["status"] == "success":
             st.success("Solution found!")
             tab_vals, tab_eq, tab_sol, tab_rsn = st.tabs(
-                ["Computed Values", "Used Equations", "Solution Path", "Reasoning Path"]
+                ["Computed Values", "Used Equations", "Solution Path", "Reasoning Graph"]
             )
 
             with tab_vals:
