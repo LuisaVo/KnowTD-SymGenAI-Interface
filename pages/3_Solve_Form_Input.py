@@ -454,15 +454,14 @@ if result is not None:
                 r_cols = st.columns(min(len(req), 4))
                 for i, (sym, val) in enumerate(req.items()):
                     with r_cols[i % 4]:
-                        st.markdown(f"**${sym}$**")
-                        st.markdown(f"${val}$" if val else "—")
+                        st.markdown(f"**${sym}$** = ${val}$" if val else "—")
 
             if other:
                 with st.expander("All other solved variables"):
                     o_cols = st.columns(3)
                     for i, (sym, val) in enumerate(other.items()):
                         with o_cols[i % 3]:
-                            st.markdown(f"**${sym}$**  →  ${val}$" if val else f"**${sym}$**")
+                            st.markdown(f"**${sym}$**  =  ${val}$" if val else f"**${sym}$**")
 
         # ── Solution Path graph ───────────────────────────────────────────────
         with tab_sol:
