@@ -10,6 +10,7 @@ import yaml
 import re
 from pathlib import Path
 from streamlit_agraph import agraph, Config
+from utils.sidebar_navigation import render_sidebar_navigation
 
 # ── connect your backend here ─────────────────────────────────────────────────
 from utils.bridge import (
@@ -32,6 +33,8 @@ GRAPH_COLORS = {
 }
 
 st.set_page_config(page_title="Solve – NL | KnowTD", page_icon="assets/Logo2.svg", layout="wide")
+
+render_sidebar_navigation()
 
 st.title(":material/chat: Solve Exercise – Natural Language Input")
 st.markdown("### Workflow")
@@ -263,7 +266,7 @@ with tab_input:
         "Exercise text",
         key="exercise_text",
         placeholder=example_text,
-        height=160,
+        height="stretch",
         help="Paste the full exercise text here, including all given values and the question.",
     )
 
@@ -271,12 +274,13 @@ with tab_tip:
     # design_services
     st.info("""**Quick Tips:**
             
-- **:material/design_services: Units Matter**
+**:material/design_services: Units Matter**
 
-    Always use SI units (Kelvin, Joules, Pascal, etc.). If your problem uses other units, convert first or specify in the text.
-- **:material/folder_open: Try an Example**
+Always use SI units (Kelvin, Joules, Pascal, etc.). If your problem uses other units, convert first or specify in the text.
 
-    You can choose from several sample exercises to test the system and get familiar with the workflow.
+**:material/folder_open: Try an Example**
+
+You can choose from several sample exercises to test the system and get familiar with the workflow.
     """)
     col_select_example, col_load = st.columns([2,1], vertical_alignment="bottom")
     with col_select_example:
@@ -322,14 +326,14 @@ if st.session_state["parsed_yaml"]:
 
     st.success("Exercise parsed successfully.")
 
-    confirm_col, parse_col = st.columns([1, 1])
+    confirm_col, parse_col = st.columns([2, 3])
 
     with parse_col:
         st.markdown("#### Extracted information")
         # st.markdown(f"**Scenario detected:** {parsed_yaml['problem_class']}")
         # st.markdown(f"**Target variable:** **{parsed_yaml['required_variables']}**")
 
-        new = st.text_area("Rewrite the answer", value=st.session_state["parsed_yaml_edit"], height=800, help="The YAML content extracted from the exercise text. Adjust if necessary before solving.")
+        new = st.text_area("Inspect and correct the converted YAML file.", value=st.session_state["parsed_yaml_edit"], height=800, help="The YAML content extracted from the exercise text. Adjust if necessary before solving.")
         if st.button(
             "Update", type="primary", disabled=new is None or new.strip(". ") == ""
         ):
@@ -338,11 +342,22 @@ if st.session_state["parsed_yaml"]:
 
     with confirm_col:
         st.markdown("#### Confirm or correct the parsed values")
-        st.info("""If the extraction looks wrong, adjust the values before solving.
-Common pitfalls are: 
-- sign mistakes for work and heat
-- convention mistakes if other units than the SI units were given
-- mix up between similar variables such as c_v and c_vm (molar heat capacity)""", icon=":material/info:")
+        st.info("""Inspect the YAML file on the right and adjust it before solving.""", icon=":material/info:")    
+        st.markdown("""
+#### Common pitfalls: 
+
+**:material/add: Incorrect Signs:** 
+
+When work or heat are removed, the LLMs often use the incorrect sign. Check Variables `Q`, `W`, `q` and `w`.
+
+**:material/design_services: Unit conversions:** 
+
+LLMs often introduce conversion mistakes if other units than the SI units were given.
+
+**:material/compare_arrows: Variable mixups:** 
+
+LLMs often mix up similar variables such as `c_v` and `c_vm` (molar heat capacity). Especially specific and molar variables are mixed up.
+""")
 
         # corrected = {}
         # for sym, val in parsed["known_values"].items():

@@ -6,6 +6,7 @@ the missing variables.
 
 import streamlit as st
 from streamlit_agraph import agraph, Config
+from utils.sidebar_navigation import render_sidebar_navigation
 
 # ── connect your backend here ─────────────────────────────────────────────────
 from utils.bridge import cyto_to_graphviz, cyto_to_agraph, filter_cyto_elements
@@ -22,6 +23,7 @@ GRAPH_COLORS = {
 }
 
 st.set_page_config(page_title="Solve – YAML | KnowTD", page_icon="assets/Logo.svg", layout="wide")
+render_sidebar_navigation()
 
 st.title(":material/upload_file: Solve Exercise – YAML Input")
 st.caption(
@@ -85,8 +87,8 @@ st.markdown(
     """
     <div class="yaml-flow-grid">
         <div class="yaml-flow-step"><strong>1. Upload</strong><span>Select a YAML file with the exercise definition.</span></div>
-        <div class="yaml-flow-step"><strong>2. Solve</strong><span>Inspect the uploaded content before solving.</span></div>
-        <div class="yaml-flow-step"><strong>3. Inspect</strong><span>Compute targets and inspect path, graph, and equations.</span></div>
+        <div class="yaml-flow-step"><strong>2. Solve</strong><span>Send the YAML file to KnowTD to solve the exercise..</span></div>
+        <div class="yaml-flow-step"><strong>3. Inspect</strong><span>Inspect resulting values, path, graph, and equations.</span></div>
     </div>
     """,
     unsafe_allow_html=True,

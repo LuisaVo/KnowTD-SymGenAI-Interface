@@ -6,6 +6,7 @@ Explore sample thermodynamics problems and see them solved step-by-step.
 import streamlit as st
 import yaml
 from pathlib import Path
+from utils.sidebar_navigation import render_sidebar_navigation
 
 st.set_page_config(
     page_title="Try an Example | KnowTD",
@@ -13,7 +14,9 @@ st.set_page_config(
     layout="wide",
 )
 
-st.title("▶ Try an Example Exercise")
+render_sidebar_navigation()
+
+st.title(":material/rocket_launch: Try an Example Exercise")
 st.markdown("Click on any example problem below to see it solved step-by-step with full reasoning.")
 st.markdown(
     """

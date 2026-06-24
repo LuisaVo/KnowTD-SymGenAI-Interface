@@ -51,8 +51,8 @@ class Solver():
         
         return {'status': 'success' if solution and all(r in solution for r in handler.problem.required_variables) else 'failure',
                 'all': solution, 
-                'required': {OutputRendering.variable_typsetting_brackets(s): solution[s] for s in solution if s in handler.problem.required_variables}, 
-                'intermediate': {OutputRendering.variable_typsetting_brackets(s): solution[s] for s in solution if s not in handler.problem.required_variables}, 
+                'required': {OutputRendering.variable_typsetting_brackets(s): round(solution[s],2) for s in solution if s in handler.problem.required_variables}, 
+                'intermediate': {OutputRendering.variable_typsetting_brackets(s): round(solution[s],2) for s in solution if s not in handler.problem.required_variables}, 
                 'equations_all': solver.equations,
                 'equations_used': {n: solver.equations[n] for n in solver.G_optimized.nodes() if n in solver.equations},
                 'graph_solution': solution_graph,

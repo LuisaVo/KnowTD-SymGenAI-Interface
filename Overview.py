@@ -7,6 +7,7 @@ import base64
 from pathlib import Path
 
 import streamlit as st
+from utils.sidebar_navigation import render_sidebar_navigation
 
 HERO_IMAGE_PATH = Path("assets/WebsiteHeader.png")
 LOGO_PATH = Path("assets/Logo.svg")
@@ -30,24 +31,7 @@ def encode_image_base64(image_path: Path) -> str:
 hero_image_base64 = encode_image_base64(HERO_IMAGE_PATH)
 logo_image_base64 = encode_image_base64(LOGO_PATH)
 
-# ── Sidebar branding ──────────────────────────────────────────────────────────
-sidebar_brand = (
-    f'<img src="data:image/svg+xml;base64,{logo_image_base64}" '
-    'style="width: 28px; height: 28px;" alt="KnowTD logo">'
-    if logo_image_base64
-    else ""
-)
-st.sidebar.markdown(
-    f"""
-    <div style="display:flex; align-items:center; gap:0.65rem; margin-bottom:0.35rem;">
-        {sidebar_brand}
-        <div style="font-size:1.4rem; font-weight:700; color:#1f1f1f;">KnowTD</div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-st.sidebar.caption("KnowTD translates natural-language thermodynamics problems into structured representations, validates them against an ontology, and solves them using symbolic reasoning.")
-st.sidebar.divider()
+render_sidebar_navigation()
 
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -393,6 +377,8 @@ st.markdown("""
 st.divider()
 
 # ── Three Main Features ───────────────────────────────────────────────────────
+st.markdown("## Main Features")
+
 col1, col2, col3 = st.columns(3)
 
 with col1:
@@ -559,11 +545,6 @@ with example_col3:
     st.image("assets/SP-Problem6.png", width="stretch")
 
 st.divider()
-st.markdown("""
-<div style="text-align: center; color: #999; padding: 1.5rem; font-size: 0.9rem;">
-Built with Streamlit
-</div>
-""", unsafe_allow_html=True)
 
 # ── Publications ──────────────────────────────────────────────────────────────
 st.markdown("## Research behind this interface")
@@ -573,36 +554,46 @@ This interface builds on a series of publications about making thermodynamic
 knowledge computable, explainable, and useful for education.
 """)
 
-pub_col1, pub_col2, pub_col3 = st.columns(3)
+pub_col1, pub_col2, pub_col3 = st.columns(3, gap="large")
+img_width=200
 
 with pub_col1:
     st.markdown("### KnowTD")
-    st.markdown("""
-    The original KnowTD paper describes how thermodynamic knowledge can be
-    translated into an actionable knowledge-based system.
-    """)
+    # st.markdown("""
+    # The original KnowTD paper describes how thermodynamic knowledge can be
+    # translated into an actionable knowledge-based system.
+    # """)
+    st.image("assets/PaperKnowTD.png", 
+             link="https://pubs.acs.org/doi/10.1021/acs.jcim.4c00647",
+             width=img_width)
     st.link_button(
         "Read the KnowTD paper",
         "https://pubs.acs.org/doi/10.1021/acs.jcim.4c00647"
     )
 
 with pub_col2:
-    st.markdown("### Knowledge-Graph Reasoning")
-    st.markdown("""
-    This work explains how KnowTD uses ontologies and knowledge graphs to set up
-    thermodynamics problems and produce transparent solution paths.
-    """)
-    st.link_button(
-        "Read the KG reasoning paper",
-        "https://ceur-ws.org/Vol-3977/XAIKG-3.pdf"
-    )
+        st.markdown("### Knowledge-Graph Reasoning")
+        # st.markdown("""
+        # This work explains how KnowTD uses ontologies and knowledge graphs to set up
+        # thermodynamics problems and produce transparent solution paths.
+        # """)
+        st.image("assets/PaperXAI.png", 
+                link="https://ceur-ws.org/Vol-3977/XAIKG-3.pdf",
+                width=img_width)
+        st.link_button(
+            "Read the KG reasoning paper",
+            "https://ceur-ws.org/Vol-3977/XAIKG-3.pdf"
+        )
 
 with pub_col3:
-    st.markdown("### Exercise Generation")
-    st.markdown("""
-    This work combines formal reasoning and KnowTD to generate plausible
-    thermodynamics exercise scenarios, assign values, and compute sample solutions.
-    """)
+    st.markdown("### Automatic Exercise Generation")
+    # st.markdown("""
+    # This work combines formal reasoning and KnowTD to generate plausible
+    # thermodynamics exercise scenarios, assign values, and compute sample solutions.
+    # """)
+    st.image("assets/PaperExGen.png", 
+             link="https://www.researchsquare.com/article/rs-8989074/v1",
+             width=img_width)
     st.link_button(
         "Read the exercise generation preprint",
         "https://www.researchsquare.com/article/rs-8989074/v1"
@@ -611,4 +602,9 @@ with pub_col3:
 st.divider()
 
 
+st.markdown("""
+<div style="text-align: center; color: #999; padding: 1.5rem; font-size: 0.9rem;">
+Built with Streamlit
+</div>
+""", unsafe_allow_html=True)
 # Built with Streamlit • Header designed by <a href="https://www.magnific.com"> Magnific</a>

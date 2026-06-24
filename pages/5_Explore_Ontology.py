@@ -6,6 +6,7 @@ Browse concepts, variables, and equations from the thermodynamics ontology.
 import streamlit as st
 from streamlit_agraph import agraph, Node, Edge, Config
 import re
+from utils.sidebar_navigation import render_sidebar_navigation
 
 # ── connect your backend here ─────────────────────────────────────────────────
 from utils.bridge import Ontology
@@ -26,12 +27,13 @@ def camel_to_normal(name):
     # Then converts the entire string to lowercase
     return re.sub( r"([A-Z])|([0-9]+)", r" \1\2", name).strip().replace('* ', '*')
 st.set_page_config(page_title="Ontology | KnowTD", page_icon="assets/Logo.svg", layout="wide")
+render_sidebar_navigation()
 
 def snake_to_camel(name):
     splitted = name.split('_')
     return ''.join(word.capitalize() for word in splitted)
 
-st.title(":material/book: Thermodynamics Ontology")
+st.title(":material/schema: Thermodynamics Ontology")
 st.caption("Browse the concepts, variables, and equations defined in the ontology.")
 st.markdown(
     """

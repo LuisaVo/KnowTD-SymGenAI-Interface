@@ -10,6 +10,7 @@ import pathlib
 import yaml
 import json
 from streamlit_agraph import agraph, Config
+from utils.sidebar_navigation import render_sidebar_navigation
 from utils.bridge import (
     gen_problem_with_values,
     cyto_to_graphviz,
@@ -102,8 +103,9 @@ def reset_filters() -> None:
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(page_title="Exercise Generation | KnowTD", page_icon="assets/Logo.svg", layout="wide")
+render_sidebar_navigation()
 
-st.title(":material/manufacturing: Exercise Generation")
+st.title(":material/auto_awesome: Exercise Generation")
 st.caption(
     "Browse the 12 thermodynamic scenarios. Filter by attribute or ID, then "
     "click a scenario to view its YAML definition."
@@ -176,10 +178,10 @@ st.caption("Use filters to narrow scenarios, open template or exercise YAML, the
 st.markdown(
     """
     <div class="gen-flow-grid">
-        <div class="gen-flow-step"><strong>1. Filter</strong><span>Choose ID, heat/work mode, and process attributes.</span></div>
-        <div class="gen-flow-step"><strong>2. Select</strong><span>Open template, existing exercise, or generate a new one.</span></div>
-        <div class="gen-flow-step"><strong>3. Inspect</strong><span>Review YAML and download when needed.</span></div>
-        <div class="gen-flow-step"><strong>4. Analyze</strong><span>View values, equations, solution path, and reasoning graph.</span></div>
+        <div class="gen-flow-step"><strong>Filter</strong><span>Choose ID, heat/work mode, and process attributes.</span></div>
+        <div class="gen-flow-step"><strong>Select</strong><span>Open template, existing exercise, or generate a new one.</span></div>
+        <div class="gen-flow-step"><strong>Inspect</strong><span>Review YAML and download when needed.</span></div>
+        <div class="gen-flow-step"><strong>Analyze Generated Exercises</strong><span>View values, equations, solution path, and reasoning graph.</span></div>
     </div>
     """,
     unsafe_allow_html=True,
@@ -316,7 +318,8 @@ else:
                     values['Q_12'] = 0
                 if sel["W"] == "W = 0":
                     values['W_12'] = 0      
-                generated_problem, solution, solution_path = gen_problem_with_values('SingleStep', attributes=attribute_assignment, values=values )
+                with st.spinner("Wait for exercise to be generated..."):
+                    generated_problem, solution, solution_path = gen_problem_with_values('SingleStep', attributes=attribute_assignment, values=values )
                 yaml_text = yaml.safe_dump(generated_problem, sort_keys=False, allow_unicode=True)
                 
                 file_name = f"scenario_{sel_id}.yaml"
@@ -324,112 +327,118 @@ else:
                 st.markdown(scenario_tags(sel), unsafe_allow_html=True)
                 st.markdown("")
 
-                st.code(yaml_text, language="yaml")
-
-                st.download_button(
-                    label="⬇ Download YAML",
-                    data=yaml_text,
-                    file_name=file_name,
-                    mime="text/yaml",
-                )
-                
-                st.divider()
                 st.success("Generated exercise with solution.")
-                
+
                 # Load problem through solver to get graph elements
                 solver_inst = Solver(ontology_file="knowtd/Ontology/thermodynamics_ontology.yaml")
                 solver_inst.load_problem(yaml_text)
                 solve_result = solver_inst.solve()
-                
-                tab_vals, tab_sol, tab_rsn, tab_eq = st.tabs(
-                    ["Values", "Solution Path", "Reasoning Graph", "Used Equations"]
-                )
 
-                with tab_vals:
-                    st.markdown("#### Required variables")
-                    for sym, val in solution.items():
-                        formatted_val = f"{val:.4g}" if isinstance(val, (int, float)) else str(val)
-                        st.metric(label=sym, value=formatted_val)
+                # Two-column layout: YAML on left, results on right
+                left_col, right_col = st.columns([1, 1.2])
 
-                    path_variables = solution_path.get("variables", {}) if isinstance(solution_path, dict) else {}
-                    intermediate_variables = {
-                        sym: val for sym, val in path_variables.items() if sym not in solution
-                    }
-                    with st.expander("Intermediate variables", expanded=False):
-                        if intermediate_variables:
-                            for sym, val in intermediate_variables.items():
-                                formatted_val = f"{val:.4g}" if isinstance(val, (int, float)) else str(val)
-                                st.metric(label=sym, value=formatted_val)
-                        else:
-                            st.caption("No intermediate variables recorded.")
+                with left_col:
+                    st.markdown("#### Generated YAML")
+                    st.code(yaml_text, language="yaml")
+                    st.download_button(
+                        label="⬇ Download YAML",
+                        data=yaml_text,
+                        file_name=file_name,
+                        mime="text/yaml",
+                    )
 
-                with tab_eq:
-                    st.markdown("#### Used Equations")
-                    equations = solution_path.get("equations", {}) if isinstance(solution_path, dict) else {}
-                    if equations:
-                        for eq_id, eq_data in equations.items():
-                            if isinstance(eq_data, dict):
-                                eq_name = eq_data.get("name", eq_id)
-                                eq_expression = eq_data.get("expression", "")
+                with right_col:
+                    st.markdown("#### Solution")
+
+                    tab_vals, tab_sol, tab_rsn, tab_eq = st.tabs(
+                        ["Values", "Solution Path", "Reasoning Graph", "Used Equations"]
+                    )
+
+                    with tab_vals:
+                        st.markdown("**Required variables:**")
+                        for sym, val in solution.items():
+                            formatted_val = f"{val:.4g}" if isinstance(val, (int, float)) else str(val)
+                            st.metric(label=sym, value=formatted_val)
+
+                        path_variables = solution_path.get("variables", {}) if isinstance(solution_path, dict) else {}
+                        intermediate_variables = {
+                            sym: val for sym, val in path_variables.items() if sym not in solution
+                        }
+                        with st.expander("Intermediate variables", expanded=False):
+                            if intermediate_variables:
+                                for sym, val in intermediate_variables.items():
+                                    formatted_val = f"{val:.4g}" if isinstance(val, (int, float)) else str(val)
+                                    st.metric(label=sym, value=formatted_val)
                             else:
-                                eq_name = eq_id
-                                eq_expression = eq_data
-                            st.text(str(eq_name))
-                            st.code(str(eq_expression), language="math")
-                    else:
-                        st.info("No equations available for the solution path.")
+                                st.caption("No intermediate variables recorded.")
 
-                with tab_sol:
-                    graph_solution = solve_result.get("graph_solution", solve_result.get("nodes+edges", []))
-                    if graph_solution:
-                        st.graphviz_chart(cyto_to_graphviz(graph_solution, GRAPH_COLORS))
-                    else:
-                        st.info("No solution path available.")
-
-                with tab_rsn:
-                    graph_reasoning = solve_result.get("graph_reasoning", solve_result.get("nodes+edges", []))
-                    if graph_reasoning:
-                        st.caption("Interactive graph: drag nodes, zoom, and pan.")
-                        toggle_cols = st.columns(3)
-                        show_variables = toggle_cols[0].toggle("Variables", value=True, key=f"scn_rsn_show_variables_{sel_id}")
-                        show_equations = toggle_cols[1].toggle("Equations", value=True, key=f"scn_rsn_show_equations_{sel_id}")
-                        show_rules = toggle_cols[2].toggle("Rules", value=True, key=f"scn_rsn_show_rules_{sel_id}")
-
-                        filtered_graph = filter_cyto_elements(
-                            graph_reasoning,
-                            show_variables=show_variables,
-                            show_equations=show_equations,
-                            show_rules=show_rules,
-                        )
-
-                        if not filtered_graph:
-                            st.info("No graph elements match the selected filters.")
+                    with tab_eq:
+                        st.markdown("**Used Equations:**")
+                        equations = solution_path.get("equations", {}) if isinstance(solution_path, dict) else {}
+                        if equations:
+                            for eq_id, eq_data in equations.items():
+                                if isinstance(eq_data, dict):
+                                    eq_name = eq_data.get("name", eq_id)
+                                    eq_expression = eq_data.get("expression", "")
+                                else:
+                                    eq_name = eq_id
+                                    eq_expression = eq_data
+                                st.text(str(eq_name))
+                                st.code(str(eq_expression), language="math")
                         else:
-                            nodes, edges = cyto_to_agraph(filtered_graph)
-                            config = Config(
-                                width=1300,
-                                height=860,
-                                directed=True,
-                                physics=True,
-                                hierarchical=False,
-                                solver="repulsion",
-                                minVelocity=0.2,
-                                maxVelocity=30,
-                                stabilization=True,
-                                fit=True,
-                                timestep=0.35,
-                                interaction={
-                                    "dragNodes": True,
-                                    "dragView": True,
-                                    "zoomView": True,
-                                    "navigationButtons": True,
-                                    "keyboard": True,
-                                    "hover": True,
-                                },
+                            st.info("No equations available for the solution path.")
+
+                    with tab_sol:
+                        graph_solution = solve_result.get("graph_solution", solve_result.get("nodes+edges", []))
+                        if graph_solution:
+                            st.graphviz_chart(cyto_to_graphviz(graph_solution, GRAPH_COLORS))
+                        else:
+                            st.info("No solution path available.")
+
+                    with tab_rsn:
+                        graph_reasoning = solve_result.get("graph_reasoning", solve_result.get("nodes+edges", []))
+                        if graph_reasoning:
+                            st.caption("Interactive graph: drag nodes, zoom, and pan.")
+                            toggle_cols = st.columns(3)
+                            show_variables = toggle_cols[0].toggle("Variables", value=True, key=f"scn_rsn_show_variables_{sel_id}")
+                            show_equations = toggle_cols[1].toggle("Equations", value=True, key=f"scn_rsn_show_equations_{sel_id}")
+                            show_rules = toggle_cols[2].toggle("Rules", value=True, key=f"scn_rsn_show_rules_{sel_id}")
+
+                            filtered_graph = filter_cyto_elements(
+                                graph_reasoning,
+                                show_variables=show_variables,
+                                show_equations=show_equations,
+                                show_rules=show_rules,
                             )
-                            agraph(nodes=nodes, edges=edges, config=config)
-                    else:
-                        st.info("No reasoning graph available.")
+
+                            if not filtered_graph:
+                                st.info("No graph elements match the selected filters.")
+                            else:
+                                nodes, edges = cyto_to_agraph(filtered_graph)
+                                config = Config(
+                                    width=650,
+                                    height=600,
+                                    directed=True,
+                                    physics=True,
+                                    hierarchical=False,
+                                    solver="repulsion",
+                                    minVelocity=0.2,
+                                    maxVelocity=30,
+                                    stabilization=True,
+                                    fit=True,
+                                    timestep=0.35,
+                                    interaction={
+                                        "dragNodes": True,
+                                        "dragView": True,
+                                        "zoomView": True,
+                                        "navigationButtons": True,
+                                        "keyboard": True,
+                                        "hover": True,
+                                    },
+                                )
+                                agraph(nodes=nodes, edges=edges, config=config)
+                        else:
+                            st.info("No reasoning graph available.")
             else:
                 if view_mode == "exercise":
                     st.subheader(f"Scenario {sel_id} — YAML exercise")
@@ -448,12 +457,12 @@ else:
                 st.markdown(scenario_tags(sel), unsafe_allow_html=True)
                 st.markdown("")
 
-                st.code(yaml_text, language="yaml")
-
                 st.download_button(
                     label="⬇ Download YAML",
                     data=yaml_text,
                     file_name=file_name,
                     mime="text/yaml",
                 )
+                
+                st.code(yaml_text, language="yaml")
 

@@ -15,6 +15,7 @@ import os, sys
 import streamlit as st
 from streamlit_agraph import agraph, Config
 from utils.bridge import cyto_to_graphviz, cyto_to_agraph, filter_cyto_elements, format_unit_display
+from utils.sidebar_navigation import render_sidebar_navigation
 
 # ── Path setup ────────────────────────────────────────────────────────────────
 # ProblemInput and friends live in knowtd/scripts/ and use bare imports, so
@@ -139,7 +140,8 @@ for _k, _v in [("pi", None), ("attrs_done", False), ("result", None)]:
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(page_title="Solve – Form | KnowTD", page_icon="assets/Logo.svg", layout="wide")
-st.title(":material/edit: Solve Exercise – Form Input")
+render_sidebar_navigation()
+st.title(":material/dashboard_customize: Solve Exercise – Form Input")
 st.caption(
     "Load a sample problem or configure a custom one, "
     "enter only the known values, mark targets, then press **Solve**."
