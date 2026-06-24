@@ -1,4 +1,4 @@
-streamlit>=1.32.0
+streamlit==1.55.0
 pandas>=2.0.0
 linkml-runtime>=1.8.1,<1.10.0
 linkml==1.8.7
