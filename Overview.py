@@ -499,21 +499,25 @@ st.markdown("## Example preview")
 example_col1, example_col2, example_col3 = st.columns(3)
 
 with example_col1:   
-    example_text = """A gas in a cylinder undergoes a polytropic expansion with the exponent $n = 0.8$. The initial pressure and specific volume are $p_1 = 2\,\mathrm{bar}$ and $v_1 = 0.7\,\mathrm{m^3/kg}$, the final specific volume is $v_2 = 1.1\,\mathrm{m^3/kg}$g. Calculate the following quantities per kilogram of gas: work, heat, entropy change.  
+    example_text = """A gas in rigid tank with the volume $V = 0.05\,\mathrm{m^3}$ is stirred. 
+The initial temperature and pressure are $T_1 = 315\,\mathrm{K}$ and $p_1 = 1\,\mathrm{bar}$. 
+The stirrer supplies a work of $0.5\,\mathrm{kJ}$. 
+The tank is cooled, as there is a threshold for the final temperature.
 
-    The gas is ideal, with $R = 277\,\mathrm{J/(kg\,K)}$ and $c_v = 1746\,\mathrm{J/(kg\,K)}$"""
-    
+Calculate the heat that is removed if the final temperature is $T_2 = 320\,\mathrm{K}$. 
+
+The gas is ideal, with $R = 287\,\mathrm{J/(kg\,K)}$ and $c_v = 1010\,\mathrm{J/(kg\,K)}$."""    
     
     st.markdown(f"""
     **Problem (text)**
     
-    {example_text}
+{example_text}
     """)
     
     if st.button(f"Run the example", use_container_width=True):
                     # Store in session state for the Solve Text Input page to pick up
                     st.session_state["exercise_text"] = example_text
-                    st.session_state["selected_example_label"] = "Problem2"
+                    st.session_state["selected_example_label"] = "Problem6"
                     st.switch_page("pages/1_Solve_Text_Input.py")
 
 with example_col2:
@@ -524,32 +528,31 @@ with example_col2:
     problem_class: SingleStep
     states:
     - id: 1
+        V:
+        value: 0.05
+        T:
+        value: 315
         p:
-        value: 200000
-        v:
-        value: 0.7
+        value: 100000
     - id: 2
-        v:
-        value: 1.1
+        T:
+        value: 320
     transition:
-    is_polytropic: true
-    n_poly:
-        value: 0.8
+    is_isochoric: true
+    W:
+      value: 500
     required_variables:
-    - w_12
-    - q_12
-    - del_s_12
+    - Q_12
     ```
     """)
 
 with example_col3:
     st.markdown("""
-    **Result (summary)**
-    
-    - $w = -66226.15\,\mathrm{J/kg}$
-    - $q = 1497143.13\,\mathrm{J/kg}$
-    - $\Delta s = 283.03\,\mathrm{J/(kg\,K)}$
+    **Result (value and solution path)**
+
+    $Q = −220.70\,\mathrm{J}$
     """)
+    st.image("assets/SP-Problem6.png", width="stretch")
 
 st.divider()
 st.markdown("""
@@ -557,5 +560,51 @@ st.markdown("""
 Built with Streamlit
 </div>
 """, unsafe_allow_html=True)
+
+# ── Publications ──────────────────────────────────────────────────────────────
+st.markdown("## Research behind this interface")
+
+st.markdown("""
+This interface builds on a series of publications about making thermodynamic
+knowledge computable, explainable, and useful for education.
+""")
+
+pub_col1, pub_col2, pub_col3 = st.columns(3)
+
+with pub_col1:
+    st.markdown("### KnowTD")
+    st.markdown("""
+    The original KnowTD paper describes how thermodynamic knowledge can be
+    translated into an actionable knowledge-based system.
+    """)
+    st.link_button(
+        "Read the KnowTD paper",
+        "https://pubs.acs.org/doi/10.1021/acs.jcim.4c00647"
+    )
+
+with pub_col2:
+    st.markdown("### Knowledge-Graph Reasoning")
+    st.markdown("""
+    This work explains how KnowTD uses ontologies and knowledge graphs to set up
+    thermodynamics problems and produce transparent solution paths.
+    """)
+    st.link_button(
+        "Read the KG reasoning paper",
+        "https://ceur-ws.org/Vol-3977/XAIKG-3.pdf"
+    )
+
+with pub_col3:
+    st.markdown("### Exercise Generation")
+    st.markdown("""
+    This work combines formal reasoning and KnowTD to generate plausible
+    thermodynamics exercise scenarios, assign values, and compute sample solutions.
+    """)
+    st.link_button(
+        "Read the exercise generation preprint",
+        "https://www.researchsquare.com/article/rs-8989074/v1"
+    )
+
+st.divider()
+
 
 # Built with Streamlit • Header designed by <a href="https://www.magnific.com"> Magnific</a>
