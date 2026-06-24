@@ -144,6 +144,72 @@ st.caption(
     "Load a sample problem or configure a custom one, "
     "enter only the known values, mark targets, then press **Solve**."
 )
+st.markdown(
+    """
+    <style>
+    div.stButton > button {
+        background: #343deb !important;
+        color: #ffffff !important;
+        border: 1px solid #343deb !important;
+        border-radius: 10px;
+        font-weight: 600;
+    }
+    div.stButton > button:hover {
+        background: #2b33c7 !important;
+        border-color: #2b33c7 !important;
+        color: #ffffff !important;
+    }
+    div.stDownloadButton > button {
+        background: #343deb !important;
+        color: #ffffff !important;
+        border: 1px solid #343deb !important;
+        border-radius: 10px;
+        font-weight: 600;
+    }
+    div.stDownloadButton > button:hover {
+        background: #2b33c7 !important;
+        border-color: #2b33c7 !important;
+        color: #ffffff !important;
+    }
+    .form-flow-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 0.6rem;
+        margin: 0.5rem 0 0.75rem 0;
+    }
+    .form-flow-step {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 0.85rem;
+        border: 1px solid #eceff4;
+    }
+    .form-flow-step strong {
+        display: block;
+        margin-bottom: 0.2rem;
+    }
+    .form-flow-step span {
+        color: #616161;
+        font-size: 0.84rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+st.markdown("### Workflow")
+st.caption("Follow these steps to configure a problem, enter known values, and solve with full transparency.")
+st.markdown(
+    """
+    <div class="form-flow-grid">
+        <div class="form-flow-step"><strong>1. Example</strong><span>Load a sample or keep custom input.</span></div>
+        <div class="form-flow-step"><strong>2. Class</strong><span>Select the problem class and state count.</span></div>
+        <div class="form-flow-step"><strong>3. Attributes</strong><span>Set process and system attributes.</span></div>
+        <div class="form-flow-step"><strong>4. Values</strong><span>Enter known variables in focused mode.</span></div>
+        <div class="form-flow-step"><strong>5. Targets</strong><span>Pick required variables and solve.</span></div>
+        <div class="form-flow-step"><strong>6. Solve and Inspect</strong><span>Gain insights into how the solution was obtained.<\span></div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 top_cols = st.columns([6, 1])
 with top_cols[1]:
     st.button("↺ Reset", key="reset_form", on_click=_reset_state, use_container_width=True)
@@ -152,7 +218,7 @@ st.divider()
 # ═══════════════════════════════════════════════════════════════════════════════
 # SECTION 1 – Example loader
 # ═══════════════════════════════════════════════════════════════════════════════
-with st.expander("1. Load an Example  (optional)", expanded=True):
+with st.expander("1. Load an Example or select custom input", expanded=True):
     example_choice = st.selectbox(
         "Select a sample problem",
         EXAMPLE_OPTIONS,
@@ -197,7 +263,7 @@ with st.expander(
     "2. Select Problem Class  (skip if you loaded an example)",
     expanded=(example_choice == "Custom Input" and st.session_state.pi is None),
 ):
-    prob_class = st.radio("Problem class", PROBLEM_CLASSES, key="problem_class")
+    prob_class = st.radio("Problem class", PROBLEM_CLASSES, key="problem_class", index=1)
 
     num_states = 3
     if prob_class in ("Sequential Steps", "Cyclic Process"):
@@ -441,7 +507,7 @@ if result is not None:
     else:
         st.success("Solution found!")
         tab_vals, tab_sol, tab_rsn = st.tabs(
-            ["📊 Values", "🗺️ Solution Path", "🧠 Reasoning Graph"]
+            ["Values", "Solution Path", "Reasoning Graph"]
         )
 
         # ── Values tab ────────────────────────────────────────────────────────
