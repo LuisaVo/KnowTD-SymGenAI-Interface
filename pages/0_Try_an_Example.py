@@ -9,7 +9,7 @@ from pathlib import Path
 
 st.set_page_config(
     page_title="Try an Example | KnowTD",
-    page_icon="▶",
+    page_icon="assets/Logo.svg",
     layout="wide",
 )
 

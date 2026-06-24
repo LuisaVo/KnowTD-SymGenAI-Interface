@@ -138,8 +138,8 @@ for _k, _v in [("pi", None), ("attrs_done", False), ("result", None)]:
         st.session_state[_k] = _v
 
 # ── Page config ───────────────────────────────────────────────────────────────
-st.set_page_config(page_title="Solve – Form | KnowTD", page_icon="✏️", layout="wide")
-st.title("✏️ Solve Exercise – Form Input")
+st.set_page_config(page_title="Solve – Form | KnowTD", page_icon="assets/Logo.svg", layout="wide")
+st.title(":material/edit: Solve Exercise – Form Input")
 st.caption(
     "Load a sample problem or configure a custom one, "
     "enter only the known values, mark targets, then press **Solve**."

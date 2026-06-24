@@ -56,6 +56,7 @@ class Ontology:
                     "description": class_def.description,
                     "related": self.sort_slots_by_type(class_def.slots),
                 })
+        concepts.sort(key=lambda c: c.get("name") in {"Material", "EquationOfState"})
         return concepts
     
     def get_variables(self, filter: str = "") -> list[dict]:
@@ -122,6 +123,9 @@ class Ontology:
         return result
 
 
+    def get_family_of_concept(self, concept_name):
+        return {"parent": [p for p in self.schemaview.class_parents(concept_name) if p != 'Concept'],
+                "children": self.schemaview.class_children(concept_name)}
 # ===========================================================================
 # 2. Solver
 # ===========================================================================

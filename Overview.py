@@ -262,8 +262,8 @@ st.markdown("""
         font-size: 0.94rem;
     }
     .feature-main-title-solve { color: #343deb; }
-    .feature-main-title-ontology { color: #2DA2AB; }
-    .feature-main-title-generate { color: #746CFF; }
+    .feature-main-title-ontology { color: #009fab; }
+    .feature-main-title-generate { color: #9659ff; }
     .st-key-main_feature_solve div.stButton > button {
         background: #e9ebff !important;
         color: #343deb !important;
@@ -276,22 +276,22 @@ st.markdown("""
     }
     .st-key-main_feature_ontology div.stButton > button {
         background: #dbf4f6 !important;
-        color: #2DA2AB !important;
+        color: #009fab !important;
         border: 1px solid #c2ecef !important;
     }
     .st-key-main_feature_ontology div.stButton > button:hover {
         background: #d0eef1 !important;
-        color: #2DA2AB !important;
+        color: #009fab !important;
         border-color: #b5e4e8 !important;
     }
     .st-key-main_feature_generate div.stButton > button {
         background: #ece9ff !important;
-        color: #746CFF !important;
+        color: #9659ff !important;
         border: 1px solid #dad4ff !important;
     }
     .st-key-main_feature_generate div.stButton > button:hover {
         background: #e3defd !important;
-        color: #746CFF !important;
+        color: #9659ff !important;
         border-color: #cdc3ff !important;
     }
     </style>
@@ -451,6 +451,10 @@ with col3:
             <div class="feature-main-text">
                 Explore scenario templates and generate complete exercises with solutions.
                 Review resulting values, equations, and graph-based reasoning in one place.
+                
+        - **Show YAML Templates** for each exercise scenario to build your own example from scratch.
+        - **Show Exercise** for each exercise scenario with plausible values.
+        - **Generate Exercise** for automatic, new exercise generation to obtain a new set of given and required variables alongside plausible values.
             </div>
         </div>
         """,

@@ -21,9 +21,9 @@ GRAPH_COLORS = {
     "rule": "steelblue2",
 }
 
-st.set_page_config(page_title="Solve – YAML | KnowTD", page_icon="✏️", layout="wide")
+st.set_page_config(page_title="Solve – YAML | KnowTD", page_icon="assets/Logo.svg", layout="wide")
 
-st.title("✏️ Solve Exercise – YAML Input")
+st.title(":material/upload_file: Solve Exercise – YAML Input")
 st.caption(
     "Upload a YAML file that defines a thermodynamics exercise, including known values and the target variable. "
     "The reasoning engine will calculate the missing ones."

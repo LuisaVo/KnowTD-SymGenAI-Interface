@@ -25,13 +25,13 @@ def camel_to_normal(name):
     # Inserts an underscore before any capital letter that follows a lowercase letter or digit
     # Then converts the entire string to lowercase
     return re.sub( r"([A-Z])|([0-9]+)", r" \1\2", name).strip().replace('* ', '*')
-st.set_page_config(page_title="Ontology | KnowTD", page_icon="🗂️", layout="wide")
+st.set_page_config(page_title="Ontology | KnowTD", page_icon="assets/Logo.svg", layout="wide")
 
 def snake_to_camel(name):
     splitted = name.split('_')
     return ''.join(word.capitalize() for word in splitted)
 
-st.title("🗂️ Thermodynamics Ontology")
+st.title(":material/book: Thermodynamics Ontology")
 st.caption("Browse the concepts, variables, and equations defined in the ontology.")
 st.markdown(
     """
@@ -77,10 +77,10 @@ st.caption("Explore thermodynamics knowledge from three perspectives and inspect
 st.markdown(
     """
     <div class="onto-flow-grid">
-        <div class="onto-flow-step"><strong>1. Concepts</strong><span>Read conceptual descriptions and relations.</span></div>
-        <div class="onto-flow-step"><strong>2. Variables</strong><span>Inspect symbols, SI units, and defaults.</span></div>
-        <div class="onto-flow-step"><strong>3. Equations</strong><span>Review expressions, slots, and constraints.</span></div>
-        <div class="onto-flow-step"><strong>4. Graph</strong><span>Visualize dependencies across all layers.</span></div>
+        <div class="onto-flow-step"><strong>Concepts</strong><span>Read conceptual descriptions and relations.</span></div>
+        <div class="onto-flow-step"><strong>Variables</strong><span>Inspect symbols, SI units, and defaults.</span></div>
+        <div class="onto-flow-step"><strong>Equations</strong><span>Review expressions, slots, and constraints.</span></div>
+        <div class="onto-flow-step"><strong>Graph</strong><span>Visualize dependencies across all layers.</span></div>
     </div>
     """,
     unsafe_allow_html=True,
@@ -114,6 +114,11 @@ with tab_concepts:
             with st.expander(concept["name"]):
                 st.write(concept["description"])
                 if concept.get("related"):
+                    family_relations = ontology.get_family_of_concept(concept["name"])
+                    if family_relations["parent"]:
+                        st.markdown("**Parent Class:** " + list_to_nice_string(family_relations["parent"]))
+                    if family_relations["children"]:
+                        st.markdown("**Children Classes:** " + list_to_nice_string(family_relations["children"]))
                     st.markdown("**Related concepts:** " + list_to_nice_string(concept["related"]["concepts"]))
                     st.markdown("**Related variables:** " + list_to_nice_string(concept["related"]["variables"]))
                     st.markdown("**Related equations:** " + list_to_nice_string(concept["related"]["equations"]))

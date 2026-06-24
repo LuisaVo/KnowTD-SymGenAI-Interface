@@ -31,9 +31,9 @@ GRAPH_COLORS = {
     "rule": "steelblue2",
 }
 
-st.set_page_config(page_title="Solve – NL | KnowTD", page_icon="💬", layout="wide")
+st.set_page_config(page_title="Solve – NL | KnowTD", page_icon="assets/Logo2.svg", layout="wide")
 
-st.title("💬 Solve Exercise – Natural Language Input")
+st.title(":material/chat: Solve Exercise – Natural Language Input")
 st.markdown("### Workflow")
 st.caption("Use this page from left to right: set up model access, provide the problem text, review extracted YAML, and solve.")
 st.markdown(
@@ -74,7 +74,7 @@ st.markdown(
     .nl-flow-step {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: top;
         align-items: center;
         text-align: center;
         padding: 0.9rem;
@@ -119,12 +119,12 @@ st.markdown(
         </div>
         <div class="nl-flow-arrow">→</div>
         <div class="nl-flow-step">
-            <strong>Solve</strong>
+            <strong>5. Solve</strong>
             <div>Get values, solution path,<br>reasoning graph, and equations</div>
         </div>
         <div class="nl-flow-arrow">→</div>
         <div class="nl-flow-step">
-            <strong>Inspect</strong>
+            <strong>6. Inspect</strong>
             <div>Inspect the solution path<br>to gain insights into how<br>the solution was obtained.</div>
         </div>
     </div>
@@ -137,11 +137,7 @@ st.divider()
 # ── API Setup text input ───────────────────────────────────────────────────────
 st.subheader("1 API setup")
 st.caption("Please enter your API Key for the desired model. You can use OpenAI or Mistral.")
-st.info("""
-**🔑 Security Note**
 
-Your API key is stored only in your browser's session and is not saved on our servers. You will need to re-enter it if you refresh the page or close your browser.
-""")
 model_options = [
     # "mistral-large-latest",
     "mistral-large-2512",
@@ -165,7 +161,7 @@ elif "gpt" in st.session_state["llm_model"] and st.session_state["llm_api_key"] 
     st.session_state["llm_api_key"] = os.environ.get("OPENAI_API_KEY", "")
 
 
-model_col, api_col = st.columns([1,2])
+model_col, api_col, info_col = st.columns([1,2,1])
 with api_col:
     st.text_input(
         "LLM API key",
@@ -181,9 +177,15 @@ with model_col:
         key="llm_model",
         help="Choose the model used for natural language parsing.",
     )
+with info_col:
+    st.info("""
+**:material/admin_panel_settings: Security Note**
+
+Your API key is stored only in your browser's session and is not saved on our servers. You will need to re-enter it if you refresh the page or close your browser.
+""")
 
 if not st.session_state["llm_api_key"].strip():
-    st.warning("Enter an API key to enable parsing.", icon="🔐")
+    st.warning("Enter an API key to enable parsing.", icon=":material/key:")
 
 st.divider()
 
@@ -266,12 +268,13 @@ with tab_input:
     )
 
 with tab_tip:
+    # design_services
     st.info("""**Quick Tips:**
             
-- **⚖️ Units Matter**
+- **:material/design_services: Units Matter**
 
     Always use SI units (Kelvin, Joules, Pascal, etc.). If your problem uses other units, convert first or specify in the text.
-- **📁 Try an Example**
+- **:material/folder_open: Try an Example**
 
     You can choose from several sample exercises to test the system and get familiar with the workflow.
     """)
@@ -339,7 +342,7 @@ if st.session_state["parsed_yaml"]:
 Common pitfalls are: 
 - sign mistakes for work and heat
 - convention mistakes if other units than the SI units were given
-- mix up between similar variables such as c_v and c_vm (molar heat capacity)""", icon="ℹ️")
+- mix up between similar variables such as c_v and c_vm (molar heat capacity)""", icon=":material/info:")
 
         # corrected = {}
         # for sym, val in parsed["known_values"].items():

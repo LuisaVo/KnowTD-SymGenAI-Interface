@@ -101,9 +101,9 @@ def reset_filters() -> None:
 
 
 # ── Page config ───────────────────────────────────────────────────────────────
-st.set_page_config(page_title="Exercise Generation | KnowTD", page_icon="⚙️", layout="wide")
+st.set_page_config(page_title="Exercise Generation | KnowTD", page_icon="assets/Logo.svg", layout="wide")
 
-st.title("⚙️ Exercise Generation")
+st.title(":material/manufacturing: Exercise Generation")
 st.caption(
     "Browse the 12 thermodynamic scenarios. Filter by attribute or ID, then "
     "click a scenario to view its YAML definition."
