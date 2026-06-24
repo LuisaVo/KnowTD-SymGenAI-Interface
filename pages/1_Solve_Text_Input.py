@@ -10,6 +10,7 @@ import yaml
 import re
 from pathlib import Path
 from streamlit_agraph import agraph, Config
+from streamlit_ace import st_ace, THEMES
 from utils.sidebar_navigation import render_sidebar_navigation
 
 # ── connect your backend here ─────────────────────────────────────────────────
@@ -330,10 +331,18 @@ if st.session_state["parsed_yaml"]:
 
     with parse_col:
         st.markdown("#### Extracted information")
-        # st.markdown(f"**Scenario detected:** {parsed_yaml['problem_class']}")
-        # st.markdown(f"**Target variable:** **{parsed_yaml['required_variables']}**")
-
-        new = st.text_area("Inspect and correct the converted YAML file.", value=st.session_state["parsed_yaml_edit"], height=800, help="The YAML content extracted from the exercise text. Adjust if necessary before solving.")
+        new = st_ace(
+    value=st.session_state["parsed_yaml_edit"],
+    language="yaml",
+    theme="tomorrow",
+    keybinding="vscode",
+    height=800,
+    font_size=14,
+    tab_size=2,
+    show_gutter=True,
+    wrap=True,
+    auto_update=True,
+)
         if st.button(
             "Update", type="primary", disabled=new is None or new.strip(". ") == ""
         ):
