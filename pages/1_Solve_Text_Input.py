@@ -43,12 +43,6 @@ st.title(":material/chat: Solve Exercise – Natural Language Input")
 st.markdown("### Workflow")
 st.caption("Use this page from left to right: set up model access, provide the problem text, review extracted YAML, and solve.")
 
-st.divider()
-
-# ── API Setup text input ───────────────────────────────────────────────────────
-st.subheader("1 API setup")
-st.caption("Please enter your API Key for the desired model. You can use OpenAI or Mistral.")
-
 st.markdown(
     """
     <div class="nl-process-flow">
@@ -85,6 +79,12 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+st.divider()
+
+# ── API Setup text input ───────────────────────────────────────────────────────
+st.subheader("1 API setup")
+st.caption("Please enter your API Key for the desired model. You can use OpenAI or Mistral.")
 
 model_options = [
     # "mistral-large-latest",
