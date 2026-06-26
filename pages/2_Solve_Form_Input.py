@@ -16,6 +16,7 @@ import streamlit as st
 from streamlit_agraph import agraph, Config
 from utils.bridge import cyto_to_graphviz, cyto_to_agraph, filter_cyto_elements, format_unit_display
 from utils.sidebar_navigation import render_sidebar_navigation
+from utils.style_config import load_styles
 
 # ── Path setup ────────────────────────────────────────────────────────────────
 # ProblemInput and friends live in knowtd/scripts/ and use bare imports, so
@@ -140,81 +141,32 @@ for _k, _v in [("pi", None), ("attrs_done", False), ("result", None)]:
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(page_title="Solve – Form | KnowTD", page_icon="assets/Logo.svg", layout="wide")
+load_styles()
 render_sidebar_navigation()
 st.title(":material/dashboard_customize: Solve Exercise – Form Input")
 st.caption(
     "Load a sample problem or configure a custom one, "
     "enter only the known values, mark targets, then press **Solve**."
 )
-st.markdown(
-    """
-    <style>
-    div.stButton > button {
-        background: #343deb !important;
-        color: #ffffff !important;
-        border: 1px solid #343deb !important;
-        border-radius: 10px;
-        font-weight: 600;
-    }
-    div.stButton > button:hover {
-        background: #2b33c7 !important;
-        border-color: #2b33c7 !important;
-        color: #ffffff !important;
-    }
-    div.stDownloadButton > button {
-        background: #343deb !important;
-        color: #ffffff !important;
-        border: 1px solid #343deb !important;
-        border-radius: 10px;
-        font-weight: 600;
-    }
-    div.stDownloadButton > button:hover {
-        background: #2b33c7 !important;
-        border-color: #2b33c7 !important;
-        color: #ffffff !important;
-    }
-    .form-flow-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-        gap: 0.6rem;
-        margin: 0.5rem 0 0.75rem 0;
-    }
-    .form-flow-step {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 0.85rem;
-        border: 1px solid #eceff4;
-    }
-    .form-flow-step strong {
-        display: block;
-        margin-bottom: 0.2rem;
-    }
-    .form-flow-step span {
-        color: #616161;
-        font-size: 0.84rem;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+
 st.markdown("### Workflow")
 st.caption("Follow these steps to configure a problem, enter known values, and solve with full transparency.")
 st.markdown(
     """
-    <div class="form-flow-grid">
-        <div class="form-flow-step"><strong>1. Example</strong><span>Load a sample or keep custom input.</span></div>
-        <div class="form-flow-step"><strong>2. Class</strong><span>Select the problem class and state count.</span></div>
-        <div class="form-flow-step"><strong>3. Attributes</strong><span>Set process and system attributes.</span></div>
-        <div class="form-flow-step"><strong>4. Values</strong><span>Enter known variables in focused mode.</span></div>
-        <div class="form-flow-step"><strong>5. Targets</strong><span>Pick required variables and solve.</span></div>
-        <div class="form-flow-step"><strong>6. Solve and Inspect</strong><span>Gain insights into how the solution was obtained.<\span></div>
+    <div class="steps-flow-grid">
+        <div class="steps-flow-step"><strong>1. Example</strong><span>Load a sample or keep custom input.</span></div>
+        <div class="steps-flow-step"><strong>2. Class</strong><span>Select the problem class and state count.</span></div>
+        <div class="steps-flow-step"><strong>3. Attributes</strong><span>Set process and system attributes.</span></div>
+        <div class="steps-flow-step"><strong>4. Values</strong><span>Enter known variables in focused mode.</span></div>
+        <div class="steps-flow-step"><strong>5. Targets</strong><span>Pick required variables and solve.</span></div>
+        <div class="steps-flow-step"><strong>6. Solve and Inspect</strong><span>Gain insights into how the solution was obtained.</span></div>
     </div>
     """,
     unsafe_allow_html=True,
 )
 top_cols = st.columns([6, 1])
 with top_cols[1]:
-    st.button("↺ Reset", key="reset_form", on_click=_reset_state, use_container_width=True)
+    st.button("↺ Reset", type="primary", key="reset_form", on_click=_reset_state, use_container_width=True)
 st.divider()
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -228,7 +180,7 @@ with st.expander("1. Load an Example or select custom input", expanded=True):
     )
 
     if example_choice != "Custom Input":
-        if st.button("Load example", key="btn_load"):
+        if st.button("Load example", type="primary", key="btn_load"):
             try:
                 pi_loaded = _load_sample(example_choice)
             except Exception as exc:
@@ -274,7 +226,7 @@ with st.expander(
             key="num_states",
         )
 
-    if st.button("Create problem", key="btn_create"):
+    if st.button("Create problem", type="primary", key="btn_create"):
         _reset_state()
         st.session_state.pi = _make_problem_input(prob_class, int(num_states))
         st.rerun()
@@ -321,7 +273,7 @@ if pi is not None:
         if not any_attrs:
             st.info("No attributes for this problem class.")
 
-        if st.button("✅ Apply attributes", key="btn_attrs"):
+        if st.button("✅ Apply attributes", type="primary", key="btn_attrs"):
             for concept in pi.get_concepts():
                 for attr in pi.get_attributes(concept):
                     k = f"attr_{concept}_{attr}"

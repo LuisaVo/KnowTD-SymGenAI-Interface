@@ -12,6 +12,7 @@ from pathlib import Path
 from streamlit_agraph import agraph, Config
 from streamlit_ace import st_ace, THEMES
 from utils.sidebar_navigation import render_sidebar_navigation
+from utils.style_config import load_styles
 
 # ── connect your backend here ─────────────────────────────────────────────────
 from utils.bridge import (
@@ -35,112 +36,55 @@ GRAPH_COLORS = {
 
 st.set_page_config(page_title="Solve – NL | KnowTD", page_icon="assets/Logo2.svg", layout="wide")
 
+load_styles()
 render_sidebar_navigation()
 
 st.title(":material/chat: Solve Exercise – Natural Language Input")
 st.markdown("### Workflow")
 st.caption("Use this page from left to right: set up model access, provide the problem text, review extracted YAML, and solve.")
-st.markdown(
-    """
-    <style>
-    div.stButton > button {
-        background: #343deb !important;
-        color: #ffffff !important;
-        border: 1px solid #343deb !important;
-        border-radius: 10px;
-        font-weight: 600;
-    }
-    div.stButton > button:hover {
-        background: #2b33c7 !important;
-        border-color: #2b33c7 !important;
-        color: #ffffff !important;
-    }
-    div.stDownloadButton > button {
-        background: #343deb !important;
-        color: #ffffff !important;
-        border: 1px solid #343deb !important;
-        border-radius: 10px;
-        font-weight: 600;
-    }
-    div.stDownloadButton > button:hover {
-        background: #2b33c7 !important;
-        border-color: #2b33c7 !important;
-        color: #ffffff !important;
-    }
-    .nl-process-flow {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        margin: 1rem 0 0.25rem 0;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-    .nl-flow-step {
-        display: flex;
-        flex-direction: column;
-        justify-content: top;
-        align-items: center;
-        text-align: center;
-        padding: 0.9rem;
-        background: #f8f9fa;
-        border-radius: 8px;
-        min-width: 150px;
-        min-height: 110px;
-        font-size: 0.9rem;
-    }
-    .nl-flow-step strong {
-        margin-bottom: 0.25rem;
-    }
-    .nl-flow-step div {
-        font-size: 0.8rem;
-        color: #666;
-        line-height: 1.3;
-    }
-    .nl-flow-arrow {
-        font-size: 1.3rem;
-        color: #999;
-    }
-    </style>
-    <div class="nl-process-flow">
-        <div class="nl-flow-step">
-            <strong>1. API Setup</strong>
-            <div>Select model and<br>enter API key</div>
-        </div>
-        <div class="nl-flow-arrow">→</div>
-        <div class="nl-flow-step">
-            <strong>2. Exercise Text</strong>
-            <div>Type or paste your problem<br>or load a<br>sample exercise</div>
-        </div>
-        <div class="nl-flow-arrow">→</div>
-        <div class="nl-flow-step">
-            <strong>3. YAML Extraction</strong>
-            <div>Let the LLM convert<br>your text to<br>structured YAML</div>
-        </div>
-        <div class="nl-flow-arrow">→</div>
-        <div class="nl-flow-step">
-            <strong>4. Review</strong>
-            <div>Confirm or edit<br>parsed values</div>
-        </div>
-        <div class="nl-flow-arrow">→</div>
-        <div class="nl-flow-step">
-            <strong>5. Solve</strong>
-            <div>Get values, solution path,<br>reasoning graph, and equations</div>
-        </div>
-        <div class="nl-flow-arrow">→</div>
-        <div class="nl-flow-step">
-            <strong>6. Inspect</strong>
-            <div>Inspect the solution path<br>to gain insights into how<br>the solution was obtained.</div>
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
 
 st.divider()
 
 # ── API Setup text input ───────────────────────────────────────────────────────
 st.subheader("1 API setup")
 st.caption("Please enter your API Key for the desired model. You can use OpenAI or Mistral.")
+
+st.markdown(
+    """
+    <div class="nl-process-flow">
+        <div class="nl-flow-step">
+            <strong>1. API Setup</strong>
+            <span>Select model and<br>enter API key</span>
+        </div>
+        <div class="nl-flow-arrow">→</div>
+        <div class="nl-flow-step">
+            <strong>2. Exercise Text</strong>
+            <span>Type or paste your problem<br>or load a<br>sample exercise</span>
+        </div>
+        <div class="nl-flow-arrow">→</div>
+        <div class="nl-flow-step">
+            <strong>3. YAML Extraction</strong>
+            <span>Let the LLM convert<br>your text to<br>structured YAML</span>
+        </div>
+        <div class="nl-flow-arrow">→</div>
+        <div class="nl-flow-step">
+            <strong>4. Review</strong>
+            <span>Confirm or edit<br>parsed values</span>
+        </div>
+        <div class="nl-flow-arrow">→</div>
+        <div class="nl-flow-step">
+            <strong>5. Solve</strong>
+            <span>Get values, solution path,<br>reasoning graph, and equations</span>
+        </div>
+        <div class="nl-flow-arrow">→</div>
+        <div class="nl-flow-step">
+            <strong>6. Inspect</strong>
+            <span>Inspect the solution path<br>to gain insights into how<br>the solution was obtained.</span>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 model_options = [
     # "mistral-large-latest",

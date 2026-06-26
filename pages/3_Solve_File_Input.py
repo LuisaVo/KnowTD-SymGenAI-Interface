@@ -7,6 +7,7 @@ the missing variables.
 import streamlit as st
 from streamlit_agraph import agraph, Config
 from utils.sidebar_navigation import render_sidebar_navigation
+from utils.style_config import load_styles
 
 # ── connect your backend here ─────────────────────────────────────────────────
 from utils.bridge import cyto_to_graphviz, cyto_to_agraph, filter_cyto_elements
@@ -23,6 +24,7 @@ GRAPH_COLORS = {
 }
 
 st.set_page_config(page_title="Solve – YAML | KnowTD", page_icon="assets/Logo.svg", layout="wide")
+load_styles()
 render_sidebar_navigation()
 
 st.title(":material/upload_file: Solve Exercise – YAML Input")
@@ -30,65 +32,15 @@ st.caption(
     "Upload a YAML file that defines a thermodynamics exercise, including known values and the target variable. "
     "The reasoning engine will calculate the missing ones."
 )
-st.markdown(
-    """
-    <style>
-    div.stButton > button {
-        background: #343deb !important;
-        color: #ffffff !important;
-        border: 1px solid #343deb !important;
-        border-radius: 10px;
-        font-weight: 600;
-    }
-    div.stButton > button:hover {
-        background: #2b33c7 !important;
-        border-color: #2b33c7 !important;
-        color: #ffffff !important;
-    }
-    div.stDownloadButton > button {
-        background: #343deb !important;
-        color: #ffffff !important;
-        border: 1px solid #343deb !important;
-        border-radius: 10px;
-        font-weight: 600;
-    }
-    div.stDownloadButton > button:hover {
-        background: #2b33c7 !important;
-        border-color: #2b33c7 !important;
-        color: #ffffff !important;
-    }
-    .yaml-flow-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 0.6rem;
-        margin: 0.5rem 0 0.75rem 0;
-    }
-    .yaml-flow-step {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 0.85rem;
-        border: 1px solid #eceff4;
-    }
-    .yaml-flow-step strong {
-        display: block;
-        margin-bottom: 0.2rem;
-    }
-    .yaml-flow-step span {
-        color: #616161;
-        font-size: 0.84rem;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+
 st.markdown("### Workflow")
 st.caption("Upload, review, and solve in three quick steps. Results include values, equations, and reasoning graphs.")
 st.markdown(
     """
-    <div class="yaml-flow-grid">
-        <div class="yaml-flow-step"><strong>1. Upload</strong><span>Select a YAML file with the exercise definition.</span></div>
-        <div class="yaml-flow-step"><strong>2. Solve</strong><span>Send the YAML file to KnowTD to solve the exercise..</span></div>
-        <div class="yaml-flow-step"><strong>3. Inspect</strong><span>Inspect resulting values, path, graph, and equations.</span></div>
+    <div class="steps-flow-grid">
+        <div class="steps-flow-step"><strong>1. Upload</strong><span>Select a YAML file with the exercise definition.</span></div>
+        <div class="steps-flow-step"><strong>2. Solve</strong><span>Send the YAML file to KnowTD to solve the exercise..</span></div>
+        <div class="steps-flow-step"><strong>3. Inspect</strong><span>Inspect resulting values, path, graph, and equations.</span></div>
     </div>
     """,
     unsafe_allow_html=True,

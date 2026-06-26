@@ -11,6 +11,7 @@ import yaml
 import json
 from streamlit_agraph import agraph, Config
 from utils.sidebar_navigation import render_sidebar_navigation
+from utils.style_config import load_styles
 from utils.bridge import (
     gen_problem_with_values,
     cyto_to_graphviz,
@@ -103,6 +104,7 @@ def reset_filters() -> None:
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(page_title="Exercise Generation | KnowTD", page_icon="assets/Logo.svg", layout="wide")
+load_styles()
 render_sidebar_navigation()
 
 st.title(":material/auto_awesome: Exercise Generation")
@@ -110,78 +112,16 @@ st.caption(
     "Browse the 12 thermodynamic scenarios. Filter by attribute or ID, then "
     "click a scenario to view its YAML definition."
 )
-st.markdown(
-    """
-    <style>
-    div.stButton > button[kind="primary"] {
-        background: #343deb !important;
-        color: #ffffff !important;
-        border: 1px solid #343deb !important;
-        border-radius: 10px;
-        font-weight: 600;
-    }
-    div.stButton > button[kind="primary"]:hover {
-        background: #2b33c7 !important;
-        border-color: #2b33c7 !important;
-        color: #ffffff !important;
-    }
-    div.stButton > button[kind="secondary"] {
-        background: #FFFFFF !important;
-        color: #343deb !important;
-        border: 1px solid #a9aceb !important;
-        border-radius: 10px;
-        font-weight: 600;
-    }
-    div.stButton > button[kind="secondary"]:hover {
-        background: #9da2e3 !important;
-        border-color: #9da2e3 !important;
-        color: #343deb !important;
-    }
-    div.stDownloadButton > button {
-        background: #343deb !important;
-        color: #ffffff !important;
-        border: 1px solid #343deb !important;
-        border-radius: 10px;
-        font-weight: 600;
-    }
-    div.stDownloadButton > button:hover {
-        background: #2b33c7 !important;
-        border-color: #2b33c7 !important;
-        color: #ffffff !important;
-    }
-    .gen-flow-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-        gap: 0.6rem;
-        margin: 0.5rem 0 0.75rem 0;
-    }
-    .gen-flow-step {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 0.85rem;
-        border: 1px solid #eceff4;
-    }
-    .gen-flow-step strong {
-        display: block;
-        margin-bottom: 0.2rem;
-    }
-    .gen-flow-step span {
-        color: #616161;
-        font-size: 0.84rem;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+
 st.markdown("### Workflow")
 st.caption("Use filters to narrow scenarios, open template or exercise YAML, then generate and inspect solved exercises.")
 st.markdown(
     """
-    <div class="gen-flow-grid">
-        <div class="gen-flow-step"><strong>Filter</strong><span>Choose ID, heat/work mode, and process attributes.</span></div>
-        <div class="gen-flow-step"><strong>Select</strong><span>Open template, existing exercise, or generate a new one.</span></div>
-        <div class="gen-flow-step"><strong>Inspect</strong><span>Review YAML and download when needed.</span></div>
-        <div class="gen-flow-step"><strong>Analyze Generated Exercises</strong><span>View values, equations, solution path, and reasoning graph.</span></div>
+    <div class="steps-flow-grid">
+        <div class="steps-flow-step"><strong>Filter</strong><span>Choose ID, heat/work mode, and process attributes.</span></div>
+        <div class="steps-flow-step"><strong>Select</strong><span>Open template, existing exercise, or generate a new one.</span></div>
+        <div class="steps-flow-step"><strong>Inspect</strong><span>Review YAML and download when needed.</span></div>
+        <div class="steps-flow-step"><strong>Analyze Generated Exercises</strong><span>View values, equations, solution path, and reasoning graph.</span></div>
     </div>
     """,
     unsafe_allow_html=True,

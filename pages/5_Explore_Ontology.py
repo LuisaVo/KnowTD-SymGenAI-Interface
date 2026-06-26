@@ -7,6 +7,7 @@ import streamlit as st
 from streamlit_agraph import agraph, Node, Edge, Config
 import re
 from utils.sidebar_navigation import render_sidebar_navigation
+from utils.style_config import load_styles
 
 # ── connect your backend here ─────────────────────────────────────────────────
 from utils.bridge import Ontology
@@ -27,6 +28,7 @@ def camel_to_normal(name):
     # Then converts the entire string to lowercase
     return re.sub( r"([A-Z])|([0-9]+)", r" \1\2", name).strip().replace('* ', '*')
 st.set_page_config(page_title="Ontology | KnowTD", page_icon="assets/Logo.svg", layout="wide")
+load_styles()
 render_sidebar_navigation()
 
 def snake_to_camel(name):
@@ -35,54 +37,16 @@ def snake_to_camel(name):
 
 st.title(":material/schema: Thermodynamics Ontology")
 st.caption("Browse the concepts, variables, and equations defined in the ontology.")
-st.markdown(
-    """
-    <style>
-    div.stButton > button {
-        background: #343deb !important;
-        color: #ffffff !important;
-        border: 1px solid #343deb !important;
-        border-radius: 10px;
-        font-weight: 600;
-    }
-    div.stButton > button:hover {
-        background: #2b33c7 !important;
-        border-color: #2b33c7 !important;
-        color: #ffffff !important;
-    }
-    .onto-flow-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 0.6rem;
-        margin: 0.5rem 0 0.75rem 0;
-    }
-    .onto-flow-step {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 0.85rem;
-        border: 1px solid #eceff4;
-    }
-    .onto-flow-step strong {
-        display: block;
-        margin-bottom: 0.2rem;
-    }
-    .onto-flow-step span {
-        color: #616161;
-        font-size: 0.84rem;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+
 st.markdown("### Workflow")
 st.caption("Explore thermodynamics knowledge from three perspectives and inspect how they connect in the graph.")
 st.markdown(
     """
-    <div class="onto-flow-grid">
-        <div class="onto-flow-step"><strong>Concepts</strong><span>Read conceptual descriptions and relations.</span></div>
-        <div class="onto-flow-step"><strong>Variables</strong><span>Inspect symbols, SI units, and defaults.</span></div>
-        <div class="onto-flow-step"><strong>Equations</strong><span>Review expressions, slots, and constraints.</span></div>
-        <div class="onto-flow-step"><strong>Graph</strong><span>Visualize dependencies across all layers.</span></div>
+    <div class="steps-flow-grid">
+        <div class="steps-flow-step"><strong>Concepts</strong><span>Read conceptual descriptions and relations.</span></div>
+        <div class="steps-flow-step"><strong>Variables</strong><span>Inspect symbols, SI units, and defaults.</span></div>
+        <div class="steps-flow-step"><strong>Equations</strong><span>Review expressions, slots, and constraints.</span></div>
+        <div class="steps-flow-step"><strong>Graph</strong><span>Visualize dependencies across all layers.</span></div>
     </div>
     """,
     unsafe_allow_html=True,
